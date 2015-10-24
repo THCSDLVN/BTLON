@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class LogInGUI extends JFrame {
@@ -26,7 +27,7 @@ public class LogInGUI extends JFrame {
 	private JPanel contentPane;
 	private JTextField usrTextfld;
 	private JPasswordField passwordField;
-	private final Action action = new SwingAction();
+	static String[] resList = new String[] {"VietAnh", "asfasf", "asfasf", "afsfsaf", "fsaasfs", "fsdsdgsd", "werwefsdg", "afsetgretweg", "asfwegsdbs", "wetwgsdgg", "wefsdgreyergds", "asfsegf", "asdksanfks", "asfnweghaiowejgv;lz", "alfhiwleuyglbmsldf", "wlehilwegerkgfdb"};
 
 	/**
 	 * Launch the application.
@@ -84,13 +85,24 @@ public class LogInGUI extends JFrame {
 				signInBtn.setEnabled(false);
 				String usr = usrTextfld.getText();
 				String pass = new String(passwordField.getPassword());
-				String query = "dataQuery(Acount,*,UserName = '" + usr + "' and PassWord = '" + pass + "',\"\",\"\",\"\",\"\")";
-				List<List<String>> accList = new ArrayList<>();
+				String query = "dataQuery(Account~*~UserName = '" + usr + "' and PassWord = '" + pass + "'~\"\"~\"\"~\"\"~\"\")";
+				//Select * from Account where UserName = usr and PassWord = pass
+				List<List<String>> accList = null;//List tra ve.
 				if(accList == null){
 					JOptionPane.showMessageDialog(null, "Your username or password is not correct");
+					signInBtn.setEnabled(true);
 				}
 				else{
-					JOptionPane.showMessageDialog(null, "Successfully Log In");
+					String[] acc = new String[7];
+					int index = 0;
+					for(List<String> innerLs : accList) {
+						for (Iterator<String> i = innerLs.iterator(); i.hasNext();) {
+							acc[index++] = i.next();
+						}
+					}
+					AccountGUI a = new AccountGUI(acc);
+					a.setVisible(true);
+					dispose();
 				}
 			}
 		});
@@ -112,18 +124,10 @@ public class LogInGUI extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				new SignUpGUI().setVisible(true);
-				dispose();
+				//dispose();
 			}
 		});
 		lblSignUp.setBounds(320, 254, 70, 15);
 		contentPane.add(lblSignUp);
-	}
-	private class SwingAction extends AbstractAction {
-		public SwingAction() {
-			putValue(NAME, "SwingAction");
-			putValue(SHORT_DESCRIPTION, "Some short description");
-		}
-		public void actionPerformed(ActionEvent e) {
-		}
 	}
 }

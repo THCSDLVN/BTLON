@@ -1,0 +1,3 @@
+[Account's Login]
+when user push "Sign In" Button, Client will send to Server a Querry.
+Server reply a allowing signal that allow can or can't Sign In and a List (if allow user Sign In). 
