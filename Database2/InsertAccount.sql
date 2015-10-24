@@ -7,7 +7,7 @@ values('ACC0001','Do Nguyet Anh','anhdn','donguyetanh0101','0912349685','Nguyet 
 ('ACC0006','Truong Van Bac','bactv','truongvanbac0101','0912312385','Van Bac','Men'),
 ('ACC0007','Le Van Cuong','cuonglv','levancuong0101','091208885','Van Cuong','Men'),
 ('ACC0008','Le Van Chien','chienlv','levanchien0101','09998995','Van Chien','Men'),
-('ACC0009','Pham Khoa Đang','dangpk','phandangkhoa0101','090101010285','Khoa Đang','Men'),
+('ACC0009','Pham Khoa Dang','dangpk','phandangkhoa0101','090101010285','Khoa Dang','Men'),
 ('ACC0010','Tong Tung Giang','giangtt','tongtunggiang0101','0981032085','Tung Giang','Men'),
 ('ACC0011','Nguyen Trong Giap','giapnt','nguyetronggiap0101','0213456123685','Trong Giap','Men'),
 ('ACC0012','Nguyen Song Hao','haons','nguyensonghao0101','054043049','Song Hao','Men'),
