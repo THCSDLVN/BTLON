@@ -1,0 +1,12 @@
+Khi gửi câu truy vấn từ các Client thì chỉ cần gửi 1 String -- Cấu Trúc : <Tên Hàm>(danh sách tham số)
+Tên Hàm -- Xem ở API.java
+danh sách tham số : ở các giá trị -> không có dấu <,"()> -- dấu , dùng để ngăn cách các giá trị
+VD "dataQuery(Account,*,\"\",\"\",\"\",\"\",\"\")"
+\" : hiển thị dấu " trong Java
+"" coi như là một giá trị rỗng (không điền thông tin)
+
+-Truy vấn dataQuery ---> trả về 1 ArrayList nếu đúng -- trả về null - nếu sai
+-Truy vấn insertDataQuery, deleteDataQuery, updateDataQuery ---> trả về 1 xâu. Nếu xâu = "0"  -> Truy vấn sai
+										   xâu != "0" -> Truy vấn đúng
+
+123.16.242.41
