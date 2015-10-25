@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 
@@ -49,8 +50,9 @@ public class test1 extends JFrame {
 		});
 	}
 
+	private String ResID = "RES0002";
 	private SqlArrayList RequestList = null;
-	private String Requestquery = "SELECT FullName,Facebook,PhoneNumber,Time FROM reservations natural join account WHERE RID = 'RES0001'";
+	private String Requestquery = "SELECT FullName,Facebook,PhoneNumber,Time,FoodList FROM reservations natural join account WHERE RID = '" + ResID + "' ORDER BY(Time) DESC";
 	private Statement stmt;
 	private Connection conn = null;
 	/**
@@ -100,23 +102,44 @@ public class test1 extends JFrame {
 		RQlist.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				JList list = (JList) e.getSource();
-				int index = list.getSelectedIndex();
-				String[] info = RequestList.getRow(index);
-				JPanel pn = (JPanel) RequestPane.getComponent(1);
-				JLabel name = (JLabel) pn.getComponent(8);
-				JLabel phone = (JLabel) pn.getComponent(9);
-				JLabel face = (JLabel) pn.getComponent(10);
-				JLabel time = (JLabel) pn.getComponent(11);
-				name.setText(info[0]);
-				face.setText(info[1]);
-				phone.setText(info[2]);
-				time.setText(info[3]);
+				try{
+					JList list = (JList) e.getSource();
+					int index = list.getSelectedIndex();
+					String[] info = RequestList.getRow(index);
+					String foodlist = new String(info[4]);
+					foodlist = foodlist.replace(",", "','");
+					float totalcost = 0;
+					SqlArrayList foodinfo = new SqlArrayList(stmt.executeQuery("SELECT FoodName,Cost FROM provide natural join menu natural join restaurant WHERE FID IN ('" + foodlist + "') AND RID ='" + ResID + "'"));
+					
+					JPanel pn = (JPanel) RequestPane.getComponent(1);
+					JLabel name = (JLabel) pn.getComponent(8);
+					JLabel phone = (JLabel) pn.getComponent(9);
+					JLabel face = (JLabel) pn.getComponent(10);
+					JLabel time = (JLabel) pn.getComponent(11);
+					JLabel cost = (JLabel) pn.getComponent(12);
+					JTable food = (JTable)((JScrollPane)pn.getComponent(4)).getViewport().getView();
+					DefaultTableModel tbmodel =(DefaultTableModel) food.getModel();
+					name.setText(info[0]);
+					face.setText(info[1]);
+					phone.setText(info[2]);
+					time.setText(info[3]);
+					tbmodel.setRowCount(0);
+					for(int i=0; i < foodinfo.getRownumber(); i++)
+					{
+						tbmodel.addRow(foodinfo.getRow(i));
+						totalcost += Float.valueOf(foodinfo.getRow(i)[1]);
+					}
+					cost.setText(Float.toString(totalcost));
+					foodinfo.close();
+				}catch(Exception ex)
+				{
+					ex.printStackTrace();
+				}			
 			}
 		});
 		RQlist.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		RQlist.setModel(new AbstractListModel() {
-			String[] values = RequestList.getColumn(1);
+			String[] values = RequestList.getColumn(0);
 			public int getSize() {
 				return values.length;
 			}
@@ -159,32 +182,26 @@ public class test1 extends JFrame {
 		foodtb = new JTable();
 		foodtb.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"ASdasd", new Float(234.0f)},
-				{"asdasd", new Float(55.66f)},
-				{"asdasd", new Float(34.6f)},
-				{"asdasd", new Float(34.5f)},
-				{"asdasd", new Float(234.5f)},
-				{"41424", new Float(324.3f)},
-				{"asdasd", null},
 			},
 			new String[] {
 				"Food", "Cost"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				String.class, Float.class
+				String.class, String.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 			boolean[] columnEditables = new boolean[] {
-				false, true
+				false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		});
 		foodtb.getColumnModel().getColumn(0).setResizable(false);
+		foodtb.getColumnModel().getColumn(1).setResizable(false);
 		scrollPane_1.setViewportView(foodtb);
 		
 		JButton btnNewButton = new JButton("Serve");
