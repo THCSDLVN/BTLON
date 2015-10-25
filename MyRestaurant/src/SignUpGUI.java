@@ -123,7 +123,16 @@ public class SignUpGUI extends JFrame {
 				a.setPassword(new String(pwPassFld.getPassword()));
 				a.setPhoneNumber(phoneTextFld.getText());
 				a.setFacebook(faceTextFld.getText());
-				String query = "insertDataQuery(Account~"+a.getID()+"~"+a.getFullName())";
+				//String query = "insertDataQuery(Account~"+a.getID()+"~"+a.getFullName())";
+				int result =0;
+				if(result == 0){
+					//Co loi sign up
+				}
+				else{
+					// Thong bao dang ki thanh cong.
+					// Quay tro ve giao dien LogIn.
+					// sex.clearSelection.
+				}
 			}
 		});
 		signUpBtn.setBounds(356, 506, 88, 33);

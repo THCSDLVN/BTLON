@@ -6,11 +6,14 @@ public class TestJDBC {
 	public static void main(String[] args) {
 		try{
 			SQLConnection c = new SQLConnection();
-			c.abc();
+			//c.logIn("anhdn","donguyetanh0101");
+			c.getRes();
+			c.logIn("anhdn", "donguyetanh0101");
 			if(c.resultList == null){
 				System.out.println("abcd");
 			}
 			else{
+				System.out.println(c.resultList.size());
 				for(List<String> innerLs : c.resultList) {
 					for (Iterator<String> i = innerLs.iterator(); i.hasNext();) {
 						System.out.print(i.next() + " ");

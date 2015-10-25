@@ -1,6 +1,5 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -21,30 +20,26 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 public class LogInGUI extends JFrame {
-
 	private JPanel contentPane;
 	private JTextField usrTextfld;
 	private JPasswordField passwordField;
 	static String[] resList = new String[] {"VietAnh", "asfasf", "asfasf", "afsfsaf", "fsaasfs", "fsdsdgsd", "werwefsdg", "afsetgretweg", "asfwegsdbs", "wetwgsdgg", "wefsdgreyergds", "asfsegf", "asdksanfks", "asfnweghaiowejgv;lz", "alfhiwleuyglbmsldf", "wlehilwegerkgfdb"};
-
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LogInGUI frame = new LogInGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						LogInGUI frame = new LogInGUI();
+						frame.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
-			}
-		});
+			});
 	}
-
 	/**
 	 * Create the frame.
 	 */
@@ -57,28 +52,22 @@ public class LogInGUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
 		JLabel appNameIcon = new JLabel(new ImageIcon(this.getClass().getResource("/AppName.png")));
 		appNameIcon.setBounds(79, 0, 300, 68);
 		contentPane.add(appNameIcon);
-		
 		JLabel usrLbl = new JLabel("Username");
 		usrLbl.setBounds(79, 101, 84, 28);
 		contentPane.add(usrLbl);
-		
 		usrTextfld = new JTextField();
 		usrTextfld.setBounds(180, 101, 205, 28);
 		contentPane.add(usrTextfld);
 		usrTextfld.setColumns(10);
-		
 		JLabel pwLbl = new JLabel("Password");
 		pwLbl.setBounds(79, 147, 70, 15);
 		contentPane.add(pwLbl);
-		
 		passwordField = new JPasswordField();
 		passwordField.setBounds(180, 141, 205, 28);
 		contentPane.add(passwordField);
-		
 		JButton signInBtn = new JButton("Sign In");
 		signInBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -88,7 +77,10 @@ public class LogInGUI extends JFrame {
 				String query = "dataQuery(Account~*~UserName = '" + usr + "' and PassWord = '" + pass + "'~\"\"~\"\"~\"\"~\"\")";
 				//Select * from Account where UserName = usr and PassWord = pass
 				List<List<String>> accList = null;//List tra ve.
-				if(accList == null){
+				SQLConnection c = new SQLConnection();
+				c.logIn(usr,pass);
+				accList = c.resultList;
+				if(accList.size() == 0){
 					JOptionPane.showMessageDialog(null, "Your username or password is not correct");
 					signInBtn.setEnabled(true);
 				}
@@ -104,11 +96,10 @@ public class LogInGUI extends JFrame {
 					a.setVisible(true);
 					dispose();
 				}
-			}
+			}	
 		});
 		signInBtn.setBounds(303, 181, 82, 38);
 		contentPane.add(signInBtn);
-		
 		JButton exitBtn = new JButton("Exit");
 		exitBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -118,7 +109,6 @@ public class LogInGUI extends JFrame {
 		});
 		exitBtn.setBounds(180, 181, 90, 38);
 		contentPane.add(exitBtn);
-		
 		JLabel lblSignUp = new JLabel("Sign Up");
 		lblSignUp.addMouseListener(new MouseAdapter() {
 			@Override

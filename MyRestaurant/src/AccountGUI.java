@@ -3,6 +3,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
+
+import java.util.Iterator;
 import java.util.List;
 
 public class AccountGUI extends JFrame {
@@ -16,9 +18,9 @@ public class AccountGUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					//String[] acc = new String[100];
-					//AccountGUI frame = new AccountGUI(acc,resList);
-					//frame.setVisible(true);
+					String[] acc = new String[100];
+					AccountGUI frame = new AccountGUI(acc);
+					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -37,7 +39,7 @@ public class AccountGUI extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setVisible(true);
-		setPreferredSize(new Dimension(470,500));
+		setPreferredSize(new Dimension(470,530));
 		pack();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -54,34 +56,40 @@ public class AccountGUI extends JFrame {
 		faceLbl.setBounds(244, 140, 194, 22);
 		contentPane.add(faceLbl);
 		
-		JButton featureBtn = new JButton("Feature");
-		featureBtn.setBounds(348, 447, 90, 25);
-		contentPane.add(featureBtn);
-		
 		JLabel avatarLbl = new JLabel(new ImageIcon(this.getClass().getResource("/female.png")));
-		avatarLbl.setBounds(37, 12, 168, 172);
+		avatarLbl.setBounds(45, 15, 168, 172);
 		contentPane.add(avatarLbl);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(37, 196, 401, 239);
-		contentPane.add(scrollPane);
+		
 		String query = "dataQuery(Restaurant~RestaurantName~\"\"~\"\"~\"\"~\"\"~\"\"~\"\")";
-		List<List<String>> resNameList = null;// List tra ve.
-		int resNameListSize = 0;
-		for(List<String> sublist : resNameList){
-			resNameListSize += sublist.size();
+		SQLConnection c = new SQLConnection();
+		c.getRes();
+		List<List<String>> resNameList = c.resultList;// List tra ve.
+		String res[] = new String[resNameList.size()];
+		int index = 0;
+		for(List<String> innerLs : resNameList) {
+			for (Iterator<String> i = innerLs.iterator(); i.hasNext();) {
+				res[index++] = i.next();
+			}
 		}
-		String Res[] = new String[resNameListSize];
-		JList list = new JList();
-		scrollPane.setViewportView(list);
-		list.setModel(new AbstractListModel() {
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(37, 232, 401, 239);
+		contentPane.add(scrollPane);
+		JList restaurantList = new JList();
+		scrollPane.setViewportView(restaurantList);
+		AbstractListModel<String> model = new AbstractListModel<String>() {
+			
+			@Override
 			public int getSize() {
-				return Res.length;
+				return res.length;
 			}
-			public Object getElementAt(int index) {
-				return Res[index];
+			
+			@Override
+			public String getElementAt(int index) {
+				return res[index];
 			}
-		});
+		};
+		restaurantList.setModel(model);
 		
 		JButton logOutBtn = new JButton("New button");
 		logOutBtn.addActionListener(new ActionListener() {
@@ -92,6 +100,25 @@ public class AccountGUI extends JFrame {
 		});
 		logOutBtn.setBounds(387, 15, 51, 45);
 		contentPane.add(logOutBtn);
+		
+		JLabel resListLbl = new JLabel("Restaurants List",JLabel.CENTER);
+		resListLbl.setBounds(37, 205, 401, 15);
+		contentPane.add(resListLbl);
+		
+		JButton refreshBtn = new JButton("New button");
+		refreshBtn.setBounds(308, 15, 51, 45);
+		contentPane.add(refreshBtn);
+		
+		JButton featureBtn = new JButton("Feature");
+		featureBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int index = restaurantList.getSelectedIndex();
+				String selectRestaurant = model.getElementAt(index);
+				
+			}
+		});
+		featureBtn.setBounds(348, 480, 90, 25);
+		contentPane.add(featureBtn);
 		
 	
 			
