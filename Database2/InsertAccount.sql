@@ -31,7 +31,7 @@ values('ACC0001','Do Nguyet Anh','anhdn','donguyetanh0101','0912349685','Nguyet 
 ('ACC0030','Le Hung Viet Bao','baolhv','lehungvietbao0101','094321970','Viet Bao','Men'),
 ('ACC0031','Dao Hai Long','longdh','daohailong0101','09123213','Hai Long','Men'),
 ('ACC0032','Nguyen The Hoan','hoannt','nguyenthehoan0101','056121685','The Hoan','Men'),
-('ACC0033','Ngo Đac Tuan','tuannd','ngodactuan0101','0912396565','Đac Tuan','Men'),
+('ACC0033','Ngo Dac Tuan','tuannd','ngodactuan0101','0912396565','Dac Tuan','Men'),
 ('ACC0034','Nguyen Chu Gia Vuong','vuongncg','nguyenchugiavuong0101','03992141341','Gia Vuong','Men'),
 ('ACC0035','To Dong Vu','vutd','todongvu0101','079543657','Dong Vu','Men'),
 ('ACC0036','Ha Huy Tai','taihh','hahuytai0101','08889996969','Huy Tai','Men'),
