@@ -114,7 +114,7 @@ public class AccountGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int index = restaurantList.getSelectedIndex();
 				String selectRestaurant = model.getElementAt(index);
-				
+				new SelectedRestaurant(selectRestaurant).setVisible(true);
 			}
 		});
 		featureBtn.setBounds(348, 480, 90, 25);

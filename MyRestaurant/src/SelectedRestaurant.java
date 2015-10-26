@@ -52,7 +52,7 @@ public class SelectedRestaurant extends JFrame {
 		contentPane.setBackground(Color.lightGray);
 		
 		JLabel label_1 = new JLabel(new ImageIcon(this.getClass().getResource("/Icons_Vertical_Markets_Restaurant.png")));
-		label_1.setBounds(33, 32, 151, 152);
+		label_1.setBounds(47, 37, 151, 152);
 		contentPane.add(label_1);
 		
 		JLabel label_2 = new JLabel("New label");
@@ -68,10 +68,11 @@ public class SelectedRestaurant extends JFrame {
 		contentPane.add(label_4);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(43, 201, 365, 192);
+		scrollPane.setBounds(67, 201, 329, 174);
 		contentPane.add(scrollPane);
 		
 		JList list = new JList();
+		scrollPane.setViewportView(list);
 		list.setModel(new AbstractListModel() {
 			String[] values = new String[] {"abcds", "asdasfd", "asdafgwe", "asfgdfhhg", "fweterhysrth", "sdfsdvsdv", "gregfdv", "sfcsfdg", "wfsdgreyer", "svsdgergwef", "sdgerfsd", "ergefsdf"};
 			public int getSize() {
@@ -81,14 +82,13 @@ public class SelectedRestaurant extends JFrame {
 				return values[index];
 			}
 		});
-		scrollPane.setViewportView(list);
 		
 		JButton btnOrder = new JButton("Order");
-		btnOrder.setBounds(288, 421, 117, 25);
+		btnOrder.setBounds(183, 399, 117, 25);
 		contentPane.add(btnOrder);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setBounds(24, 22, 413, 451);
+		lblNewLabel.setBounds(23, 24, 413, 451);
 		lblNewLabel.setBackground(Color.WHITE);
 		lblNewLabel.setOpaque(true);
 		contentPane.add(lblNewLabel);

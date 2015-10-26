@@ -70,7 +70,7 @@ public class SQLConnection {
 		try{
 			connect = DriverManager.getConnection(url,username,password);
 			stmt = connect.createStatement();
-			result = stmt.executeQuery("SELECT RestaurantName FROM Restaurant");
+			result = stmt.executeQuery("SELECT RestaurantName FROM Restaurant ORDER BY Rate DESC");
 			metadata = result.getMetaData();
 			numcols = metadata.getColumnCount();
 			resultList = new ArrayList<>();
