@@ -214,7 +214,7 @@ public class login {
 						if(rsl.getRownumber() > 0)
 						{
 							frmLoginAsRestaurant.dispose();
-							restaurant res = new restaurant(rsl.getRow(0));
+							restaurant res = new restaurant(rsl.getRow(0),conn);
 							res.setVisible(true);
 						}
 						else
