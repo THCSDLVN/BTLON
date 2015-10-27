@@ -151,6 +151,8 @@ public class SignUpGUI extends JFrame {
 				a.setFacebook(faceTextFld.getText());
 				if(a.getUsername().equals("abc"))
 					ContentPane.getComponents()[1].setVisible(true);
+				else
+					ContentPane.getComponents()[1].setVisible(false);
 				//String query = "insertDataQuery(Account~"+a.getID()+"~"+a.getFullName())";
 				int result =0;
 				if(result == 0){
