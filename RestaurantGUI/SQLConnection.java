@@ -1,4 +1,4 @@
-package javalearn;
+package gui;
 import java.sql.DriverManager;
 import java.sql.Connection;
 
