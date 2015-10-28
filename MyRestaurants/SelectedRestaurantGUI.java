@@ -13,14 +13,20 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
+import javax.swing.AbstractListModel;
 import javax.swing.BoxLayout;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JList;
 
 public class SelectedRestaurantGUI extends JFrame {
 
@@ -81,19 +87,27 @@ public class SelectedRestaurantGUI extends JFrame {
 		resFaceIconLbl.setBounds(184, 158, 45, 40);
 		resInfoPanel.add(resFaceIconLbl);
 		
-		JLabel resNameLbl = new JLabel("");
+		SQLConnection c = new SQLConnection();
+		c.getResInfo(SelectedRestaurant);
+		List<List<String>> info = c.resultList;
+		String resInfo[] = new String[info.get(0).size()];
+		int x = 0;
+		for(x=0;x< info.get(0).size();x++)
+			resInfo[x] = info.get(0).get(x);
+		
+		JLabel resNameLbl = new JLabel(resInfo[0]);
 		resNameLbl.setBounds(240, 12, 151, 32);
 		resInfoPanel.add(resNameLbl);
 		
-		JLabel resPhoneLbl = new JLabel("");
+		JLabel resPhoneLbl = new JLabel(resInfo[1]);
 		resPhoneLbl.setBounds(241, 65, 151, 32);
 		resInfoPanel.add(resPhoneLbl);
 		
-		JLabel resAddLbl = new JLabel("");
+		JLabel resAddLbl = new JLabel(resInfo[2]);
 		resAddLbl.setBounds(241, 117, 151, 32);
 		resInfoPanel.add(resAddLbl);
 		
-		JLabel resFaceLbl = new JLabel("");
+		JLabel resFaceLbl = new JLabel(resInfo[3]);
 		resFaceLbl.setBounds(241, 158, 151, 32);
 		resInfoPanel.add(resFaceLbl);
 		
@@ -129,6 +143,25 @@ public class SelectedRestaurantGUI extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(12, 345, 391, 200);
 		contentPane.add(scrollPane);
+		
+		c.getMenu(SelectedRestaurant);
+		String menu[] = new String[c.resultList.size()];
+		int index = 0;
+		for(List<String> innerLs : c.resultList) {
+			for (Iterator<String> i = innerLs.iterator(); i.hasNext();) {
+				menu[index++] = i.next();
+			}
+		}
+		JList list = new JList();
+		list.setModel(new AbstractListModel() {
+			public int getSize() {
+				return menu.length;
+			}
+			public Object getElementAt(int index) {
+				return menu[index];
+			}
+		});
+		scrollPane.setViewportView(list);
 		
 		JLabel menuLabel = new JLabel("Menu",JLabel.CENTER);
 		menuLabel.setIcon(new ImageIcon(this.getClass().getResource("/ResResource/menu.png")));

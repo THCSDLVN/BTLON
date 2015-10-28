@@ -90,4 +90,78 @@ public class SQLConnection {
 			System.out.println(e.getMessage());
 		}
 	}
+	public void getMenu(String RestaurantName) {
+		try{
+				Class.forName("com.mysql.jdbc.Driver");
+				//System.out.println("Load JDBC Driver Complete ...\n");
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		Connection connect;
+		Statement stmt;
+		ResultSet result;
+		ResultSetMetaData metadata;
+		int numcols;
+		try{
+			connect = DriverManager.getConnection(url,username,password);
+			stmt = connect.createStatement();
+			String querry = "SELECT FoodName FROM Menu,Provide,Restaurant WHERE RestaurantName = '"+RestaurantName+"' and Restaurant.RID = Provide.RID and Provide.FID = Menu.FID";
+			result = stmt.executeQuery(querry);
+			metadata = result.getMetaData();
+			numcols = metadata.getColumnCount();
+			resultList = new ArrayList<>();
+			while (result.next()) {
+				List<String> row = new ArrayList<>(numcols); // new list per row
+				int i = 1;
+				while (i <= numcols) { // don't skip the last column, use <=
+					row.add(result.getString(i++));
+				}
+				resultList.add(row); // add it to the result
+			}
+			connect.close();
+			stmt.close();
+			result.close();
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
+	public void getResInfo(String RestaurantName) {
+		try{
+				Class.forName("com.mysql.jdbc.Driver");
+				//System.out.println("Load JDBC Driver Complete ...\n");
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		Connection connect;
+		Statement stmt;
+		ResultSet result;
+		ResultSetMetaData metadata;
+		int numcols;
+		try{
+			connect = DriverManager.getConnection(url,username,password);
+			stmt = connect.createStatement();
+			String querry = "select RestaurantName,PhoneNumber,Address,Facebook from Restaurant where RestaurantName = '"+RestaurantName+"'";
+			result = stmt.executeQuery(querry);
+			metadata = result.getMetaData();
+			numcols = metadata.getColumnCount();
+			resultList = new ArrayList<>();
+			while (result.next()) {
+				List<String> row = new ArrayList<>(numcols); // new list per row
+				int i = 1;
+				while (i <= numcols) { // don't skip the last column, use <=
+					row.add(result.getString(i++));
+				}
+				resultList.add(row); // add it to the result
+			}
+			connect.close();
+			stmt.close();
+			result.close();
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
 }

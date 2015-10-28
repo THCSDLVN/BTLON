@@ -10,7 +10,6 @@ import java.util.List;
 public class AccountGUI extends JFrame {
 
 	private JPanel contentPane;
-	static String[] resList = new String[] {"VietAnh", "asfasf", "asfasf", "afsfsaf", "fsaasfs", "fsdsdgsd", "werwefsdg", "afsetgretweg", "asfwegsdbs", "wetwgsdgg", "wefsdgreyergds", "asfsegf", "asdksanfks", "asfnweghaiowejgv;lz", "alfhiwleuyglbmsldf", "wlehilwegerkgfdb"};
 	/**
 	 * Launch the application.
 	 */
@@ -119,8 +118,5 @@ public class AccountGUI extends JFrame {
 		});
 		featureBtn.setBounds(348, 480, 90, 25);
 		contentPane.add(featureBtn);
-		
-	
-			
 	}
 }

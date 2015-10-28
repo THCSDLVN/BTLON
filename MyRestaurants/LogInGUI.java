@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,6 +22,9 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.font.TextAttribute;
 public class LogInGUI extends JFrame {
 	private JPanel contentPane;
 	private JTextField usrTextfld;
@@ -109,15 +114,29 @@ public class LogInGUI extends JFrame {
 		});
 		exitBtn.setBounds(180, 181, 90, 38);
 		contentPane.add(exitBtn);
+		
 		JLabel lblSignUp = new JLabel("Sign Up");
+		Font font = lblSignUp.getFont();
+		lblSignUp.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				Map attributes = font.getAttributes();
+				attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+				lblSignUp.setFont(font.deriveFont(attributes));
+			}
+		});
 		lblSignUp.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				new SignUpGUI().setVisible(true);
 				//dispose();
 			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblSignUp.setFont(font);
+			}
 		});
-		lblSignUp.setBounds(320, 254, 70, 15);
+		lblSignUp.setBounds(315, 250, 70, 15);
 		contentPane.add(lblSignUp);
 	}
 }

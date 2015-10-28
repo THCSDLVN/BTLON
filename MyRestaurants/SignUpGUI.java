@@ -55,7 +55,7 @@ public class SignUpGUI extends JFrame {
 	 */
 	public SignUpGUI() {
 		super("Sign Up");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/Hungres/icon_signup.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/Resource/icon_signup.png")));
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		ContentPane = new JPanel();
@@ -69,7 +69,7 @@ public class SignUpGUI extends JFrame {
 		ContentPane.add(panel);
 		panel.setLayout(null);
 		
-		JLabel signUpIconLbl = new JLabel(new ImageIcon(this.getClass().getResource("/AppName.png")));
+		JLabel signUpIconLbl = new JLabel(new ImageIcon(this.getClass().getResource("/Resource/AppName.png")));
 		signUpIconLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		signUpIconLbl.setBounds(-45, 0, 480, 90);
 		panel.add(signUpIconLbl);
@@ -129,12 +129,12 @@ public class SignUpGUI extends JFrame {
 		JButton signUpBtn = new JButton("Sign Up");
 		signUpBtn.setBounds(261, 496, 132, 43);
 		panel.add(signUpBtn);
-		signUpBtn.setIcon(new ImageIcon(this.getClass().getResource("/Hungres/icon_signup.png")));
+		signUpBtn.setIcon(new ImageIcon(this.getClass().getResource("/Resource/icon_signup.png")));
 		
 		btnCancel = new JButton("Cancel");
 		btnCancel.setBounds(0, 496, 132, 43);
 		panel.add(btnCancel);
-		btnCancel.setIcon(new ImageIcon(this.getClass().getResource("/Hungres/cancel.png")));
+		btnCancel.setIcon(new ImageIcon(this.getClass().getResource("/Resource/cancel.png")));
 		
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
