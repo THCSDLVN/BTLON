@@ -1,10 +1,11 @@
-public ResultSet dataQuery(String tableName, String listColumn, String condition, String groupBy, String having, String orderBy, String arrangement)
+public ResultSet dataQuery(String tableName, String listColumn,String on, String condition, String groupBy, String having, String orderBy, String arrangement)
 
 /*
 hàm truy xuất dữ liệu - sử dụng câu lệnh SELECT FROM
 Trả về ResultSet
 tableName = Bảng1,Bảng2,.....
 listColumn = cột1,cột2,....(*)
+on = key trong inner join(chỉ được 1 key tại 1 thoi diem truy van)
 condition = giống như khi viết câu lệnh SQL (VD:AID = 'ACC0001' and RID = 'RES0001')
 group by = giống như khi viết câu lệnh SQL
 having = tương tự trên
@@ -22,11 +23,12 @@ condition = tương tự như khi viết cấu lệnh SQL (VD: AID = 'ACC0001' a
 tableName, condition bắt buộc phải khác rỗng
 */
 
-public int updateDataQuery(String tableName, String set, String condition)
+public int updateDataQuery(String tableName, String set, String value, String condition)
 /*
 hàm sử dụng để update dữ liệu - Sử dụng câu lệnh UPDATE 
 tableName = Bảng1 (Chỉ update dữ liệu của 1 bảng duy nhất)
-set = tương tự như câu lệnh SQL (VD:AID = 'ACC0001')
+set = tên của cột muốn update dữ liệu(chi update dc 1 cột duy nhất)
+value = giá trị mới của cột
 condition = tương tự như câu lệnh SQl (AID = 'ACC0001')
 
 tableName và set phải khác rỗng

@@ -1,7 +1,11 @@
-Khi gửi câu truy vấn từ các Client thì chỉ cần gửi 1 String -- Cấu Trúc : <Tên Hàm>(danh sách tham số)
+Khi gửi câu truy vấn từ các Client thì chỉ cần gửi 1 String -- Cấu Trúc : <Tên Hàm>(danh sách tham số) (1)
 Tên Hàm -- Xem ở API.java
-danh sách tham số : ở các giá trị -> không có dấu <,"()> -- dấu , dùng để ngăn cách các giá trị
-VD "dataQuery(Account,*,\"\",\"\",\"\",\"\",\"\")"
+										
+danh sách tham số : ở các giá trị -> không có dấu <,"()> -- dấu ~ dùng để ngăn cách các giá trị		
+trong 1 giá trị: không thể có ~()										
+gửi truy vấn --> phải tuân theo đúng cấu trúc ở (1)
+
+VD "dataQuery(Account~*~\"\"~\"\"~\"\"~\"\"~\"\")"
 \" : hiển thị dấu " trong Java
 "" coi như là một giá trị rỗng (không điền thông tin)
 
