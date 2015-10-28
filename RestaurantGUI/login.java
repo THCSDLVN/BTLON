@@ -16,6 +16,7 @@ import javax.xml.ws.handler.MessageContext;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 import javax.swing.GrayFilter;
 import javax.swing.ImageIcon;
@@ -84,7 +85,9 @@ public class login {
 	 * Create the application.
 	 */
 	
-	Connection conn = null;
+	private signup Signup = new signup();
+	private Connection conn = null;
+	
 	public login() {
 		conn = SQLConnection.DBConnect();
 		if(conn == null) System.exit(0);
@@ -107,7 +110,7 @@ public class login {
 		frmLoginAsRestaurant.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmLoginAsRestaurant.getContentPane().setLayout(null);
 		
-		JLabel lblUsername = new JLabel("Username");
+		JLabel lblUsername = new JLabel("Resname");
 		lblUsername.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblUsername.setBounds(82, 82, 72, 14);
 		frmLoginAsRestaurant.getContentPane().add(lblUsername);
@@ -191,7 +194,7 @@ public class login {
 		passwordField.setBounds(177, 114, 123, 25);
 		frmLoginAsRestaurant.getContentPane().add(passwordField);
 		
-		title = new JLabel("LOG IN YOUR ACCOUNT");
+		title = new JLabel("LOG IN YOUR RESTAURANT");
 		title.setForeground(new Color(0, 51, 102));
 		title.setFont(new Font("Magneto", Font.BOLD, 14));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -205,15 +208,13 @@ public class login {
 				try{
 					if(btnlogin.isEnabled())
 					{				
-						String query = "SELECT * FROM restaurant WHERE ResName = ? AND ResPass = ? " ;
-						PreparedStatement pst = conn.prepareStatement(query);
-						pst.setString(1, usrname);
-						pst.setString(2, passd);
-						ResultSet rsl = pst.executeQuery();
-						if(rsl.next())
+						String query = "SELECT RID,RestaurantName,Address,PhoneNumber,Facebook,Rate FROM restaurant WHERE ResName = '" + usrname +"' AND ResPass = '" + passd + "'";
+						Statement stmt = conn.createStatement();
+						SqlArrayList rsl = new SqlArrayList(stmt.executeQuery(query));
+						if(rsl.getRownumber() > 0)
 						{
 							frmLoginAsRestaurant.dispose();
-							restaurant res = new restaurant();
+							restaurant res = new restaurant(rsl.getRow(0),conn);
 							res.setVisible(true);
 						}
 						else
@@ -230,11 +231,6 @@ public class login {
 		btnlogin.setIcon(new ImageIcon(this.getClass().getResource("/login.png")));
 		btnlogin.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnlogin.setEnabled(false);
-		btnlogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		
 		btnlogin.setBounds(171, 169, 123, 36);
 		frmLoginAsRestaurant.getContentPane().add(btnlogin,BorderLayout.CENTER);
 		
@@ -299,8 +295,9 @@ public class login {
 			}
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				signup sign_up = new signup();
-				sign_up.setVisible(true);
+				if(!Signup.isShowing()) Signup = new signup();			
+				Signup.setFocusable(true);
+				Signup.setVisible(true);
 			}
 		});
 		lblSignUp.setBounds(390, 261, 59, 14);

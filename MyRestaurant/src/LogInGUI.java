@@ -52,7 +52,7 @@ public class LogInGUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		JLabel appNameIcon = new JLabel(new ImageIcon(this.getClass().getResource("/AppName.png")));
+		JLabel appNameIcon = new JLabel(new ImageIcon(this.getClass().getResource("/Resource/AppName.png")));
 		appNameIcon.setBounds(79, 0, 300, 68);
 		contentPane.add(appNameIcon);
 		JLabel usrLbl = new JLabel("Username");

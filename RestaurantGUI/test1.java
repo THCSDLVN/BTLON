@@ -1,4 +1,4 @@
-package gui;
+package javalearn;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -50,7 +50,7 @@ public class test1 extends JFrame {
 		});
 	}
 
-	private String ResID = "RES0002";
+	private String ResID = "RES0001";
 	private SqlArrayList RequestList = null;
 	private String Requestquery = "SELECT FullName,Facebook,PhoneNumber,Time,FoodList FROM reservations natural join account WHERE RID = '" + ResID + "' ORDER BY(Time) DESC";
 	private Statement stmt;

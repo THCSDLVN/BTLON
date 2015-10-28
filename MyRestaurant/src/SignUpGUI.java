@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -8,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -29,6 +32,7 @@ public class SignUpGUI extends JFrame {
 	private JTextField faceTextFld;
 	private JButton btnCancel;
 	private Account a = new Account();
+	private JPanel panel;
 
 	/**
 	 * Launch the application.
@@ -51,6 +55,7 @@ public class SignUpGUI extends JFrame {
 	 */
 	public SignUpGUI() {
 		super("Sign Up");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/Hungres/icon_signup.png")));
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		ContentPane = new JPanel();
@@ -59,63 +64,84 @@ public class SignUpGUI extends JFrame {
 		ContentPane.setLayout(null);
 		setSize(500, 600);
 		
+		panel = new JPanel();
+		panel.setBounds(51, 0, 393, 539);
+		ContentPane.add(panel);
+		panel.setLayout(null);
+		
 		JLabel signUpIconLbl = new JLabel(new ImageIcon(this.getClass().getResource("/AppName.png")));
-		signUpIconLbl.setBounds(51, 0, 339, 90);
-		ContentPane.add(signUpIconLbl);
+		signUpIconLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		signUpIconLbl.setBounds(-45, 0, 480, 90);
+		panel.add(signUpIconLbl);
 		
 		JLabel nameLbl = new JLabel("Your Name");
-		nameLbl.setBounds(51, 120, 103, 15);
-		ContentPane.add(nameLbl);
+		nameLbl.setBounds(0, 114, 103, 15);
+		panel.add(nameLbl);
 		
 		nameTextFld = new JTextField();
-		nameTextFld.setBounds(212, 114, 232, 27);
-		ContentPane.add(nameTextFld);
+		nameTextFld.setBounds(161, 114, 232, 27);
+		panel.add(nameTextFld);
 		nameTextFld.setColumns(10);
 		
 		usrLbl_1 = new JLabel("Username");
-		usrLbl_1.setBounds(51, 188, 103, 15);
-		ContentPane.add(usrLbl_1);
+		usrLbl_1.setBounds(0, 182, 103, 15);
+		panel.add(usrLbl_1);
 		
 		usrTextFld = new JTextField();
+		usrTextFld.setBounds(161, 182, 232, 27);
+		panel.add(usrTextFld);
 		usrTextFld.setColumns(10);
-		usrTextFld.setBounds(212, 182, 232, 27);
-		ContentPane.add(usrTextFld);
 		
 		pwLbl = new JLabel("Password");
-		pwLbl.setBounds(51, 253, 103, 15);
-		ContentPane.add(pwLbl);
+		pwLbl.setBounds(0, 250, 103, 15);
+		panel.add(pwLbl);
 		
 		pwPassFld = new JPasswordField();
-		pwPassFld.setBounds(212, 247, 232, 27);
-		ContentPane.add(pwPassFld);
+		pwPassFld.setBounds(161, 250, 232, 27);
+		panel.add(pwPassFld);
 		
 		JLabel rePwLbl = new JLabel("Re-type Password");
-		rePwLbl.setBounds(51, 314, 143, 15);
-		ContentPane.add(rePwLbl);
+		rePwLbl.setBounds(0, 318, 143, 15);
+		panel.add(rePwLbl);
 		
 		rePwPassfld = new JPasswordField();
-		rePwPassfld.setBounds(212, 308, 232, 27);
-		ContentPane.add(rePwPassfld);
+		rePwPassfld.setBounds(161, 318, 232, 27);
+		panel.add(rePwPassfld);
 		
 		phoneLbl = new JLabel("Phone Number");
-		phoneLbl.setBounds(51, 384, 143, 15);
-		ContentPane.add(phoneLbl);
+		phoneLbl.setBounds(0, 386, 143, 15);
+		panel.add(phoneLbl);
 		
 		phoneTextFld = new JTextField();
+		phoneTextFld.setBounds(161, 386, 232, 27);
+		panel.add(phoneTextFld);
 		phoneTextFld.setColumns(10);
-		phoneTextFld.setBounds(212, 372, 232, 27);
-		ContentPane.add(phoneTextFld);
 		
 		faceLbl = new JLabel("Facebook");
-		faceLbl.setBounds(51, 451, 143, 15);
-		ContentPane.add(faceLbl);
+		faceLbl.setBounds(0, 454, 143, 15);
+		panel.add(faceLbl);
 		
 		faceTextFld = new JTextField();
+		faceTextFld.setBounds(161, 454, 232, 27);
+		panel.add(faceTextFld);
 		faceTextFld.setColumns(10);
-		faceTextFld.setBounds(212, 445, 232, 27);
-		ContentPane.add(faceTextFld);
 		
 		JButton signUpBtn = new JButton("Sign Up");
+		signUpBtn.setBounds(261, 496, 132, 43);
+		panel.add(signUpBtn);
+		signUpBtn.setIcon(new ImageIcon(this.getClass().getResource("/Hungres/icon_signup.png")));
+		
+		btnCancel = new JButton("Cancel");
+		btnCancel.setBounds(0, 496, 132, 43);
+		panel.add(btnCancel);
+		btnCancel.setIcon(new ImageIcon(this.getClass().getResource("/Hungres/cancel.png")));
+		
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//new LogInGUI().setVisible(true);
+				dispose();
+			}
+		});
 		signUpBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				a.setFullName(nameTextFld.getText());
@@ -123,6 +149,10 @@ public class SignUpGUI extends JFrame {
 				a.setPassword(new String(pwPassFld.getPassword()));
 				a.setPhoneNumber(phoneTextFld.getText());
 				a.setFacebook(faceTextFld.getText());
+				if(a.getUsername().equals("abc"))
+					ContentPane.getComponents()[1].setVisible(true);
+				else
+					ContentPane.getComponents()[1].setVisible(false);
 				//String query = "insertDataQuery(Account~"+a.getID()+"~"+a.getFullName())";
 				int result =0;
 				if(result == 0){
@@ -135,39 +165,34 @@ public class SignUpGUI extends JFrame {
 				}
 			}
 		});
-		signUpBtn.setBounds(356, 506, 88, 33);
-		ContentPane.add(signUpBtn);
-		
-		btnCancel = new JButton("Cancel");
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//new LogInGUI().setVisible(true);
-				dispose();
-			}
-		});
-		btnCancel.setBounds(212, 506, 94, 33);
-		ContentPane.add(btnCancel);
-		
+
+		ButtonGroup sex = new ButtonGroup();
 		JRadioButton maleRdbtn = new JRadioButton("Male");
+		maleRdbtn.setBounds(161, 149, 69, 23);
+		panel.add(maleRdbtn);
 		maleRdbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				a.setSex(true);
 			}
 		});
-		maleRdbtn.setBounds(212, 149, 69, 23);
-		ContentPane.add(maleRdbtn);
+		sex.add(maleRdbtn);
 		
 		JRadioButton femaleRdbtn = new JRadioButton("Female");
+		femaleRdbtn.setBounds(267, 149, 103, 23);
+		panel.add(femaleRdbtn);
 		femaleRdbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				a.setSex(false);
 			}
 		});
-		femaleRdbtn.setBounds(318, 149, 103, 23);
-		ContentPane.add(femaleRdbtn);
-
-		ButtonGroup sex = new ButtonGroup();
 		sex.add(femaleRdbtn);
-		sex.add(maleRdbtn);
+		
+		JPanel checkUsrname = new JPanel();
+		checkUsrname.setBounds(456, 188, 10, 10);
+		checkUsrname.setBackground(Color.RED);
+		checkUsrname.setVisible(false);
+		if(usrTextFld.getText().equals("avc"))
+			ContentPane.getComponents()[1].setVisible(true);
+		ContentPane.add(checkUsrname);
 	}
 }

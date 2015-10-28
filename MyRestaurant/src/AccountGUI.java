@@ -56,7 +56,7 @@ public class AccountGUI extends JFrame {
 		faceLbl.setBounds(244, 140, 194, 22);
 		contentPane.add(faceLbl);
 		
-		JLabel avatarLbl = new JLabel(new ImageIcon(this.getClass().getResource("/female.png")));
+		JLabel avatarLbl = new JLabel(new ImageIcon(this.getClass().getResource("/Resource/female.png")));
 		avatarLbl.setBounds(45, 15, 168, 172);
 		contentPane.add(avatarLbl);
 		
@@ -114,7 +114,7 @@ public class AccountGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int index = restaurantList.getSelectedIndex();
 				String selectRestaurant = model.getElementAt(index);
-				
+				new SelectedRestaurantGUI(selectRestaurant).setVisible(true);
 			}
 		});
 		featureBtn.setBounds(348, 480, 90, 25);
