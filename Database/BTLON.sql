@@ -4,11 +4,10 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Restaurant` (
 	`Address` VARCHAR(20) NOT NULL,
 	`PhoneNumber` VARCHAR(15) NOT NULL,
 	`Facebook` VARCHAR(30) NOT NULL,
-	`Rate` FLOAT  DEFAULT 0 NOT NULL,
+	`NumberLike` LONG NOT NULL,
 	`ResName` VARCHAR(45) NOT NULL,
 	`ResPass` VARCHAR(45) NOT NULL,
-	PRIMARY KEY (`RID`),
-    CHECK(`Rate` BETWEEN 0 AND 5)
+	PRIMARY KEY (`RID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
@@ -30,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Account` (
 	`Password` VARCHAR(25) NOT NULL,
 	`PhoneNumber` VARCHAR(15) NOT NULL,
 	`Facebook` VARCHAR(30) NOT NULL,
-	'Sex' VARCHAR(10) NOT NULL,
+	`Sex` VARCHAR(10) NOT NULL,
 	PRIMARY KEY (`AID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -55,23 +54,8 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Reservations` (
 	`RID` VARCHAR(8) NOT NULL,
 	`AID` VARCHAR(8) NOT NULL,
 	`FoodList` VARCHAR(80) NOT NULL,
-	`Time` DATETIME DEFAULT NOW() NOT NULL,
+	`Time` DATETIME NOT NULL,
 	PRIMARY KEY (`RID`, `AID`),
 	FOREIGN KEY (`AID`) REFERENCES `BT_LON`.`Account` (`AID`),
 	FOREIGN KEY (`RID`) REFERENCES `BT_LON`.`Restaurant` (`RID`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
--- -----------------------------------------------------
--- Table `BT_LON`.`FoodShip`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `BT_LON`.`FoodShip` (
-	`RID` VARCHAR(8) NOT NULL,
-	`AID` VARCHAR(8) NOT NULL,
-	`FoodList` VARCHAR(80) NOT NULL,
-	`ShipAddress` VARCHAR(45) NOT NULL,
-	`Time` DATETIME DEFAULT NOW() NOT NULL,
-	PRIMARY KEY (`AID`, `RID`),
-	FOREIGN KEY (`RID`) REFERENCES `BT_LON`.`Restaurant` (`RID`),
-	FOREIGN KEY (`AID`) REFERENCES `BT_LON`.`Account` (`AID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
