@@ -59,18 +59,3 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Reservations` (
 	FOREIGN KEY (`AID`) REFERENCES `BT_LON`.`Account` (`AID`),
 	FOREIGN KEY (`RID`) REFERENCES `BT_LON`.`Restaurant` (`RID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
--- -----------------------------------------------------
--- Table `BT_LON`.`FoodShip`
--- -----------------------------------------------------
-/*CREATE TABLE IF NOT EXISTS `BT_LON`.`FoodShip` (
-	`RID` VARCHAR(8) NOT NULL,
-	`AID` VARCHAR(8) NOT NULL,
-	`FoodList` VARCHAR(80) NOT NULL,
-	`ShipAddress` VARCHAR(45) NOT NULL,
-	`Time` DATETIME DEFAULT NOW() NOT NULL,
-	PRIMARY KEY (`AID`, `RID`),
-	FOREIGN KEY (`RID`) REFERENCES `BT_LON`.`Restaurant` (`RID`),
-	FOREIGN KEY (`AID`) REFERENCES `BT_LON`.`Account` (`AID`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;*/
