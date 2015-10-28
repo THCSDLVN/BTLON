@@ -20,33 +20,32 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.BorderLayout;
 
 import buttonflag.ButtonFlag;
 
 import insertdataframe.insertmenudata.InsertMenuData;
 import insertdataframe.insertaccountdata.InsertAccountData;
 import insertdataframe.insertrestaurantdata.InsertRestaurantData;
-import insertdataframe.insertreservationdata.InsertReservationData;
+import insertdataframe.insertreservationsdata.InsertReservationsData;
 import insertdataframe.insertprovidedata.InsertProvideData;
-import insertdataframe.insertfoodshipdata.InsertFoodShipData;
 
 public class InsertDataFrame implements InsertDataFrameInterface {
 	public InsertMenuData insertMenuData = new InsertMenuData(panelMenu,frame);
 	public InsertAccountData insertAccountData = new InsertAccountData(panelAccount,frame);
 	public InsertRestaurantData insertRestaurantData = new InsertRestaurantData(panelRestaurant,frame);
-	public InsertReservationData inserReservationData = new InsertReservationData(panelReservations,frame);
+	public InsertReservationsData inserReservationsData = new InsertReservationsData(panelReservations,frame);
 	public InsertProvideData insertProvideData = new InsertProvideData(panelProvide,frame);
-	public InsertFoodShipData insertFoodShipData = new InsertFoodShipData(panelFoodShip,frame);
 
 	public InsertDataFrame(ButtonFlag buttonFlag){
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);
 		frame.setResizable(false);
 		frame.setPreferredSize(new Dimension(680,440));
-		frame.pack();
 
-		frame.getContentPane().add(tabbedPane);
-		frame.getContentPane().setLayout(null);
+		frame.getContentPane().setLayout(new BorderLayout());
+ 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
+		frame.pack();
 
 		tabbedPane.setBounds(0, 0, 680, 440);
 		tabbedPane.addTab("Restaurant", panelRestaurant);
@@ -54,7 +53,6 @@ public class InsertDataFrame implements InsertDataFrameInterface {
 		tabbedPane.addTab("Menu", panelMenu);
 		tabbedPane.addTab("Provide", panelProvide);
 		tabbedPane.addTab("Reservations", panelReservations);
-		tabbedPane.addTab("FoodShip", panelFoodShip);
 
 		frame.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent we){

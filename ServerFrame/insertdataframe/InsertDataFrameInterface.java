@@ -12,7 +12,6 @@ public interface InsertDataFrameInterface {
 	public JPanel panelMenu = new JPanel();
 	public JPanel panelProvide = new JPanel();
 	public JPanel panelReservations = new JPanel();
-	public JPanel panelFoodShip = new JPanel();
 
 	public JTabbedPane tabbedPane = new JTabbedPane();
 }
