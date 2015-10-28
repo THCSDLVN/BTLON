@@ -90,7 +90,7 @@ public class InsertAccountData implements MouseListener{
 		labelNameAccount.setFont(new Font("Ubuntu", 1, 24));
 		labelNameAccount.setForeground(new Color(246, 9, 9));
 		labelNameAccount.setHorizontalAlignment(SwingConstants.CENTER);
-		labelNameAccount.setBounds(190, 10, 290, 28);
+		labelNameAccount.setBounds(180, 20, 290, 28);
 
 		accountAIDLabel.setFont(new Font("Ubuntu", 1, 16));
 		accountAIDLabel.setForeground(new Color(22, 117, 245));
@@ -148,8 +148,8 @@ public class InsertAccountData implements MouseListener{
 
 		checkBox.setFont(new Font("Ubuntu", 1, 15));
 		checkBox.setForeground(new Color(22, 112, 245));
-		checkBox.setText("Are You Sure Want To Create Account");
-		checkBox.setBounds(340, 280, 310, 21);
+		checkBox.setText("Are You Sure Want To Create Account ?");
+		checkBox.setBounds(350, 280, 380, 21);
 		checkBox.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent me){
 				if(checkBox.isSelected()){
@@ -204,7 +204,7 @@ public class InsertAccountData implements MouseListener{
 		accountHelpLabel.setForeground(new Color(22, 117, 245));
 		accountHelpLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		panelAccount.add(accountHelpLabel);
-		accountHelpLabel.setBounds(30, 360, 50, 17);
+		accountHelpLabel.setBounds(30, 370, 40, 20);
 		accountHelpLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		if(accountHelpLabel.getMouseListeners().length < 1){
 			accountHelpLabel.addMouseListener(new MouseAdapter(){

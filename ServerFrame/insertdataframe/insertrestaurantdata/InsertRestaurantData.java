@@ -151,8 +151,8 @@ public class InsertRestaurantData {
 
 		checkBox.setFont(new Font("Ubuntu", 1, 15));
 		checkBox.setForeground(new Color(22, 112, 245));
-		checkBox.setText("Are You Sure Want To Create Account");
-		checkBox.setBounds(360, 270, 310, 21);
+		checkBox.setText("Are You Sure Want To Create Account ?");
+		checkBox.setBounds(350, 270, 380, 21);
 		checkBox.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent me){
 				if(checkBox.isSelected()){
@@ -207,7 +207,7 @@ public class InsertRestaurantData {
 		restaurantHelpLabel.setFont(new Font("Ubuntu", 1, 16));
 		restaurantHelpLabel.setForeground(new Color(22, 117, 245));
 		restaurantHelpLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		restaurantHelpLabel.setBounds(30, 360, 49, 17);
+		restaurantHelpLabel.setBounds(30, 370, 40, 20);
 		restaurantHelpLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		if(restaurantHelpLabel.getMouseListeners().length < 1){
 			restaurantHelpLabel.addMouseListener(new MouseAdapter(){

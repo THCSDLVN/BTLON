@@ -74,7 +74,7 @@ public class InsertProvideData {
 		provideCostLabel.setForeground(new Color(22, 117, 245));
 		provideCostLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		provideCostLabel.setBorder(BorderFactory.createEtchedBorder());
-		provideCostLabel.setBounds(140, 260, 120, 40);
+		provideCostLabel.setBounds(140, 250, 120, 40);
 
 		provideFIDLabel.setFont(new Font("Ubuntu", 1, 16)); 
 		provideFIDLabel.setForeground(new Color(22, 117, 245));
@@ -89,7 +89,7 @@ public class InsertProvideData {
 		provideRIDTextField.setBounds(320, 170, 230, 40);
 
 		provideCostTextField.setFont(new Font("Ubuntu", 1, 18));
-		provideCostTextField.setBounds(320, 260, 230, 40);
+		provideCostTextField.setBounds(320, 250, 230, 40);
 
 		provideHelpLabel.setFont(new Font("Ubuntu", 1, 16));
 		provideHelpLabel.setForeground(new Color(22, 117, 245));
@@ -105,6 +105,15 @@ public class InsertProvideData {
 					msg.append("\nInput data into textField correlative to labelName");
 					msg.append("\nEach time you can only insert one record to table");
 					JOptionPane.showMessageDialog(null,msg.toString(),"Help Of InsertProvideDataFrame",JOptionPane.INFORMATION_MESSAGE,icon);
+				}
+				public void mouseEntered(MouseEvent me) {
+					final Map attributes = (new Font("Ubuntu", 1, 16)).getAttributes();
+					attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+					me.getComponent().setFont(new Font(attributes));
+				}
+				
+				public void mouseExited(MouseEvent me) {
+					me.getComponent().setFont(new Font("Ubuntu", 1, 16));
 				}
 			});
 		}
