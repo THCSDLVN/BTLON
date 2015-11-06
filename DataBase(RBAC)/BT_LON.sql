@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Restaurant` (
   `Resname` VARCHAR(45) NULL,
   KEY(`ResID`),
   PRIMARY KEY (`ResID`))
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Provide` (
   `ResID` VARCHAR(8) NOT NULL,
   `Foodname` VARCHAR(45) NOT NULL,
   `Cost` DOUBLE NULL,
-  `Describe` VARCHAR(45) NULL,
+  `Description` VARCHAR(45) DEFAULT ' ' NULL,
   KEY (`Foodname`),
   PRIMARY KEY (`ResID`, `Foodname`),
   CONSTRAINT `fk_Provide_1`
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Provide` (
     REFERENCES `BT_LON`.`Restaurant` (`ResID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
@@ -43,9 +43,10 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Account` (
   `Password` VARCHAR(45) NULL,
   `FullName` VARCHAR(45) NULL,
   `Birthday` DATE NULL,
+  `Sex` VARCHAR(6) NOT NULL,
   KEY (`AID`),
   PRIMARY KEY (`AID`))
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
@@ -54,7 +55,6 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `BT_LON`.`Manage` (
   `AID` VARCHAR(8) NOT NULL,
   `ResID` VARCHAR(8) NOT NULL,
-  `Permision` TINYINT(1) NULL,
   PRIMARY KEY (`AID`, `ResID`),
   INDEX `fk_Manage_2_idx` (`ResID` ASC),
   CONSTRAINT `fk_Manage_1`
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Manage` (
     REFERENCES `BT_LON`.`Restaurant` (`ResID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`SequenceRestaurant` (
     REFERENCES `BT_LON`.`Manage` (`ResID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Order` (
     REFERENCES `BT_LON`.`SequenceRestaurant` (`ResID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Roles` (
   `Rolename` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`RLID`)
   )
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Objects` (
   `Objectname` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`OBJID`)
   )
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Operations` (
   `Delete` BOOLEAN NOT NULL,
   PRIMARY KEY (`OPID`)
   )
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
@@ -186,7 +186,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Permissions` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
   )
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
@@ -207,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`PermissionsAssignment` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
   )
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
@@ -228,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`AccountAssignment` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
   )
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
