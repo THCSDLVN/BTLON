@@ -12,13 +12,13 @@ public class ERRDiagram extends JFrame{
 		getContentPane().setLayout(null);
 		setVisible(true);
 		setResizable(false);
-		setPreferredSize(new Dimension(750,523));
+		setPreferredSize(new Dimension(820,540));
 		pack();
 
 		JLabel labelImage = new JLabel();
 
 		labelImage.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/Resource/ERRDiagram.png"));
 		getContentPane().add(labelImage);
-		labelImage.setBounds(0, 0, 750, 515);
+		labelImage.setBounds(0, 0, 820, 540);
 	}
 }

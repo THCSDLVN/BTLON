@@ -30,7 +30,6 @@ import java.util.Map;
 
 import java.sql.ResultSet;
 
-import buttonflag.ButtonFlag;
 import sqlfunc.SQLFunc;
 import tableforresult.TableForResult;
 
@@ -41,7 +40,7 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 	public final int RB_MAX = rb.length - 1;
 	public int rbSelected = RB_MAX;
 	
-	public DataQueryFrame(ButtonFlag buttonFlag){
+	public DataQueryFrame(){
 		super("Data Query");
 		getContentPane().setLayout(null);
 		setVisible(true);
@@ -233,10 +232,6 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 
 		addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent we){
-				buttonFlag.buttonInsertFlag = 1;
-				buttonFlag.buttonUpdateFlag = 1;
-				buttonFlag.buttonDeleteFlag = 1;
-				buttonFlag.buttonQueryFlag = 1;
 
 				tableNameTextField.setText("");
 				listColumnTextField.setText("");
