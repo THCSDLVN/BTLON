@@ -7,5 +7,5 @@ public interface SQLFuncInterface {
 	public final String standardCharacter1 = "abcdefghijklmnopqrstuvxywz";
 	public final String standardCharacter2 = "ABCDEFGHIJKLMNOPQRSTUVXYWZ";
 	public final String standardCharacter3 = "0123456789_";
-	public final String standardCharacter4 = ",";
+	public final String standardCharacter4 = ",*";
 }

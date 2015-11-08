@@ -94,11 +94,24 @@ public class SQLFunc implements SQLFuncInterface{
 		stringResultArray = stringTokenizer(input);
 		buff.append(stringResultArray[0]);
 		for(int i = 1 ; i < stringResultArray.length ; i++){
-			buff.append(" natural join ");
+			buff.append(" inner join ");
 			buff.append(stringResultArray[i]);
 		}
 		return buff.toString();
 	}
+
+	public String listColumnTreating(String tableName,String on){
+		String tableNameResult[] = stringTokenizer(tableName);
+		StringBuffer onKey = new StringBuffer();
+		onKey.append(tableNameResult[0]);
+		for(int i = 1 ; i < tableNameResult.length ; i++){
+			onKey.append("." + on + " = " +  tableNameResult[i] + "." + on);
+			if(i < tableNameResult.length - 1){
+				onKey.append(" and " + tableNameResult[i]);
+			}
+		} 
+		return onKey.toString();
+	} 
 
 	public ResultSet executeQueryCommand(String queryCommand){
 		try{ 
@@ -120,7 +133,7 @@ public class SQLFunc implements SQLFuncInterface{
 		}
 	}
 
-	public ResultSet dataQuery(String tableName, String listColumn, String condition, String groupBy, String having, String orderBy, String arrangement){
+	public ResultSet dataQuery(String tableName, String listColumn, String on, String condition, String groupBy, String having, String orderBy, String arrangement){
 		if(tableName.equals("") || listColumn.equals("") || !checkString(tableName,true)){
 			return null;
 		}
@@ -136,6 +149,10 @@ public class SQLFunc implements SQLFuncInterface{
 		String tableNameOut = tableNameTreating(tableName);
 		StringBuffer queryCommand = new StringBuffer();
 		queryCommand.append("SELECT " + listColumn + " FROM " + tableNameOut);
+		if(!on.equals("")){
+			String onKey = listColumnTreating(tableName,on);
+			queryCommand.append(" ON " + onKey);
+		}
 		if(!condition.equals("")){
 			queryCommand.append(" WHERE " + condition);
 		}
@@ -177,42 +194,15 @@ public class SQLFunc implements SQLFuncInterface{
 		
 		StringBuffer queryCommand = new StringBuffer();
 		if(tableName.equals("Account")){
-			if(setColumn.equals("UserName")){
-				if(!checkDataInsertForAccount(setNewValue,"")){
-					return 0;
-				}
-			}
-			else if(setColumn.equals("PhoneNumber")){
-				if(!checkDataInsertForAccount("",setNewValue)){
+			if(setColumn.equals("Username")){
+				if(!checkDataInsertForAccount(setNewValue)){
 					return 0;
 				}
 			}
 		}
 		else if(tableName.equals("Restaurant")){
-			if(setColumn.equals("RestaurantName")){
-				if(!checkDataInsertForRestaurant(setNewValue,"","","")){
-					return 0;
-				}
-			}
-			else if(setColumn.equals("Address")){
-				if(!checkDataInsertForRestaurant("",setNewValue,"","")){
-					return 0;
-				}
-			}
-			else if(setColumn.equals("PhoneNumber")){
-				if(!checkDataInsertForRestaurant("","",setNewValue,"")){
-					return 0;
-				}
-			}
-			else if(setColumn.equals("ResName")){
-				if(!checkDataInsertForRestaurant("","","",setNewValue)){
-					return 0;
-				}
-			}
-		}
-		else if(tableName.equals("Menu")){
-			if(setColumn.equals("FoodName")){
-				if(!checkDataInsertForMenu(setNewValue)){
+			if(setColumn.equals("ResName")){
+				if(!checkDataInsertForRestaurant(setNewValue)){
 					return 0;
 				}
 			}
@@ -226,7 +216,7 @@ public class SQLFunc implements SQLFuncInterface{
 		return executeUpdateCommand(queryCommand.toString());
 	}
 
-	public int insertDataQuery(String tableName, String value1, String value2, String value3, String value4, String value5, String value6, String value7, String value8){
+	public int insertDataQuery(String tableName, String value1, String value2, String value3, String value4, String value5, String value6){
 		if(tableName.equals("") || !checkString(tableName,false)){
 			return 0;
 		}
@@ -238,46 +228,34 @@ public class SQLFunc implements SQLFuncInterface{
 
 
 		if(tableName.equals("Restaurant")){
-			if(!checkDataInsertForRestaurant(value2,value3,value4,value7) || value1.equals("")){
-				return 0;
-			}
-			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 + "','" + value7 + "','" + value8 + "');");
-		}
-		else if(tableName.equals("Account")){
-			if(!checkDataInsertForAccount(value3,value5) || value1.equals("")){
-				return 0;
-			}
-			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 + "');");
-		}
-		else if(tableName.equals("Menu")){
-			if(!checkDataInsertForMenu(value2)  || value1.equals("")){
+			if(!checkDataInsertForRestaurant(value2)){
 				return 0;
 			}
 			queryCommand.append("('" + value1 + "','" + value2 + "');");
 		}
-		else if(tableName.equals("Provide")){
-			if(value1.equals("") || value2.equals("")){
+		else if(tableName.equals("Account")){
+			if(!checkDataInsertForAccount(value2)){
 				return 0;
 			}
+			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 + "');");
+		}
+		else if(tableName.equals("Provide")){
+			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "');");
+		}
+		else if(tableName.equals("Order")){
+			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 + "');");
+		}
+		else if(tableName.equals("SequenceRestaurant")){
 			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "');");
 		}
-		else if(tableName.equals("Reservations")){
-			if(value1.equals("") || value2.equals("")){
-				return 0;
-			}
-			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "')");
-		}
-		else if(tableName.equals("FoodShip")){
-			if(value1.equals("") || value2.equals("")){
-				return 0;
-			}
-			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "')");
+		else if(tableName.equals("Manage")){
+			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "');");
 		}
 
 		return executeUpdateCommand(queryCommand.toString());
 	}
 
-	public boolean checkDataInsertForRestaurant(String restaurantName, String address, String phoneNumber, String resName){
+	public boolean checkDataInsertForRestaurant(String resName){
 		int rows = 0,counter = 0;
 		try{
 			result = executeQueryCommand("SELECT * FROM Restaurant;");
@@ -297,9 +275,6 @@ public class SQLFunc implements SQLFuncInterface{
 		
 		try{ 
 			while(result.next()){
-				restaurantNameArray[counter] = result.getString("RestaurantName");
-				addressArray[counter] = result.getString("Address");
-				phoneNumberArray[counter] = result.getString("PhoneNumber");
 				resNameArray[counter++] = result.getString("ResName");
 			}
 		}
@@ -308,7 +283,7 @@ public class SQLFunc implements SQLFuncInterface{
 		}
 
 		for(counter = 0 ; counter < rows ; counter ++){
-			if((!restaurantName.equals("") && restaurantName.equals(restaurantNameArray[counter])) || (!address.equals("") && address.equals(addressArray[counter])) || (!phoneNumber.equals("") && phoneNumber.equals(phoneNumberArray[counter])) || (!resName.equals("") && resName.equals(resNameArray[counter]))){
+			if(!resName.equals("") && resName.equals(resNameArray[counter])){
 				return false;
 			}
 		}
@@ -316,7 +291,7 @@ public class SQLFunc implements SQLFuncInterface{
 		return true;
 	}
 	
-	public boolean checkDataInsertForAccount(String userName, String phoneNumber){
+	public boolean checkDataInsertForAccount(String userName){
 		int rows = 0,counter = 0;
 		try{ 
 			result = executeQueryCommand("SELECT * FROM Account;");
@@ -330,12 +305,10 @@ public class SQLFunc implements SQLFuncInterface{
 		}
 
 		String userNameArray[] = new String[rows];
-		String phoneNumberArray[] = new String[rows];
 
 		try{ 
 			while(result.next()){
-				userNameArray[counter] = result.getString("UserName");
-				phoneNumberArray[counter++] = result.getString("PhoneNumber");
+				userNameArray[counter++] = result.getString("Username");
 			}
 		}
 		catch(SQLException sqle){
@@ -343,42 +316,10 @@ public class SQLFunc implements SQLFuncInterface{
 		}
 
 		for(counter = 0 ; counter < rows ; counter ++){
-			if((!userName.equals("") && userName.equals(userNameArray[counter])) || (!phoneNumber.equals("") && phoneNumber.equals(phoneNumberArray[counter]))){
+			if(!userName.equals("") && userName.equals(userNameArray[counter])){
 				return false;
 			}
 		}
 		return true;	
 	}
-	
-	public boolean checkDataInsertForMenu(String foodName){
-		int rows = 0,counter = 0;
-		try{ 
-			result = executeQueryCommand("SELECT * FROM Menu;");
-			if(result.last()){
-				rows = result.getRow();
-				result.beforeFirst();
-			}
-		}
-		catch(SQLException sqle){
-			System.out.println(sqle.getMessage());
-		}
-
-		String foodNameArray[] = new String[rows];
-
-		try{
-			while(result.next()){
-				foodNameArray[counter++] = result.getString("FoodName");
-			}
-		}
-		catch(SQLException sqle){
-			System.out.println(sqle.getMessage());
-		}
-		
-		for(counter = 0 ; counter < rows ; counter ++){
-			if((!foodName.equals("") && foodName.equals(foodNameArray[counter]))){
-				return false;
-			}
-		}
-		return true;
-	} 
 }

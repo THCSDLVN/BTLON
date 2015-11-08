@@ -125,7 +125,7 @@ public class ServerProcessRequest {
 			return Integer.toString(funcTool.updateDataQuery(fillParam[0],fillParam[1],fillParam[2],fillParam[3]));
 		}
 		else if(command.equals("insertDataQuery")){
-			return Integer.toString(funcTool.insertDataQuery(fillParam[0],fillParam[1],fillParam[2],fillParam[3],fillParam[4],fillParam[5],fillParam[6],fillParam[7],fillParam[8]));
+			return Integer.toString(funcTool.insertDataQuery(fillParam[0],fillParam[1],fillParam[2],fillParam[3],fillParam[4],fillParam[5],fillParam[6]));
 		}
 		else if(command.equals("deleteDataQuery")){
 			return Integer.toString(funcTool.deleteDataQuery(fillParam[0],fillParam[1]));
