@@ -323,7 +323,8 @@ public class restaurant extends JFrame {
 						lblTimeInfo.setText(RowInfo[4]);
 						DefaultTableModel model = (DefaultTableModel) RQFoodtbl.getModel();
 						model.setRowCount(0);
-						for(int i=0;i<Foods.getRownumber();i++) model.addRow(Foods.getRow(i));
+						for(int i=0;i<Foods.getRownumber();i++) 
+							model.addRow(Foods.getRow(i));
 						lblTotalCostInfo.setText(Foods.getRow(0)[2]);
 					}
 				}catch(Exception ex)
