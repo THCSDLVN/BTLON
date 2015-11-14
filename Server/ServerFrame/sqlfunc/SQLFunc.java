@@ -216,7 +216,7 @@ public class SQLFunc implements SQLFuncInterface{
 		return executeUpdateCommand(queryCommand.toString());
 	}
 
-	public int insertDataQuery(String tableName, String value1, String value2, String value3, String value4, String value5, String value6){
+	public int insertDataQuery(String tableName, String value1, String value2, String value3, String value4, String value5, String value6,String value7){
 		if(tableName.equals("") || !checkString(tableName,false)){
 			return 0;
 		}
@@ -224,7 +224,7 @@ public class SQLFunc implements SQLFuncInterface{
 		getStatement();
 		
 		StringBuffer queryCommand = new StringBuffer();
-		queryCommand.append("INSERT INTO " + tableName + " VALUE ");
+		queryCommand.append("INSERT INTO " + tableName + " VALUES ");
 
 
 		if(tableName.equals("Restaurant")){
@@ -237,7 +237,7 @@ public class SQLFunc implements SQLFuncInterface{
 			if(!checkDataInsertForAccount(value2)){
 				return 0;
 			}
-			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 + "');");
+			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 + "','" + value7 +"');");
 		}
 		else if(tableName.equals("Provide")){
 			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "');");
@@ -246,10 +246,28 @@ public class SQLFunc implements SQLFuncInterface{
 			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 + "');");
 		}
 		else if(tableName.equals("SequenceRestaurant")){
-			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "');");
+			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "');");
 		}
 		else if(tableName.equals("Manage")){
-			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "');");
+			queryCommand.append("('" + value1 + "','" + value2 + "');");
+		}
+		else if(tableName.equals("Permisions")){
+			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 +"');");
+		}
+		else if(tableName.equals("PermisionsAssignment")){
+			queryCommand.append("('" + value1 + "','" + value2 +"');");
+		}
+		else if(tableName.equals("Objects")){
+			queryCommand.append("('" + value1 + "','" + value2 +"');");
+		}
+		else if(tableName.equals("AccountAssignment")){
+			queryCommand.append("('" + value1 + "','" + value2 +"');");
+		}
+		else if(tableName.equals("Roles")){
+			queryCommand.append("('" + value1 + "','" + value2 +"');");
+		}
+		else if(tableName.equals("Operations")){
+			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 +"');");
 		}
 
 		return executeUpdateCommand(queryCommand.toString());
@@ -308,7 +326,7 @@ public class SQLFunc implements SQLFuncInterface{
 
 		try{ 
 			while(result.next()){
-				userNameArray[counter++] = result.getString("Username");
+				userNameArray[counter] = result.getString("UserName");
 			}
 		}
 		catch(SQLException sqle){
@@ -320,6 +338,6 @@ public class SQLFunc implements SQLFuncInterface{
 				return false;
 			}
 		}
-		return true;	
+		return true;
 	}
 }
