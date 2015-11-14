@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.UIManager;
+import javax.swing.plaf.ColorUIResource;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -133,6 +135,11 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 		if(labelHelp.getMouseListeners().length < 1){
 			labelHelp.addMouseListener(new MouseAdapter(){
 				public void mouseClicked(MouseEvent me){
+					UIManager UI = new UIManager();
+ 					UI.put("OptionPane.background",new ColorUIResource(0, 153, 204));
+ 					UI.put("Panel.background",new ColorUIResource(0, 153, 204));
+ 					UI.put("OptionPane.messageForeground", Color.WHITE);
+
 					Icon icon = new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/Resource/float.png");
 					StringBuffer msg = new StringBuffer();
 					msg.append("This is the window to retrieve data,");
