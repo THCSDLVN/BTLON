@@ -3,12 +3,11 @@ package dataqueryframe;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 
 public interface DataQueryFrameInterface {
-	public JButton buttonOk = new JButton("OK");
+	public JLabel labelBackGround = new JLabel();
+	public JLabel labelIcon = new JLabel();
 	public JLabel labelFrameName = new JLabel("DATA QUERY");
 	public JLabel labelTableName = new JLabel("Table Name");
 	public JLabel labelColumnName = new JLabel("List Column");
@@ -18,6 +17,8 @@ public interface DataQueryFrameInterface {
 	public JLabel labelHaving = new JLabel("Having");
 	public JLabel labelOrderBy = new JLabel("Order By");
 	public JLabel labelHelp = new JLabel("HELP");
+
+	public JButton buttonOk = new JButton("OK");
 
 	public JTextField tableNameTextField = new JTextField();
 	public JTextField listColumnTextField = new JTextField();

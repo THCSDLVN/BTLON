@@ -45,7 +45,7 @@ public class ServerFrame extends JFrame implements ServerFrameInterface{
 		backGroundLabel.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/Resource/background.png"));
 		backGroundLabel.setBounds(-1, 0, 580, 390);
 
-		buttonExit.setBackground(new Color(254, 236, 181));
+		buttonExit.setBackground(new Color(252, 249, 194));
 		buttonExit.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		buttonExit.setBounds(450, 160, 110, 30);
 		buttonExit.setFont(new Font("Ubuntu", 1, 15));
@@ -63,7 +63,7 @@ public class ServerFrame extends JFrame implements ServerFrameInterface{
 			}
 		});
 
-		buttonQuery.setBackground(new Color(254, 236, 181));
+		buttonQuery.setBackground(new Color(252, 249, 194));
 		buttonQuery.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		buttonQuery.setBounds(450, 60, 110, 30);
 		buttonQuery.setFont(new Font("Ubuntu", 1, 14));
@@ -79,7 +79,7 @@ public class ServerFrame extends JFrame implements ServerFrameInterface{
 			});
 		}
 
-		buttonDiagram.setBackground(new Color(254, 236, 181));
+		buttonDiagram.setBackground(new Color(252, 249, 194));
 		buttonDiagram.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		buttonDiagram.setBounds(450, 110, 110, 30);
 		buttonDiagram.setFont(new Font("Ubuntu", 1, 15));

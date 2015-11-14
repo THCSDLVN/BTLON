@@ -9,7 +9,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
@@ -32,20 +31,31 @@ import java.sql.ResultSet;
 
 import sqlfunc.SQLFunc;
 import tableforresult.TableForResult;
+import textprompt.TextPrompt;
+import buttonflag.ButtonFlag;
 
 public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFrameInterface{
 	public String arrangement = new String("");
+	
 	public ButtonGroup rbGroup = new ButtonGroup();
 	public JRadioButton[] rb = new JRadioButton[3];
 	public final int RB_MAX = rb.length - 1;
 	public int rbSelected = RB_MAX;
+
+	public TextPrompt tpTableName = new TextPrompt("Enter Table Name(s)",tableNameTextField);
+	public TextPrompt tpListColumn = new TextPrompt("Enter List Column(s)",listColumnTextField);
+	public TextPrompt tpOnKey = new TextPrompt("Enter Key",onKeyTextField);
+	public TextPrompt tpCondition = new TextPrompt("Enter Condition",conditionTextField);
+	public TextPrompt tpGroupBy = new TextPrompt("Enter Group Column(s)",groupByTextField);
+	public TextPrompt tpHaving = new TextPrompt("Enter Having Column(s)",havingTextField);
+	public TextPrompt tpOrderBy = new TextPrompt("Enter Order Column(s)",orderByTextField);
 	
-	public DataQueryFrame(){
+	public DataQueryFrame(ButtonFlag buttonFlag){
 		super("Data Query");
 		getContentPane().setLayout(null);
 		setVisible(true);
 		setResizable(false);
-		setPreferredSize(new Dimension(485,580));
+		setPreferredSize(new Dimension(480,600));
 		pack();
 
 		getContentPane().add(labelFrameName);
@@ -57,6 +67,7 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 		getContentPane().add(labelGroupBy);
 		getContentPane().add(labelHaving);
 		getContentPane().add(labelOrderBy);
+		getContentPane().add(labelIcon);
 
 		getContentPane().add(tableNameTextField);
 		getContentPane().add(conditionTextField);
@@ -68,57 +79,56 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 
 		getContentPane().add(buttonOk);
 
+		labelBackGround.setBounds(0, 0, 480, 600);
+		labelBackGround.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/Resource/backgroundDQ.png"));
+
+		labelIcon.setBounds(100, 10, 50, 50);
+		labelIcon.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/Resource/find.png"));
+
 		labelFrameName.setFont(new Font("Ubuntu", 1, 24));
-		labelFrameName.setForeground(new Color(246, 9, 9));
+		labelFrameName.setForeground(new Color(254, 254, 254));
 		labelFrameName.setHorizontalAlignment(SwingConstants.CENTER);
-		labelFrameName.setBounds(170, 10, 160, 40);
+		labelFrameName.setBounds(160, 10, 180, 40);
 
 		labelTableName.setFont(new Font("Ubuntu", 1, 16));
-		labelTableName.setForeground(new Color(22, 117, 245));
+		labelTableName.setForeground(new Color(254, 254, 254));
 		labelTableName.setHorizontalAlignment(SwingConstants.CENTER);
-		labelTableName.setBorder(BorderFactory.createEtchedBorder());
-		labelTableName.setBounds(70, 70, 110, 40);
+		labelTableName.setBounds(50, 70, 110, 40);
 
 		labelColumnName.setFont(new Font("Ubuntu", 1, 16));
-		labelColumnName.setForeground(new Color(22, 117, 245));
+		labelColumnName.setForeground(new Color(254, 254, 254));
 		labelColumnName.setHorizontalAlignment(SwingConstants.CENTER);
-		labelColumnName.setBorder(BorderFactory.createEtchedBorder());
-		labelColumnName.setBounds(70, 130, 110, 40);
+		labelColumnName.setBounds(50, 130, 110, 40);
 
 		labelOnKey.setFont(new Font("Ubuntu", 1, 16));
-		labelOnKey.setForeground(new Color(22, 117, 245));
+		labelOnKey.setForeground(new Color(254, 254, 254));
 		labelOnKey.setHorizontalAlignment(SwingConstants.CENTER);
-		labelOnKey.setBorder(BorderFactory.createEtchedBorder());
-		labelOnKey.setBounds(70, 190, 110, 40);
+		labelOnKey.setBounds(50, 190, 110, 40);
 
 		labelCondition.setFont(new Font("Ubuntu", 1, 16));
-		labelCondition.setForeground(new Color(22, 117, 245));
+		labelCondition.setForeground(new Color(254, 254, 254));
 		labelCondition.setHorizontalAlignment(SwingConstants.CENTER);
-		labelCondition.setBorder(BorderFactory.createEtchedBorder());
-		labelCondition.setBounds(70, 250, 110, 40);
+		labelCondition.setBounds(50, 250, 110, 40);
 
 		labelGroupBy.setFont(new Font("Ubuntu", 1, 16));
-		labelGroupBy.setForeground(new Color(22, 117, 245));
-		labelGroupBy.setHorizontalAlignment(SwingConstants.CENTER);
-		labelGroupBy.setBorder(BorderFactory.createEtchedBorder());
-		labelGroupBy.setBounds(70, 310, 110, 40);
+		labelGroupBy.setForeground(new Color(254, 254, 254));
+		labelGroupBy.setHorizontalAlignment(SwingConstants.CENTER);	
+		labelGroupBy.setBounds(50, 310, 110, 40);
 
 		labelHaving.setFont(new Font("Ubuntu", 1, 16));
-		labelHaving.setForeground(new Color(22, 117, 245));
+		labelHaving.setForeground(new Color(254, 254, 254));
 		labelHaving.setHorizontalAlignment(SwingConstants.CENTER);
-		labelHaving.setBorder(BorderFactory.createEtchedBorder());
-		labelHaving.setBounds(70, 370, 110, 40);
+		labelHaving.setBounds(50, 370, 110, 40);
 
 		labelOrderBy.setFont(new Font("Ubuntu", 1, 16));
-		labelOrderBy.setForeground(new Color(22, 117, 245));
+		labelOrderBy.setForeground(new Color(254, 254, 254));
 		labelOrderBy.setHorizontalAlignment(SwingConstants.CENTER);
-		labelOrderBy.setBorder(BorderFactory.createEtchedBorder());
-		labelOrderBy.setBounds(70, 430, 110, 40);
+		labelOrderBy.setBounds(50, 430, 110, 40);
 
 		labelHelp.setFont(new Font("Ubuntu", 1, 16));
-		labelHelp.setForeground(new Color(22, 117, 245));
+		labelHelp.setForeground(new Color(254, 254, 254));
 		labelHelp.setHorizontalAlignment(SwingConstants.CENTER);
-		labelHelp.setBounds(20, 550, 49, 17);
+		labelHelp.setBounds(30, 560, 49, 17);
 		labelHelp.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		if(labelHelp.getMouseListeners().length < 1){
 			labelHelp.addMouseListener(new MouseAdapter(){
@@ -155,9 +165,9 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 		}
 
 		buttonOk.setFont(new Font("Ubuntu", 1, 18));
-		buttonOk.setForeground(new Color(22, 117, 245));
-		buttonOk.setBounds(190, 520, 100, 50);
-		buttonOk.setBackground(Color.WHITE);
+		buttonOk.setForeground(new Color(254, 254, 254));
+		buttonOk.setBounds(200, 530, 100, 50);
+		buttonOk.setBackground(new Color(254, 120, 4));
 		if(buttonOk.getActionListeners().length < 1){
 			buttonOk.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent ae){
@@ -189,27 +199,22 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 				}
 			});
 		}
+
+		tpTableName.setForeground(new Color(208, 206, 206));
+		tpListColumn.setForeground(new Color(208, 206, 206));
+		tpOnKey.setForeground(new Color(208, 206, 206));
+		tpCondition.setForeground(new Color(208, 206, 206));
+		tpGroupBy.setForeground(new Color(208, 206, 206));
+		tpHaving.setForeground(new Color(208, 206, 206));
+		tpOrderBy.setForeground(new Color(208, 206, 206));
 		
-		tableNameTextField.setBounds(230, 70, 200, 40);
-		tableNameTextField.setFont(new Font("Ubuntu" , 1, 18));
-		
-		listColumnTextField.setFont(new Font("Ubuntu" , 1, 18));
-		listColumnTextField.setBounds(230, 130, 200, 40);
-		
-		onKeyTextField.setBounds(230, 190, 200, 40);
-		onKeyTextField.setFont(new Font("Ubuntu" , 1, 18));
-		
-		conditionTextField.setBounds(230, 250, 200, 40);
-		conditionTextField.setFont(new Font("Ubuntu" , 1, 18));
-		
-		groupByTextField.setFont(new Font("Ubuntu" , 1, 18));
-		groupByTextField.setBounds(230, 310, 200, 40);
-		
-		havingTextField.setFont(new Font("Ubuntu" , 1, 18));
-		havingTextField.setBounds(230, 370, 200, 40);
-		
-		orderByTextField.setFont(new Font("Ubuntu" , 1, 18));
-		orderByTextField.setBounds(230, 430, 200, 40);
+		tableNameTextField.setBounds(210, 70, 220, 40);
+		listColumnTextField.setBounds(210, 130, 220, 40);
+		onKeyTextField.setBounds(210, 190, 220, 40);
+		conditionTextField.setBounds(210, 250, 220, 40);
+		groupByTextField.setBounds(210, 310, 220, 40);
+		havingTextField.setBounds(210, 370, 220, 40);
+		orderByTextField.setBounds(210, 430, 220, 40);
 
 		rb[0] = new JRadioButton("ASC");
 		rb[1] = new JRadioButton("DESC");
@@ -219,14 +224,25 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 		rb[1].addMouseListener(this);
 		rb[2].addMouseListener(this);
 
+		rb[0].setFont(new Font("Ubuntu", 1, 15));
+		rb[1].setFont(new Font("Ubuntu", 1, 15));
+
 		rb[0].setBounds(230, 490, 70, 21);
 		rb[1].setBounds(360, 490, 70, 21);
 		
 		rbGroup.add(rb[0]);
 		rbGroup.add(rb[1]);
 		rbGroup.add(rb[2]);
+
+		rb[0].setForeground(new Color(254, 254, 254));
+		rb[1].setForeground(new Color(254, 254, 254));
+
+		rb[0].setBackground(new Color(0, 153, 204));
+		rb[1].setBackground(new Color(0, 153, 204));
+
 		getContentPane().add(rb[0]);
 		getContentPane().add(rb[1]);
+		getContentPane().add(labelBackGround);
 		
 		rb[rbSelected].setSelected(true);
 
@@ -243,6 +259,7 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 				arrangement = "";
 
 				rbGroup.clearSelection();
+				buttonFlag.buttonQueryFlag = 1;
 			}
 		});
 	}
