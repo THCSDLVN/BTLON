@@ -189,6 +189,11 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 					String orderBy = new String(orderByTextField.getText());
 					ResultSet result = sqlFunc.dataQuery(tableName,listColumn,onKey,condition,groupBy,having,orderBy,arrangement);
 					if(result == null){
+						UIManager UI = new UIManager();
+ 						UI.put("OptionPane.background",new ColorUIResource(0, 153, 204));
+ 						UI.put("Panel.background",new ColorUIResource(0, 153, 204));
+ 						UI.put("OptionPane.messageForeground", Color.WHITE);
+						
 						JOptionPane.showMessageDialog(null,"Error In Query Command","Help Of DataQueryFrame",JOptionPane.INFORMATION_MESSAGE,icon);
 						return ;
 					}
