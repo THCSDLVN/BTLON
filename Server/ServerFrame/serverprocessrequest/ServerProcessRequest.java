@@ -55,7 +55,7 @@ public class ServerProcessRequest {
 			}
 		}
 		else if(command.equals("insertDataQuery")){
-			if(fillParam.length != 9){
+			if(fillParam.length != 7){
 				return false;
 			}
 		}
