@@ -1,4 +1,4 @@
-public ResultSet dataQuery(String tableName, String listColumn,String on, String condition, String groupBy, String having, String orderBy, String arrangement)
+public ResultSet dataQuery(String tableName, String listColumn,String on, String condition, String groupBy, String having)
 
 /*
 hàm truy xuất dữ liệu - sử dụng câu lệnh SELECT FROM
@@ -9,8 +9,6 @@ on = key trong inner join(chỉ được 1 key tại 1 thoi diem truy van)
 condition = giống như khi viết câu lệnh SQL (VD:AID = 'ACC0001' and RID = 'RES0001')
 group by = giống như khi viết câu lệnh SQL
 having = tương tự trên
-OrderBy = tương tự trên
-arrangement = ASC || DESC
 tableName và listColumn bắt buộc khác rỗng
 các thành phần còn lại có thể bằng rỗng("","","") - nhưng buộc phải có trong câu lệnh
 */
