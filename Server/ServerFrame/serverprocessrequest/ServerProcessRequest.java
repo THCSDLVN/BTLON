@@ -45,7 +45,7 @@ public class ServerProcessRequest {
 
 	public boolean checkParam(){
 		if(command.equals("dataQuery")){
-			if(fillParam.length != 8){
+			if(fillParam.length != 6){
 				return false;
 			}
 		}
@@ -113,7 +113,7 @@ public class ServerProcessRequest {
 	}
 
 	public List<List<String>> executeDataQuery(){
-		ResultSet result = funcTool.dataQuery(fillParam[0],fillParam[1],fillParam[2],fillParam[3],fillParam[4],fillParam[5],fillParam[6],fillParam[7]);
+		ResultSet result = funcTool.dataQuery(fillParam[0],fillParam[1],fillParam[2],fillParam[3],fillParam[4],fillParam[5]);
 		if(result == null){
 			return null;
 		}

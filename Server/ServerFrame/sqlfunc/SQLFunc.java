@@ -133,7 +133,7 @@ public class SQLFunc implements SQLFuncInterface{
 		}
 	}
 
-	public ResultSet dataQuery(String tableName, String listColumn, String on, String condition, String groupBy, String having, String orderBy, String arrangement){
+	public ResultSet dataQuery(String tableName, String listColumn, String on, String condition, String groupBy, String having){
 		if(tableName.equals("") || listColumn.equals("") || !checkString(tableName,true)){
 			return null;
 		}
@@ -161,12 +161,6 @@ public class SQLFunc implements SQLFuncInterface{
 		}
 		if(!having.equals("")){
 			queryCommand.append(" HAVING " + having);
-		}
-		if(!orderBy.equals("")){
-			queryCommand.append(" ORDER BY " + orderBy);
-		}
-		if(!arrangement.equals("")){
-			queryCommand.append(" " + arrangement);
 		}
 		queryCommand.append(";");
 	

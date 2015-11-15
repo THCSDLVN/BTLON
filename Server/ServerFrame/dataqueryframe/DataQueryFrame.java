@@ -35,14 +35,10 @@ import sqlfunc.SQLFunc;
 import tableforresult.TableForResult;
 import textprompt.TextPrompt;
 import buttonflag.ButtonFlag;
+import copypastefunc.CopyPasteFunc;
 
-public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFrameInterface{
-	public String arrangement = new String("");
-	
-	public ButtonGroup rbGroup = new ButtonGroup();
-	public JRadioButton[] rb = new JRadioButton[3];
-	public final int RB_MAX = rb.length - 1;
-	public int rbSelected = RB_MAX;
+public class DataQueryFrame extends JFrame implements DataQueryFrameInterface{	
+	public CopyPasteFunc copyPasteFunc = new CopyPasteFunc();
 
 	public TextPrompt tpTableName = new TextPrompt("Enter Table Name(s)",tableNameTextField);
 	public TextPrompt tpListColumn = new TextPrompt("Enter List Column(s)",listColumnTextField);
@@ -50,14 +46,13 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 	public TextPrompt tpCondition = new TextPrompt("Enter Condition",conditionTextField);
 	public TextPrompt tpGroupBy = new TextPrompt("Enter Group Column(s)",groupByTextField);
 	public TextPrompt tpHaving = new TextPrompt("Enter Having Column(s)",havingTextField);
-	public TextPrompt tpOrderBy = new TextPrompt("Enter Order Column(s)",orderByTextField);
 	
 	public DataQueryFrame(ButtonFlag buttonFlag){
 		super("Data Query");
 		getContentPane().setLayout(null);
 		setVisible(true);
 		setResizable(false);
-		setPreferredSize(new Dimension(480,600));
+		setPreferredSize(new Dimension(480,520));
 		pack();
 
 		getContentPane().add(labelFrameName);
@@ -68,7 +63,6 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 		getContentPane().add(labelHelp);
 		getContentPane().add(labelGroupBy);
 		getContentPane().add(labelHaving);
-		getContentPane().add(labelOrderBy);
 		getContentPane().add(labelIcon);
 
 		getContentPane().add(tableNameTextField);
@@ -77,11 +71,10 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 		getContentPane().add(listColumnTextField);
 		getContentPane().add(groupByTextField);
 		getContentPane().add(havingTextField);
-		getContentPane().add(orderByTextField);
 
 		getContentPane().add(buttonOk);
 
-		labelBackGround.setBounds(0, 0, 480, 600);
+		labelBackGround.setBounds(0, 0, 480, 520);
 		labelBackGround.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/Resource/backgroundDQ.png"));
 
 		labelIcon.setBounds(100, 10, 50, 50);
@@ -122,15 +115,10 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 		labelHaving.setHorizontalAlignment(SwingConstants.CENTER);
 		labelHaving.setBounds(50, 370, 110, 40);
 
-		labelOrderBy.setFont(new Font("Ubuntu", 1, 16));
-		labelOrderBy.setForeground(new Color(254, 254, 254));
-		labelOrderBy.setHorizontalAlignment(SwingConstants.CENTER);
-		labelOrderBy.setBounds(50, 430, 110, 40);
-
 		labelHelp.setFont(new Font("Ubuntu", 1, 16));
 		labelHelp.setForeground(new Color(254, 254, 254));
 		labelHelp.setHorizontalAlignment(SwingConstants.CENTER);
-		labelHelp.setBounds(30, 560, 49, 17);
+		labelHelp.setBounds(30, 480, 49, 17);
 		labelHelp.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		if(labelHelp.getMouseListeners().length < 1){
 			labelHelp.addMouseListener(new MouseAdapter(){
@@ -173,7 +161,7 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 
 		buttonOk.setFont(new Font("Ubuntu", 1, 18));
 		buttonOk.setForeground(new Color(254, 254, 254));
-		buttonOk.setBounds(200, 530, 100, 50);
+		buttonOk.setBounds(200, 450, 100, 50);
 		buttonOk.setBackground(new Color(254, 120, 4));
 		if(buttonOk.getActionListeners().length < 1){
 			buttonOk.addActionListener(new ActionListener(){
@@ -186,8 +174,7 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 					String condition = new String(conditionTextField.getText());
 					String groupBy = new String(groupByTextField.getText());
 					String having = new String(havingTextField.getText());
-					String orderBy = new String(orderByTextField.getText());
-					ResultSet result = sqlFunc.dataQuery(tableName,listColumn,onKey,condition,groupBy,having,orderBy,arrangement);
+					ResultSet result = sqlFunc.dataQuery(tableName,listColumn,onKey,condition,groupBy,having);
 					if(result == null){
 						UIManager UI = new UIManager();
  						UI.put("OptionPane.background",new ColorUIResource(0, 153, 204));
@@ -204,9 +191,7 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 						conditionTextField.setText("");
 						groupByTextField.setText("");
 						havingTextField.setText("");
-						orderByTextField.setText("");
 						onKeyTextField.setText("");
-						arrangement = "";
 					}
 				}
 			});
@@ -218,7 +203,6 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 		tpCondition.setForeground(new Color(208, 206, 206));
 		tpGroupBy.setForeground(new Color(208, 206, 206));
 		tpHaving.setForeground(new Color(208, 206, 206));
-		tpOrderBy.setForeground(new Color(208, 206, 206));
 		
 		tableNameTextField.setBounds(210, 70, 220, 40);
 		listColumnTextField.setBounds(210, 130, 220, 40);
@@ -226,81 +210,39 @@ public class DataQueryFrame extends JFrame implements MouseListener,DataQueryFra
 		conditionTextField.setBounds(210, 250, 220, 40);
 		groupByTextField.setBounds(210, 310, 220, 40);
 		havingTextField.setBounds(210, 370, 220, 40);
-		orderByTextField.setBounds(210, 430, 220, 40);
 
-		rb[0] = new JRadioButton("ASC");
-		rb[1] = new JRadioButton("DESC");
-		rb[2] = new JRadioButton();
-		
-		rb[0].addMouseListener(this);
-		rb[1].addMouseListener(this);
-		rb[2].addMouseListener(this);
+		copyPasteFunc.addPopUpMenu(tableNameTextField);
+		copyPasteFunc.addPopUpMenu(listColumnTextField);
+		copyPasteFunc.addPopUpMenu(onKeyTextField);
+		copyPasteFunc.addPopUpMenu(conditionTextField);
+		copyPasteFunc.addPopUpMenu(groupByTextField);
+		copyPasteFunc.addPopUpMenu(havingTextField);
 
-		rb[0].setFont(new Font("Ubuntu", 1, 15));
-		rb[1].setFont(new Font("Ubuntu", 1, 15));
+		copyPasteFunc.addPasteToArea();
+		copyPasteFunc.addCopyToArea();
+		copyPasteFunc.addSelectAllToArea();
+		copyPasteFunc.addCutToArea();
 
-		rb[0].setBounds(230, 490, 70, 21);
-		rb[1].setBounds(360, 490, 70, 21);
-		
-		rbGroup.add(rb[0]);
-		rbGroup.add(rb[1]);
-		rbGroup.add(rb[2]);
+		copyPasteFunc.addFocusListen(tableNameTextField);
+		copyPasteFunc.addFocusListen(listColumnTextField);
+		copyPasteFunc.addFocusListen(onKeyTextField);
+		copyPasteFunc.addFocusListen(conditionTextField);
+		copyPasteFunc.addFocusListen(groupByTextField);
+		copyPasteFunc.addFocusListen(havingTextField);
 
-		rb[0].setForeground(new Color(254, 254, 254));
-		rb[1].setForeground(new Color(254, 254, 254));
-
-		rb[0].setBackground(new Color(0, 153, 204));
-		rb[1].setBackground(new Color(0, 153, 204));
-
-		getContentPane().add(rb[0]);
-		getContentPane().add(rb[1]);
 		getContentPane().add(labelBackGround);
-		
-		rb[rbSelected].setSelected(true);
 
 		addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent we){
-
 				tableNameTextField.setText("");
 				listColumnTextField.setText("");
 				conditionTextField.setText("");
 				groupByTextField.setText("");
 				havingTextField.setText("");
-				orderByTextField.setText("");
 				onKeyTextField.setText("");
-				arrangement = "";
 
-				rbGroup.clearSelection();
 				buttonFlag.buttonQueryFlag = 1;
 			}
 		});
 	}
-	
-	public void mouseClicked(MouseEvent me){
-		for(int x = 0; x < RB_MAX; x++){
-			if(me.getSource() == rb[x]){
-				if(x != rbSelected){
-					rbSelected = x;
-				}
-				else{
-					rb[RB_MAX].setSelected(true);
-					rbSelected = RB_MAX;
-				}
-				if(rb[0].isSelected()){
-					arrangement = "ASC";
-				}
-				else if(rb[1].isSelected()){
-					arrangement = "DESC";
-				}
-				else if(rb[2].isSelected()){
-					arrangement = "";
-				}
-				break;
-			}
-		}
-	}
-	public void mousePressed(MouseEvent me){}
-	public void mouseReleased(MouseEvent me){}
-	public void mouseEntered(MouseEvent me){}
-	public void mouseExited(MouseEvent me){}
 }

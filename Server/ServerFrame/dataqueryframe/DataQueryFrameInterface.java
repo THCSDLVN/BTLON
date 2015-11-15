@@ -15,7 +15,6 @@ public interface DataQueryFrameInterface {
 	public JLabel labelCondition = new JLabel("Condition");
 	public JLabel labelGroupBy = new JLabel("Group By");
 	public JLabel labelHaving = new JLabel("Having");
-	public JLabel labelOrderBy = new JLabel("Order By");
 	public JLabel labelHelp = new JLabel("HELP");
 
 	public JButton buttonOk = new JButton("OK");
@@ -26,5 +25,4 @@ public interface DataQueryFrameInterface {
 	public JTextField conditionTextField = new JTextField();
 	public JTextField groupByTextField = new JTextField();
 	public JTextField havingTextField = new JTextField();
-	public JTextField orderByTextField = new JTextField();
 }
