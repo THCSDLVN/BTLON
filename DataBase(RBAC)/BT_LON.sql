@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Account` (
   `FullName` VARCHAR(45) NULL,
   `Birthday` DATE NULL,
   `Sex` VARCHAR(6) NOT NULL,
+`PhoneNumber` CHAR(13),
   KEY (`AID`),
   PRIMARY KEY (`AID`))
 ENGINE=InnoDB DEFAULT CHARSET=utf8;

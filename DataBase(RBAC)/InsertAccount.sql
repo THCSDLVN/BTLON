@@ -1,4 +1,4 @@
-INSERT INTO `Account` 
+INSERT INTO `BT_LON`.`Account` 
 values('ACC0000','baolhv','lehungvietbao0101','Lê Hùng Việt Bảo','1983/09/27','Male','0903435848'),
 ('ACC0001','longdh','daohailong0101','Đào Hải Long','1983/02/26','Male','0948411919'),
 ('ACC0002','hoannt','nguyenthehoan0101','Nguyễn Thế Hoàn','1983/01/21','Male','0915511962'),
