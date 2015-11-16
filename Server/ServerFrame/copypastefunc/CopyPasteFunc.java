@@ -30,26 +30,26 @@ public class CopyPasteFunc implements FocusListener {
 
 		cut.setForeground(Color.WHITE);
 		cut.setOpaque(true);
-		cut.setBackground(new Color(0, 126, 168));
+		cut.setBackground(new Color(196, 194, 194));
 		
 		copy.setForeground(Color.WHITE);
 		copy.setOpaque(true);
-		copy.setBackground(new Color(0, 140, 187));
+		copy.setBackground(new Color(196, 194, 194));
 
 		paste.setForeground(Color.WHITE);		
 		paste.setOpaque(true);
-		paste.setBackground(new Color(0, 126, 168));
+		paste.setBackground(new Color(196,194,194));
 		
 		selectAll.setForeground(Color.WHITE);
 		selectAll.setOpaque(true);
-		selectAll.setBackground(new Color(0, 140, 187));
+		selectAll.setBackground(new Color(196, 194, 194));
 		
-		cut.setBorder(BorderFactory.createLineBorder(new Color(0, 126, 168)));
-		copy.setBorder(BorderFactory.createLineBorder(new Color(0, 140, 187)));
-		paste.setBorder(BorderFactory.createLineBorder(new Color(0, 126, 168)));
-		selectAll.setBorder(BorderFactory.createLineBorder(new Color(0, 140, 187)));
+		cut.setBorder(BorderFactory.createLineBorder(new Color(196, 194, 194)));
+		copy.setBorder(BorderFactory.createLineBorder(new Color(196, 194, 194)));
+		paste.setBorder(BorderFactory.createLineBorder(new Color(196,194,194)));
+		selectAll.setBorder(BorderFactory.createLineBorder(new Color(196, 194, 194)));
 
-		menu.setBorder(BorderFactory.createLineBorder(new Color(0, 123, 164)));
+		menu.setBorder(BorderFactory.createLineBorder(new Color(196, 194, 194)));
 	}
 
 	public void addCopyToArea(){
