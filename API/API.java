@@ -33,7 +33,7 @@ tableName và set phải khác rỗng
 condition có thể bằng rỗng("") - nhưng buộc phải có trong câu lệnh
 */
 
-public int insertDataQuery(String tableName, String value1, String value2, String value3, String value4, String value5, String value6)
+public int insertDataQuery(String tableName, String value1, String value2, String value3, String value4, String value5, String value6, String value7)
 /*
 hàm sử dụng để nhập dữ liệu vào bảng - Sử dụng câu lệnh INSERT 
 tableName = Bảng1 (Chỉ insert được dữ liệu của 1 bảng duy nhất)
