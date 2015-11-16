@@ -29,6 +29,7 @@ public class ServerFrame extends JFrame implements ServerFrameInterface{
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setResizable(false);
 		setVisible(true);
+		setLocationRelativeTo(null);
 		setPreferredSize(new Dimension(580,386));
 		pack();
 
@@ -45,11 +46,11 @@ public class ServerFrame extends JFrame implements ServerFrameInterface{
 		backGroundLabel.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/Resource/background.png"));
 		backGroundLabel.setBounds(-1, 0, 580, 390);
 
-		buttonExit.setBackground(new Color(252, 249, 194));
+		buttonExit.setBackground(new Color(0, 153, 204));
 		buttonExit.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		buttonExit.setBounds(450, 160, 110, 30);
 		buttonExit.setFont(new Font("Ubuntu", 1, 15));
-		buttonExit.setForeground(new Color(237, 21, 15));
+		buttonExit.setForeground(Color.WHITE);
 		buttonExit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ae){
 				Runtime run = Runtime.getRuntime();
@@ -63,11 +64,11 @@ public class ServerFrame extends JFrame implements ServerFrameInterface{
 			}
 		});
 
-		buttonQuery.setBackground(new Color(252, 249, 194));
+		buttonQuery.setBackground(new Color(0, 153, 204));
 		buttonQuery.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		buttonQuery.setBounds(450, 60, 110, 30);
 		buttonQuery.setFont(new Font("Ubuntu", 1, 14));
-		buttonQuery.setForeground(new Color(237, 21, 15));
+		buttonQuery.setForeground(Color.WHITE);
 		if(buttonQuery.getActionListeners().length < 1){
 			buttonQuery.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent ae){
@@ -79,11 +80,11 @@ public class ServerFrame extends JFrame implements ServerFrameInterface{
 			});
 		}
 
-		buttonDiagram.setBackground(new Color(252, 249, 194));
+		buttonDiagram.setBackground(new Color(0, 153, 204));
 		buttonDiagram.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		buttonDiagram.setBounds(450, 110, 110, 30);
 		buttonDiagram.setFont(new Font("Ubuntu", 1, 15));
-		buttonDiagram.setForeground(new Color(237, 21, 15));
+		buttonDiagram.setForeground(Color.WHITE);
 		buttonDiagram.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ae){
 				new ERRDiagram();			
