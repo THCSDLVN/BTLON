@@ -29,7 +29,6 @@ public class ServerFrame extends JFrame implements ServerFrameInterface{
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setResizable(false);
 		setVisible(true);
-		setLocationRelativeTo(null);
 		setPreferredSize(new Dimension(580,386));
 		pack();
 
