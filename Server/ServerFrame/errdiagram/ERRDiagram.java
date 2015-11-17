@@ -12,7 +12,7 @@ public class ERRDiagram extends JFrame{
 		getContentPane().setLayout(null);
 		setVisible(true);
 		setResizable(false);
-		setPreferredSize(new Dimension(820,540));
+		setPreferredSize(new Dimension(815,547));
 		pack();
 
 		JLabel labelImage = new JLabel();
