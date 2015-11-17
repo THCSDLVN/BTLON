@@ -210,7 +210,7 @@ public class SQLFunc implements SQLFuncInterface{
 		return executeUpdateCommand(queryCommand.toString());
 	}
 
-	public int insertDataQuery(String tableName, String value1, String value2, String value3, String value4, String value5, String value6,String value7){
+	public int insertDataQuery(String tableName, String value1, String value2, String value3, String value4, String value5, String value6,String value7,String value8){
 		if(tableName.equals("") || !checkString(tableName,false)){
 			return 0;
 		}
@@ -231,7 +231,7 @@ public class SQLFunc implements SQLFuncInterface{
 			if(!checkDataInsertForAccount(value2)){
 				return 0;
 			}
-			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 + "','" + value7 +"');");
+			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 + "','" + value7 + "','" + value8 + "');");
 		}
 		else if(tableName.equals("Provide")){
 			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "');");
