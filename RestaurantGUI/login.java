@@ -1,8 +1,7 @@
 package gui;
 
 import java.awt.EventQueue;
-import java.sql.DriverManager;
-import java.text.MessageFormat;
+
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -10,18 +9,11 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.plaf.synth.SynthStyleFactory;
-import javax.tools.ForwardingJavaFileObject;
-import javax.xml.ws.handler.MessageContext;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
-import javax.swing.GrayFilter;
 import javax.swing.ImageIcon;
 import java.awt.Font;
-import java.awt.Frame;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -30,13 +22,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.PageAttributes.OriginType;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.font.TextAttribute;
 import java.sql.Connection;
 import java.util.Map;
@@ -46,11 +33,8 @@ import java.awt.event.MouseAdapter;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.JProgressBar;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.Toolkit;
-import java.awt.Component;
+import gui.SQLConnection;
 
 public class login {
 
@@ -86,11 +70,12 @@ public class login {
 	 */
 	
 	private signup Signup = new signup();
-	private Connection conn = null;
+	
+	private String loginquery = new String("SELECT * FROM account WHERE Username = ? AND Password = ?");
 	
 	public login() {
-		conn = SQLConnection.DBConnect();
-		if(conn == null) System.exit(0);
+		SQLConnection.DBConnect();
+		if(SQLConnection.isnull()) System.exit(0);
 		initialize();	
 	}
 
@@ -110,7 +95,7 @@ public class login {
 		frmLoginAsRestaurant.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmLoginAsRestaurant.getContentPane().setLayout(null);
 		
-		JLabel lblUsername = new JLabel("Resname");
+		JLabel lblUsername = new JLabel("Username");
 		lblUsername.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblUsername.setBounds(82, 82, 72, 14);
 		frmLoginAsRestaurant.getContentPane().add(lblUsername);
@@ -194,11 +179,12 @@ public class login {
 		passwordField.setBounds(177, 114, 123, 25);
 		frmLoginAsRestaurant.getContentPane().add(passwordField);
 		
-		title = new JLabel("LOG IN YOUR RESTAURANT");
+		title = new JLabel("");
 		title.setForeground(new Color(0, 51, 102));
 		title.setFont(new Font("Magneto", Font.BOLD, 14));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
-		title.setBounds(91, 11, 264, 46);
+		title.setBounds(91, 11, 300, 46);
+		title.setIcon(new ImageIcon(this.getClass().getResource("/AppName.png")));
 		frmLoginAsRestaurant.getContentPane().add(title);
 		
 		btnlogin = new JButton("LOG IN");
@@ -208,19 +194,20 @@ public class login {
 				try{
 					if(btnlogin.isEnabled())
 					{				
-						String query = "SELECT RID,RestaurantName,Address,PhoneNumber,Facebook,Rate FROM restaurant WHERE ResName = '" + usrname +"' AND ResPass = '" + passd + "'";
-						Statement stmt = conn.createStatement();
-						SqlArrayList rsl = new SqlArrayList(stmt.executeQuery(query));
+						PreparedStatement stmt = SQLConnection.conn.prepareStatement(loginquery);
+						stmt.setString(1, usrname);
+						stmt.setString(2, passd);
+						SqlArrayList rsl = new SqlArrayList(stmt.executeQuery());
 						if(rsl.getRownumber() > 0)
 						{
-							frmLoginAsRestaurant.dispose();
-							restaurant res = new restaurant(rsl.getRow(0),conn);
-							res.setVisible(true);
+							AccountGUI accGUI = new AccountGUI();
+							accGUI.setVisible(true);
 						}
 						else
 						{
-							JOptionPane.showMessageDialog(null, "Your username or password are incorrect","Login failed",JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Incorrect username or password","Login failed",JOptionPane.INFORMATION_MESSAGE);
 						}
+						stmt.close();
 					}
 				}catch(Exception ex)
 				{

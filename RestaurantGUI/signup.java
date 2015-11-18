@@ -20,11 +20,18 @@ import javax.swing.ImageIcon;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Statement;
+
 import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
+import gui.SQLConnection;
+import gui.ProvideAIDRandom;
+
 public class signup extends JFrame {
+	
+	
 
 	private JPanel contentPane;
 	private JTextField UsernameField;
@@ -36,7 +43,7 @@ public class signup extends JFrame {
 	private JComboBox MonthCbbox;
 	private JComboBox YearCbbox;
 	private JPanel signupPn;
-	private JPanel successPn;
+	private JComboBox SexcomboBox;
 
 	/**
 	 * Launch the application.
@@ -54,6 +61,8 @@ public class signup extends JFrame {
 		});
 	}
 
+	
+	private String maxAID_query = new String("SELECT AID FROM account ORDER BY AID DESC LIMIT 1");
 	/**
 	 * Create the frame.
 	 */
@@ -80,13 +89,13 @@ public class signup extends JFrame {
 		Title.setHorizontalAlignment(SwingConstants.CENTER);
 		Title.setForeground(new Color(51, 153, 102));
 		Title.setFont(new Font("Lucida Console", Font.BOLD, 14));
-		Title.setBounds(10, 21, 372, 51);
+		Title.setBounds(10, 0, 372, 51);
 		signupPn.add(Title);
 		
 		JPanel InfoFillPn = new JPanel();
 		InfoFillPn.setBackground(new Color(153, 204, 153));
 		InfoFillPn.setBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(0, 153, 51), new Color(0, 153, 102)));
-		InfoFillPn.setBounds(10, 91, 372, 248);
+		InfoFillPn.setBounds(10, 51, 372, 302);
 		signupPn.add(InfoFillPn);
 		InfoFillPn.setLayout(null);
 		
@@ -110,7 +119,7 @@ public class signup extends JFrame {
 		InfoFillPn.add(lblRetypassword);
 		lblRetypassword.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
-		JLabel lblFullName = new JLabel("FullName");
+		JLabel lblFullName = new JLabel("Full Name");
 		lblFullName.setBounds(6, 139, 105, 20);
 		InfoFillPn.add(lblFullName);
 		lblFullName.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -126,12 +135,12 @@ public class signup extends JFrame {
 		lblBirthday.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
 		JLabel lblPhoneNum = new JLabel("Phone number");
-		lblPhoneNum.setBounds(6, 221, 105, 20);
+		lblPhoneNum.setBounds(6, 262, 105, 20);
 		InfoFillPn.add(lblPhoneNum);
 		lblPhoneNum.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
 		PhoneNumField = new JTextField();
-		PhoneNumField.setBounds(154, 221, 195, 20);
+		PhoneNumField.setBounds(154, 262, 195, 20);
 		InfoFillPn.add(PhoneNumField);
 		PhoneNumField.setColumns(10);
 		
@@ -183,6 +192,16 @@ public class signup extends JFrame {
 		lblLine2.setBounds(276, 180, 16, 20);
 		InfoFillPn.add(lblLine2);
 		
+		JLabel lblSex = new JLabel("Sex");
+		lblSex.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblSex.setBounds(6, 221, 86, 20);
+		InfoFillPn.add(lblSex);
+		
+		SexcomboBox = new JComboBox();
+		SexcomboBox.setModel(new DefaultComboBoxModel(new String[] {"Male", "Female"}));
+		SexcomboBox.setBounds(154, 221, 80, 20);
+		InfoFillPn.add(SexcomboBox);
+		
 		JButton btnSignup = new JButton("Sign up");
 		btnSignup.addMouseListener(new MouseAdapter() {
 			@Override
@@ -205,29 +224,6 @@ public class signup extends JFrame {
 		btnCancel.setBounds(198, 364, 159, 46);
 		signupPn.add(btnCancel);
 		
-		successPn = new JPanel();
-		successPn.setVisible(false);
-		successPn.setBounds(0, 0, 392, 432);
-		contentPane.add(successPn);
-		successPn.setLayout(null);
-		
-		JLabel message = new JLabel("YOUR ACCOUNT HAS BEEN CREATED");
-		message.setFont(new Font("Arial", Font.BOLD, 15));
-		message.setHorizontalAlignment(SwingConstants.CENTER);
-		message.setBounds(0, 115, 392, 111);
-		successPn.add(message);
-	
-		JButton btnNewButton = new JButton("");
-		btnNewButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {				
-				dispose();
-			}
-		});
-		btnNewButton.setIcon(new ImageIcon("C:\\Users\\6520\\workspace\\gui\\img\\Check-icon.png"));
-		btnNewButton.setBounds(171, 237, 50, 50);
-		successPn.add(btnNewButton);
-		
 		JLabel label = new JLabel("LOG IN YOUR ACCOUNT");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setForeground(new Color(0, 51, 102));
@@ -235,7 +231,7 @@ public class signup extends JFrame {
 		label.setBounds(10, 26, 264, 46);
 		
 	}
-	
+
 	private Boolean checkRetyPassword(JPasswordField typ,JPasswordField retyp)
 	{
 		String typPass = new String(typ.getPassword());
@@ -259,6 +255,7 @@ public class signup extends JFrame {
 	{
 		try
 		{
+			String aid,usrname,password,fullname,dateofbirth,sex,phonenum;
 			if(UsernameField.getText().isEmpty())
 			{
 				JOptionPane.showMessageDialog(null, "Fill your Username");
@@ -279,13 +276,41 @@ public class signup extends JFrame {
 				JOptionPane.showMessageDialog(null, "Your PhoneNumber must be digits");
 				return;
 			}
+			if(dayCbbox.getSelectedIndex() < 0 ||MonthCbbox.getSelectedIndex() < 0 || YearCbbox.getSelectedIndex() < 0)
+			{
+				JOptionPane.showMessageDialog(null,"Fill your date of birth");
+				return;
+			}
 			
-			signupPn.setVisible(false);
-			successPn.setVisible(true);
+			usrname = new String(UsernameField.getText());
+			password = new String(passwordField.getPassword());
+			fullname = new String(FullNameField.getText());
+			dateofbirth = new String(YearCbbox.getSelectedItem() + "-" + MonthCbbox.getSelectedItem() + "-" + dayCbbox.getSelectedItem());
+			sex = new String((String)SexcomboBox.getSelectedItem());
+			phonenum = new String(PhoneNumField.getText());
+			
+			Statement stmt = SQLConnection.conn.createStatement();
+			SqlArrayList rs = new SqlArrayList(stmt.executeQuery(maxAID_query));
+			if(rs.getRownumber() <= 0)
+			{
+				aid = new String("ACC0000");
+			}
+			else
+			{
+				String maxaid = rs.getRow(0)[0];
+				aid = new String((new ProvideAIDRandom()).ProvideAID(maxaid));
+			}
+			stmt.executeUpdate("INSERT INTO account VALUES ('"+ aid +"','" + usrname + "','" + password + "','" + fullname + "','" + dateofbirth + "','" + phonenum + "','" + sex + "');");
+			stmt.close();		
+			AccountGUI accgui = new AccountGUI();
+			accgui.setVisible(true);
+			JOptionPane.showMessageDialog(null, "Your account has been created");
+			
 		}
 		catch(Exception e)
 		{
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
 			return;
 		}
 	}
@@ -318,7 +343,7 @@ public class signup extends JFrame {
 	public JPanel getSignupPn() {
 		return signupPn;
 	}
-	public JPanel getSuccessPn() {
-		return successPn;
+	public JComboBox getSexcomboBox() {
+		return SexcomboBox;
 	}
 }
