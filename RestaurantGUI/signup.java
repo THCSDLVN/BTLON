@@ -251,6 +251,19 @@ public class signup extends JFrame {
 			return false;
 	}
 	
+	private Boolean check_date(JComboBox day,JComboBox month,JComboBox year)
+	{
+		int[] monthdays = new int[]{31,28,31,30,31,30,31,31,30,31,30,31};
+		int iday = day.getSelectedIndex()+1;
+		int imonth = month.getSelectedIndex();
+		int iyear = year.getSelectedIndex()+1920;
+		monthdays[1] = (iyear%4 == 0)? 29 : 28;
+		if(iday<=monthdays[imonth])
+			return true;
+		else 
+			return false;
+	}
+	
 	private void signupClick()
 	{
 		try
@@ -281,6 +294,11 @@ public class signup extends JFrame {
 				JOptionPane.showMessageDialog(null,"Fill your date of birth");
 				return;
 			}
+			if(!check_date(dayCbbox, MonthCbbox, YearCbbox))
+			{
+				JOptionPane.showMessageDialog(null,"Date of birth is not exist");
+				return;
+			}
 			
 			usrname = new String(UsernameField.getText());
 			password = new String(passwordField.getPassword());
@@ -300,11 +318,12 @@ public class signup extends JFrame {
 				String maxaid = rs.getRow(0)[0];
 				aid = new String((new ProvideAIDRandom()).ProvideAID(maxaid));
 			}
-			stmt.executeUpdate("INSERT INTO account VALUES ('"+ aid +"','" + usrname + "','" + password + "','" + fullname + "','" + dateofbirth + "','" + phonenum + "','" + sex + "');");
+			stmt.executeUpdate("INSERT INTO account VALUES ('"+ aid +"','" + usrname + "','" + password + "','" + fullname + "','" + dateofbirth + "','" + phonenum + "','" + sex +"','" + "1" +"');");
 			stmt.close();		
 			AccountGUI accgui = new AccountGUI();
 			accgui.setVisible(true);
 			JOptionPane.showMessageDialog(null, "Your account has been created");
+			dispose();
 			
 		}
 		catch(Exception e)
@@ -313,37 +332,5 @@ public class signup extends JFrame {
 			e.printStackTrace();
 			return;
 		}
-	}
-	
-	public JComboBox getDayCbbox() {
-		return dayCbbox;
-	}
-	public JComboBox getMonthCbbox()
-	{
-		return MonthCbbox;
-	}
-	public JComboBox getYearCbbox() {
-		return YearCbbox;
-	}
-	public JTextField getUsernameField() {
-		return UsernameField;
-	}
-	public JPasswordField getPasswordField() {
-		return passwordField;
-	}
-	public JPasswordField getRetypasswordField() {
-		return RetypasswordField;
-	}
-	public JTextField getFullNameField() {
-		return FullNameField;
-	}
-	public JTextField getPhoneNumField() {
-		return PhoneNumField;
-	}
-	public JPanel getSignupPn() {
-		return signupPn;
-	}
-	public JComboBox getSexcomboBox() {
-		return SexcomboBox;
 	}
 }
