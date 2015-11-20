@@ -1,0 +1,18 @@
+INSERT INTO `Restaurant`
+values('REST0001','123'),
+('REST0002','ABC'),
+('REST0003','LOTTE'),
+('REST0004','KFC'),
+('REST0005','Nhà hàng Thiên Lộc'),
+('REST0006','Nhà hàng MasterChef'),
+('REST0007','Nhà Hàng The Sun'),
+('REST0008','Nhà hàng VINGON 22'),
+('REST0009','Nhà hàng Sing'),
+('REST0010','Eureka Coffee & Fastfood Shop'),
+('REST0011','Nhà hàng Vạn Tuế Thăng Long'),
+('REST0012','V2 Club ( Bar - Restaurant - Cafe )'),
+('REST0013','Sumo BBQ'),
+('REST0014','Nhà hàng Hải Long Vương'),
+('REST0015','Nhà hàng Hoàng Đế'),
+('REST0016','Nhà hàng Bắc Bộ'),
+('REST0017','McDonnald');
