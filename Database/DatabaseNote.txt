@@ -1,6 +1,6 @@
 AID ------------- VD : ACCT0001
 ResID ----------- VD : REST0001
-OrderID --------- VD : ORDR0001
+ReserID --------- VD : ORDR0001
 PermisionID ----- VD : PERM0001
 ObjectID -------- VD : OBJT0001
 OperationID ----- VD : OPER0001
