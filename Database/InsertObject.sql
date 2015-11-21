@@ -5,4 +5,4 @@ INSERT INTO `Objects` VALUES
 ('OBJT0004','Restaurant'),
 ('OBJT0005','SequenceRestaurant'),
 ('OBJT0006','Provide'),
-('OBJT0007','SequenceRestaurant.Like');
+('OBJT0007','SequenceRestaurant.NumberLike');
