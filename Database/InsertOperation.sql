@@ -1,4 +1,4 @@
-INSERT INTO `btlon`.`Operations`
+INSERT INTO `Operations`
 VALUES ('OPER0000','NULL','0','0','0','0'),
 ('OPER0001','D','0','0','0','1'),
 ('OPER0002','U','0','0','1','0'),

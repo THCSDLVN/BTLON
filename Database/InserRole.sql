@@ -1,3 +1,3 @@
-INSERT INTO `bt_lon`.`Roles`
+INSERT INTO `Roles`
 VALUES ('ROLE0001','Customer'),
 ('ROLE0002','RestaurantManager');
