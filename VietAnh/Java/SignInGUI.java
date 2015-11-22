@@ -76,12 +76,27 @@ public class SignInGUI extends JFrame {
 		JButton signInBtn = new JButton("Sign In");
 		signInBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				signInBtn.setEnabled(false);
 				String usr = usrTextfld.getText();
 				String pass = new String(passwordField.getPassword());
 				String query = "dataQuery(Account~*~UserName = '" + usr + "' and PassWord = '" + pass + "'~\"\"~\"\"~\"\"~\"\")";
-				//Select * from Account where UserName = usr and PassWord = pass
-				List<List<String>> accList = null;//List tra ve.
+				Account a = new Account();
+				SQLConnection c = new SQLConnection();
+				List<List<String>> accList = c.getAcc(usr, pass);
+				String[][] x = SolveArrayList.ConvertFromArrayList(accList);
+				if(x == null){
+					JOptionPane.showMessageDialog(null, "Your username or password is not correct");
+				}
+				else{
+					a.setAID(x[0][0]);
+					a.setUsername(x[0][1]);
+					a.setPassword(x[0][2]);
+					a.setFullname(x[0][3]);
+					a.setBirthday(x[0][4]);
+					a.setSex(x[0][5]);
+					a.setPhonenumber(x[0][6]);
+					new AccountGUI(a).setVisible(true);
+					//dispose();
+				}
 			}	
 		});
 		signInBtn.setBounds(303, 181, 82, 38);
@@ -89,8 +104,8 @@ public class SignInGUI extends JFrame {
 		JButton exitBtn = new JButton("Exit");
 		exitBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//ExitConfirm a = new ExitConfirm();
-				//a.setVisible(true);
+				ExitConfirm a = new ExitConfirm();
+				a.setVisible(true);
 			}
 		});
 		exitBtn.setBounds(180, 181, 90, 38);

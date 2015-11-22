@@ -6,23 +6,54 @@ public class Account {
 	private String fullName = "";
 	private String phoneNumber = "";
 	private String sex = "";
+	private String birthday = "";
 	
-	public String getaid(){
+	public void setAID(String aid){
+		this.aid = aid;
+	}
+	public String getAID(){
 		return (aid);
 	}
-	public String getusername(){
+	
+	public void setUsername(String username){
+		this.username = username;
+	}
+	public String getUsername(){
 		return (username);
 	}
-	public String getpassword(){
+	
+	public void setPassword(String password){
+		this.password = password;
+	}
+	public String getPassword(){
 		return (password);
 	}
-	public String getfullname(){
+	
+	public void setFullname(String fullname){
+		this.fullName = fullname;
+	}
+	public String getFullname(){
 		return (fullName);
 	}
-	public String getphoneNumber(){
+	
+	public void setPhonenumber(String phonenumber){
+		this.phoneNumber = phonenumber;
+	}
+	public String getPhoneNumber(){
 		return (phoneNumber);
 	}
-	public String getsex(){
+	
+	public void setSex(String sex){
+		this.sex = sex;
+	}
+	public String getSex(){
 		return (sex);
+	}
+	
+	public void setBirthday(String birthday){
+		this.birthday = birthday;
+	}
+	public String getBirthday(){
+		return(birthday);
 	}
 }
