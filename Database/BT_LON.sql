@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Account` (
   `Status` INT NULL,
   PRIMARY KEY (`AID`),
   INDEX `AID` (`AID` ASC),
+  UNIQUE INDEX `Username_UNIQUE` (`Username` ASC),
   UNIQUE INDEX `PhoneNumber_UNIQUE` (`PhoneNumber` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -171,6 +172,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Reservation` (
   `Foodname` VARCHAR(45) NOT NULL,
   `Time` DATETIME NULL DEFAULT NULL,
   `Quantity` MEDIUMTEXT NULL DEFAULT NULL,
+  `AcceptReser` INT NULL DEFAULT 0,
   PRIMARY KEY (`AID`, `ResID`, `ReserID`, `Foodname`),
   INDEX `fk_Reservation_2_idx` (`Foodname` ASC),
   INDEX `fk_Reservation_3_idx` (`ResID` ASC),
