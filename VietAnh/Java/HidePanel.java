@@ -78,19 +78,18 @@ public class HidePanel extends JPanel {
 		menu.setModel(model);
 		scrollPane.setViewportView(menu);
 		
-		JButton btnNewButton = new JButton("New");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton newBtn = new JButton("New");
+		newBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(getOrderItem().getSelectedIndex());
+				new CreateOrder(getOrderItem()).setVisible(true);
 			}
 		});
-		btnNewButton.setBounds(317, 7, 71, 25);
-		add(btnNewButton);
+		newBtn.setBounds(317, 7, 71, 25);
+		add(newBtn);
 		
 		JLabel time = new JLabel("");
 		time.setBounds(12, 39, 202, 15);
 		add(time);
-		TimeRunning(time);
 		
 	}
 	public JTable getMenu() {
@@ -98,21 +97,5 @@ public class HidePanel extends JPanel {
 	}
 	public JComboBox getOrderItem() {
 		return comboBox;
-	}
-	public void TimeRunning(JLabel timeLbl){
-		Calendar c = Calendar.getInstance();
-		int now = c.get(Calendar.SECOND);
-		int temp = 100;
-		//while(true){
-		for(;;){
-			c = Calendar.getInstance();
-			if(temp != now){
-				now = temp;
-				timeLbl.setText(Integer.toString(c.get(Calendar.HOUR_OF_DAY))+":"+
-						Integer.toString(c.get(Calendar.MINUTE))+":"+
-						Integer.toString(c.get(Calendar.SECOND)));
-			}
-			temp = c.get(Calendar.SECOND);
-		}
 	}
 }
