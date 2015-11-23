@@ -1,4 +1,4 @@
-package serverprocessrequest;
+package Server.serverprocessrequest;
 
 import java.util.StringTokenizer;
 import java.util.List;
@@ -7,13 +7,18 @@ import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 
-import sqlfunc.SQLFunc;
+import Server.sqlfunc.SQLFunc;
 
 public class ServerProcessRequest {
-	String command = new String();
+	String command;
 	String fillParam[];
-	SQLFunc funcTool = new SQLFunc();
+	SQLFunc funcTool;
 	
+	public ServerProcessRequest(){
+		command = new String();
+		funcTool = new SQLFunc();
+	}
+
 	public boolean checkReceivedRequest(String request){
 		if(request.equals("")){
 			return false;
