@@ -1,4 +1,4 @@
-package serverframe;
+package Server.serverframe;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;

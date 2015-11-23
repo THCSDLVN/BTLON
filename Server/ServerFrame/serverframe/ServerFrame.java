@@ -1,4 +1,4 @@
-package serverframe;
+package Server.serverframe;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -14,16 +14,17 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
+import java.awt.event.WindowListener;
 import java.awt.event.WindowEvent;
 
-import dataqueryframe.DataQueryFrame;
+import Server.dataqueryframe.DataQueryFrame;
+import Server.errdiagram.ERRDiagram;
+import Server.buttonflag.ButtonFlag;
+import Server.sqlfunc.SQLFunc;
 
-import errdiagram.ERRDiagram;
-import buttonflag.ButtonFlag;
-
-public class ServerFrame extends JFrame implements ServerFrameInterface{
+public class ServerFrame extends JFrame implements ServerFrameInterface,WindowListener{
 	public ButtonFlag buttonFlag = new ButtonFlag();
+	public SQLFunc funcTool = new SQLFunc();
 	public ServerFrame(){
 		super("ServerFrame");
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -59,6 +60,7 @@ public class ServerFrame extends JFrame implements ServerFrameInterface{
 				catch(Exception e){
 					e.printStackTrace();
 				}
+				funcTool.updateDataQuery("Account","Status","0","Status = 1");
 				System.exit(0);
 			}
 		});
@@ -89,5 +91,40 @@ public class ServerFrame extends JFrame implements ServerFrameInterface{
 				new ERRDiagram();			
 			}
 		});
+	}
+	public void windowOpened(WindowEvent we){
+
+	}
+
+	public void windowClosing(WindowEvent we){
+		Runtime run = Runtime.getRuntime();
+		try{
+			run.exec("/bin/sh shell.sh");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		funcTool.updateDataQuery("Account","Status","0","Status = 1");
+		System.exit(0);
+	}
+
+	public void windowClosed(WindowEvent we){
+
+	}
+
+	public void windowIconified(WindowEvent we){
+
+	}
+
+	public void windowDeiconified(WindowEvent we){
+
+	}
+
+	public void windowActivated(WindowEvent we){
+
+	}
+
+	public void windowDeactivated(WindowEvent we){
+
 	}
 }
