@@ -323,8 +323,22 @@ public class signup extends JFrame {
 			AccountGUI accgui = new AccountGUI();
 			accgui.setVisible(true);
 			JOptionPane.showMessageDialog(null, "Your account has been created");
-			dispose();
 			
+			UsernameField.setText("");
+			passwordField.setText("");
+			RetypasswordField.setText("");
+			FullNameField.setText("");
+			dayCbbox.setEditable(true);
+			MonthCbbox.setEditable(true);
+			YearCbbox.setEditable(true);
+			dayCbbox.setSelectedItem("Day");
+			MonthCbbox.setSelectedItem("Month");
+			YearCbbox.setSelectedItem("Year");
+			dayCbbox.setEditable(false);
+			MonthCbbox.setEditable(false);
+			YearCbbox.setEditable(false);
+			SexcomboBox.setSelectedIndex(0);
+			PhoneNumField.setText("");
 		}
 		catch(Exception e)
 		{
