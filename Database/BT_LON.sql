@@ -167,15 +167,16 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `BT_LON`.`Reservation` (
   `AID` VARCHAR(8) NOT NULL,
-  `ResID` VARCHAR(8) NOT NULL,
-  `ReserID` VARCHAR(8) NOT NULL,
+  `ResAddress` VARCHAR(45) NOT NULL,
   `Foodname` VARCHAR(45) NOT NULL,
-  `Time` DATETIME NULL DEFAULT NULL,
+  `Time` DATETIME NOT NULL DEFAULT NOT NULL,
   `Quantity` MEDIUMTEXT NULL DEFAULT NULL,
   `AcceptReser` INT NULL DEFAULT 0,
-  PRIMARY KEY (`AID`, `ResID`, `ReserID`, `Foodname`),
-  INDEX `fk_Reservation_2_idx` (`Foodname` ASC),
-  INDEX `fk_Reservation_3_idx` (`ResID` ASC),
+  PRIMARY KEY (`AID`, `ResAddress`, `Foodname`,`Time`),
+  INDEX `fk_Reservation_1_idx` (`AID` ASC),
+  INDEX `fk_Reservation_2_idx` (`ResAddress` ASC),
+  INDEX `fk_Reservation_3_idx` (`Foodname` ASC),
+  INDEX `fk_Reservation_4_idx` (`Time` ASC),
   CONSTRAINT `fk_Reservation_1`
     FOREIGN KEY (`AID`)
     REFERENCES `BT_LON`.`Account` (`AID`)
@@ -187,8 +188,8 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Reservation` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Reservation_3`
-    FOREIGN KEY (`ResID`)
-    REFERENCES `BT_LON`.`SequenceRestaurant` (`ResID`)
+    FOREIGN KEY (`ResAddress`)
+    REFERENCES `BT_LON`.`SequenceRestaurant` (`Address`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
