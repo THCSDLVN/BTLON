@@ -70,6 +70,16 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Restaurant` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+-- ----------------------------------------------------
+-- Table `BT_LON`.FoodSet
+-- ----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `BT_LON`.`FoodSet` (
+  `Foodname` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`Foodname`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
 
 -- -----------------------------------------------------
 -- Table `BT_LON`.`Objects`
@@ -107,6 +117,9 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Provide` (
   `DescribeFood` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`ResID`, `Foodname`),
   INDEX `Foodname` (`Foodname` ASC),
+  CONSTRAINT `fk_Provide_2`
+    FOREIGN KEY (`Foodname`)
+    REFERENCES `BT_LON`.`FoodSet` (`Foodname`),
   CONSTRAINT `fk_Provide_1`
     FOREIGN KEY (`ResID`)
     REFERENCES `BT_LON`.`Restaurant` (`ResID`))
@@ -120,7 +133,6 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `BT_LON`.`SequenceRestaurant` (
   `Address` VARCHAR(45) NOT NULL,
   `ResID` VARCHAR(8) NOT NULL,
-  `NumberLike` INT NULL DEFAULT 0,
   PRIMARY KEY (`Address`, `ResID`),
   INDEX `fk_SequenceRestaurant_2_idx` (`ResID` ASC),
   CONSTRAINT `fk_SequenceRestaurant_2`
@@ -140,6 +152,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Reservation` (
   `Time` DATETIME NULL DEFAULT NULL,
   `Quantity` MEDIUMTEXT NULL DEFAULT NULL,
   `AcceptReser` INT NULL,
+  `Cost` DOUBLE NULL,
   PRIMARY KEY (`AID`, `ResAddress`, `Foodname`, `Time`),
   INDEX `fk_Reservation_1_idx` (`ResAddress` ASC),
   INDEX `fk_Reservation_3_idx` (`Foodname` ASC),
@@ -151,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Reservation` (
     REFERENCES `BT_LON`.`Account` (`AID`),
   CONSTRAINT `fk_Reservation_3`
     FOREIGN KEY (`Foodname`)
-    REFERENCES `BT_LON`.`Provide` (`Foodname`))
+    REFERENCES `BT_LON`.`FoodSet` (`Foodname`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 

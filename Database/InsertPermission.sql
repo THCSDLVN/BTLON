@@ -9,5 +9,5 @@ VALUES
 ('PERM0007','RIUD-Provide','OBJT0005','OPER0015'),/* Doc,Them,Cap nhat,Xoa du lieu tren bang Provide.*/
 ('PERM0008','RIUD-Reservation','OBJT0001','OPER0015'),/* Doc,Them,Cap nhat,Xoa du lieu tren bang Reservation.*/
 ('PERM0009','RD-Reservation','OBJT0001','OPER0009'),/* Doc,Xoa du lieu tren bang Reservation.*/
-('PERM0010','RU-SequenceRestaurant.NumberLike','OBJT0006','OPER0010'),/* Xem,Sua du lieu tren truong NumberLike cua bang SequenceRestaurant.*/
-('PERM0011','R-SequenceRestaurant.NumberLike','OBJT0006','OPER0008');/*Doc du lieu tren truong NumberLike cua bang SequenceRestaurant.*/
+('PERM0010','RU-FoodSet','OBJT0006','OPER0010'),/* Xem,Sua du lieu cua bang FoodSet.*/
+('PERM0011','R-FoodSet','OBJT0006','OPER0008');/*Doc du lieu cua bang FoodSet.*/
