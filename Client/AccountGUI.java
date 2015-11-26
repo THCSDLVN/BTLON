@@ -3,6 +3,7 @@ package Client.accountGUI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -24,14 +25,22 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.Dimension;
+import java.awt.font.TextAttribute;
 
 import Client.accountinfor.AccountInfor;
 import Client.solvearraylist.SolveArrayList;
 import Client.clientprocess.ClientProcess;
 import Client.hidepanel.HidePanel;
+import Client.editprofileframe.EditProfileFrame;
+import Client.orderframe.OrderFrame;
 
 public class AccountGUI extends JFrame{
 
@@ -51,7 +60,7 @@ public class AccountGUI extends JFrame{
 	public String resName = new String("");
 	public String resAddr = new String("");
 	public String resNumber = new String("");
-	public String[] foodMenuColumns = {"Food","Price"}; 
+	public String[] foodMenuColumns = {"Food","Price","Describe"}; 
 	public String[][] data;
 	
 	public JLabel resNameLbl;
@@ -67,13 +76,13 @@ public class AccountGUI extends JFrame{
 	public JLabel resNameAvaLbl = new JLabel(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/home.png"));
 	public JLabel resAddressAvaLbl = new JLabel(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/AddressIcon.png"));
 	public JLabel resPhoneAvaLbl = new JLabel(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/res_phone.png"));
-	public JLabel likeAvaLbl = new JLabel(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/red_heart.png"));
 	public JLabel resLikeLbl = new JLabel((String) null);
 	public JLabel fullnameLbl;
 	public JLabel phoneNumberLbl;
 	public JLabel birthdayLbl;
+	public JLabel editProfileLbl = new JLabel("Edit Profile");
 	
-	public JButton likeBtn = new JButton("");
+	public JButton listOrderBtn = new JButton("");
 	public JButton backBtn = new JButton("");
 	public JButton refreshBtn = new JButton("");
 	public JButton menuBtn = new JButton();
@@ -86,7 +95,7 @@ public class AccountGUI extends JFrame{
 	public ClientProcess clientProcess = new ClientProcess();
 
 	public AccountGUI(AccountInfor aI,ClientProcess cP) {
-		super(aI.getFullname());
+		super(aI.getUsername());
 		accInfor = aI;
 		clientProcess = cP;
 
@@ -146,10 +155,37 @@ public class AccountGUI extends JFrame{
 		scrollPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, UIManager.getColor("Button.darkShadow"), null));
 		scrollPane.setBounds(12, 359, 416, 188);
 		userPanel.add(scrollPane);
+
+		editProfileLbl.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		editProfileLbl.setFont(new Font("Tahoma", Font.BOLD, 13));
+		editProfileLbl.setForeground(new Color(34, 135, 254));
+		if(editProfileLbl.getMouseListeners().length < 1){
+			editProfileLbl.addMouseListener(new MouseAdapter(){
+				public void mouseClicked(MouseEvent me){
+					EditProfileFrame edit = new EditProfileFrame(accInfor,clientProcess,fullnameLbl,phoneNumberLbl);
+				}
+
+				public void mouseEntered(MouseEvent me) {
+					final Map attributes = (new Font("Tahoma", Font.BOLD, 13)).getAttributes();
+					attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+					me.getComponent().setFont(new Font(attributes));
+				}
+				
+				public void mouseExited(MouseEvent me) {
+					me.getComponent().setFont(new Font("Tahoma", Font.BOLD, 13));
+				}
+			});
+		}
+		panel.add(editProfileLbl);
+		editProfileLbl.setBounds(325, 24, 195, 14);
 		
-		String[] columnNames = {"Restaurant","Address","Like"};
-		List<List<String>> resList = new ArrayList<>();			
-		clientProcess.getRequestFromClient("dataQuery(Restaurant,SequenceRestaurant~Resname,Address,NumberLike~ResID~\"\"~\"\"~\"\")");
+		String[] columnNames = {"Restaurant","Address"};
+		List<List<String>> resList = new ArrayList<>();		
+		do{
+			;
+		}
+		while(!clientProcess.request.toString().equals(""));	
+		clientProcess.getRequestFromClient("dataQuery(Restaurant,SequenceRestaurant~Resname,Address~Restaurant.ResID = SequenceRestaurant.ResID~\"\"~\"\"~\"\")");
 		do{
 			if(clientProcess.lock == 1){
 				clientProcess.setRequest();
@@ -179,6 +215,10 @@ public class AccountGUI extends JFrame{
 					resName = (String)model.getValueAt(row, 0);
 					resAddr = (String)model.getValueAt(row, 1);
 					List<List<String>> resNumber = new ArrayList();
+					do{
+						;
+					}
+					while(!clientProcess.request.toString().equals(""));
 					clientProcess.getRequestFromClient("dataQuery(Account~PhoneNumber~\"\"~AID = (select AID from Restaurant where Resname = '" + resName +"')~\"\"~\"\")");
 					do{
 						if(clientProcess.lock == 1){
@@ -197,7 +237,11 @@ public class AccountGUI extends JFrame{
 					JTable menu = getMenuPanel().getMenu();
 					getMenuPanel().setResAddress(resAddr);
 					List<List<String>> foodMenu = new ArrayList();
-					clientProcess.getRequestFromClient("dataQuery(Provide~FoodName,Cost~\"\"~ResID = (select ResID from SequenceRestaurant where Address = '" + resAddr +"')~\"\"~\"\")");
+					do{
+						;
+					}
+					while(!clientProcess.request.toString().equals(""));
+					clientProcess.getRequestFromClient("dataQuery(Provide~FoodName,Cost,DescribeFood~\"\"~ResID = (select ResID from SequenceRestaurant where Address = '" + resAddr +"')~\"\"~\"\")");
 					do{
 						if(clientProcess.lock == 1){
 							clientProcess.setRequest();
@@ -261,15 +305,17 @@ public class AccountGUI extends JFrame{
 		resPhoneLbl_1.setBounds(219, 112, 169, 38);
 		resInfo.add(resPhoneLbl_1);
 		
-		likeAvaLbl.setBounds(175, 162, 43, 38);
-		resInfo.add(likeAvaLbl);
-		
 		resLikeLbl.setBounds(219, 162, 169, 38);
 		resInfo.add(resLikeLbl);
 		
-		likeBtn.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/flying_heart.png"));
-		likeBtn.setBounds(12, 232, 55, 56);
-		restaurantPanel.add(likeBtn);
+		listOrderBtn.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/listOrder.png"));
+		listOrderBtn.setBounds(12, 232, 55, 56);
+		listOrderBtn.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae){
+				OrderFrame odrFrame = new OrderFrame(clientProcess,accInfor);
+			}
+		});
+		restaurantPanel.add(listOrderBtn);
 		
 		backBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -301,7 +347,11 @@ public class AccountGUI extends JFrame{
 				getMenuPanel().setVisible(true);
 				JTable menu = getMenuPanel().getMenu();
 				List<List<String>> foodMenu = new ArrayList();
-				clientProcess.getRequestFromClient("dataQuery(Provide~FoodName,Cost~\"\"~ResID = (select ResID from SequenceRestaurant where Address = '" + resAddr +"')~\"\"~\"\")");
+				do{
+					;
+				}
+				while(!clientProcess.request.toString().equals(""));
+				clientProcess.getRequestFromClient("dataQuery(Provide~FoodName,Cost,DescribeFood~\"\"~ResID = (select ResID from SequenceRestaurant where Address = '" + resAddr +"')~\"\"~\"\")");
 				do{
 					if(clientProcess.lock == 1){
 						clientProcess.setRequest();

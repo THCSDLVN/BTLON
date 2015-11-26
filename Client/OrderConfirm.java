@@ -74,7 +74,11 @@ public class OrderConfirm extends JDialog {
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(clientProcess.lock == 0){
-					clientProcess.getRequestFromClient("insertDataQuery(Reservation~" + aid + "~" + resAddress + "~" + foodname + "~" + orderDate + "~" + Integer.toString(quantity) + "~0~\"\"~\"\")");
+					do{
+						;
+					}
+					while(!clientProcess.request.toString().equals(""));
+					clientProcess.getRequestFromClient("insertDataQuery(Reservation~" + aid + "~" + resAddress + "~" + foodname + "~" + orderDate + "~" + Integer.toString(quantity) + "~0~" + Integer.toString(total) +"~\"\")");
 					do{
 						if(clientProcess.lock == 1){
 							clientProcess.setRequest();

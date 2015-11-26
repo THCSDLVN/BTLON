@@ -75,7 +75,7 @@ public class Login {
 	}
 	
 	public void initialize() {
-		frmLoginAsRestaurant.setTitle("Login as restaurant");
+		frmLoginAsRestaurant.setTitle("Login");
 		frmLoginAsRestaurant.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frmLoginAsRestaurant.setVisible(true);
 		frmLoginAsRestaurant.setPreferredSize(new Dimension(459, 285));
@@ -89,6 +89,10 @@ public class Login {
 				if(!clientProcess.listUserIsOnline.isEmpty()){
 					for (Iterator<String> i = clientProcess.listUserIsOnline.iterator(); i.hasNext();) {
 						String usn = new String(i.next());
+						do{
+							;
+						}
+						while(!clientProcess.request.toString().equals(""));
 						clientProcess.getRequestFromClient("updateDataQuery(Account~Status~0~Status = 1 and Username ='" + usn + "')");
 						clientProcess.printRequest();
 						do{
@@ -246,7 +250,11 @@ public class Login {
 			public void mouseClicked(MouseEvent me) {
 				try{
 					if(btnlogin.isEnabled()){
-						if(clientProcess.lock == 0){			
+						if(clientProcess.lock == 0){
+							do{
+								;
+							}
+							while(!clientProcess.request.toString().equals(""));			
 							clientProcess.getRequestFromClient("dataQuery(Account~*~\"\"~Username = '" + username + "' and Password = '" + passd + "' and Status = 0~\"\"~\"\")");
 							do{
 								if(clientProcess.lock == 1){
@@ -259,6 +267,10 @@ public class Login {
 							List<List<String>> rsl = clientProcess.getResultList();
 							clientProcess.setResultList();
 							if(!rsl.isEmpty()){
+								do{
+									;
+								}
+								while(!clientProcess.request.toString().equals(""));
 								clientProcess.getRequestFromClient("updateDataQuery(Account~Status~1~Username = '" + username + "')");
 								do{
 									if(clientProcess.lock == 1){
@@ -282,6 +294,10 @@ public class Login {
 									AccountGUI accGUI = new AccountGUI(accInfor,clientProcess);
 									accGUI.addWindowListener(new WindowAdapter(){
 										public void windowClosing(WindowEvent we){
+											do{
+												;
+											}
+											while(!clientProcess.request.toString().equals(""));
 											clientProcess.getRequestFromClient("updateDataQuery(Account~Status~0~Status = 1 and Username = '"+ accInfor.getUsername() +"')");
 											clientProcess.printRequest();
 											do{
@@ -331,8 +347,11 @@ public class Login {
 				if(!clientProcess.listUserIsOnline.isEmpty()){
 					for (Iterator<String> i = clientProcess.listUserIsOnline.iterator(); i.hasNext();) {
 						String usn = new String(i.next());
+						do{
+							;
+						}
+						while(!clientProcess.request.toString().equals(""));
 						clientProcess.getRequestFromClient("updateDataQuery(Account~Status~0~Status = 1 and Username ='" + usn + "')");
-						clientProcess.printRequest();
 						do{
 							if(clientProcess.lock == 1){
 								clientProcess.setRequest();

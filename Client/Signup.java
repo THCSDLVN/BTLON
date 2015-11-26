@@ -142,7 +142,7 @@ public class Signup extends JFrame {
 		lblBirthday.setBounds(6, 180, 105, 20);
 		lblBirthday.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
-		lblPhoneNum.setBounds(6, 262, 105, 20);
+		lblPhoneNum.setBounds(6, 262, 120, 20);
 		lblPhoneNum.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
 		phoneNumField.setBounds(154, 262, 195, 20);
@@ -259,6 +259,14 @@ public class Signup extends JFrame {
 					JOptionPane.showMessageDialog(null,"Date Of Birth Is Not Exist","Announce",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
+				if(!usernameField.getText().equals("") && !check_text(usernameField.getText())){
+					JOptionPane.showMessageDialog(null, "Username Must Be Letters Or Digits","Announce",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				if(!passwordField.getText().equals("") && !check_text(passwordField.getText())){
+					JOptionPane.showMessageDialog(null, "Password Must Be Letters Or Digits","Announce",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
 				
 				usrname = new String(usernameField.getText());
 				password = new String(passwordField.getPassword());
@@ -266,6 +274,11 @@ public class Signup extends JFrame {
 				dateofbirth = new String(yearCbbox.getSelectedItem() + "-" + monthCbbox.getSelectedItem() + "-" + dayCbbox.getSelectedItem());
 				sex = new String((String)sexcomboBox.getSelectedItem());
 				phonenum = new String(phoneNumField.getText());
+				
+				do{
+					;
+				}
+				while(!clientProcess.request.toString().equals(""));
 				
 				clientProcess.getRequestFromClient("dataQuery(Account~AID~\"\"~\"\"~\"\"~\"\")");
 				do{
@@ -280,7 +293,10 @@ public class Signup extends JFrame {
 				resultList = clientProcess.getResultList();
 				clientProcess.setResultList();
 				aid = new String(pAIDRan.ProvideIDRandom(resultList,"ACCT"));
-
+				do{
+					;
+				}
+				while(!clientProcess.request.toString().equals(""));
 				clientProcess.getRequestFromClient("insertDataQuery(Account~"+ aid + "~" + usrname + "~" + password + "~" + fullname + "~" + dateofbirth + "~" + phonenum + "~" + sex + "~1" +")");
 				do{
 					if(clientProcess.lock == 1){
@@ -304,6 +320,10 @@ public class Signup extends JFrame {
 					AccountGUI accGUI = new AccountGUI(accInfor,clientProcess);
 					accGUI.addWindowListener(new WindowAdapter(){
 						public void windowClosing(WindowEvent we){
+							do{
+								;
+							}
+							while(!clientProcess.request.toString().equals(""));
 							clientProcess.getRequestFromClient("updateDataQuery(Account~Status~0~Status = 1 and Username = '"+ accInfor.getUsername() +"')");
 							clientProcess.printRequest();
 							do{
@@ -358,7 +378,7 @@ public class Signup extends JFrame {
 			}
 		}
 		else{
-			JOptionPane.showMessageDialog(null, "Server Has Crashed");
+			JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
@@ -372,6 +392,15 @@ public class Signup extends JFrame {
 			return true;
 		}
 		else {
+			return false;
+		}
+	}
+
+	private Boolean check_text(String text){
+		if (text.matches("[A-Za-z0-9]+")){
+			return true;
+		}
+		else{
 			return false;
 		}
 	}
