@@ -28,6 +28,8 @@ import javax.swing.DefaultComboBoxModel;
 
 import gui.SQLConnection;
 import gui.ProvideAIDRandom;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class signup extends JFrame {
 	
@@ -203,9 +205,8 @@ public class signup extends JFrame {
 		InfoFillPn.add(SexcomboBox);
 		
 		JButton btnSignup = new JButton("Sign up");
-		btnSignup.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
+		btnSignup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				signupClick();
 			}
 		});
@@ -214,9 +215,8 @@ public class signup extends JFrame {
 		signupPn.add(btnSignup);
 		
 		JButton btnCancel = new JButton("Cancel");
-		btnCancel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
