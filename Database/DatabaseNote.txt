@@ -1,7 +1,7 @@
 AID ------------- VD : ACCT0001
 ResID ----------- VD : REST0001
-ReserID --------- VD : ORDR0001
+StatusReser ----- VD : Lock - Updating - Deny - Delete - OK
 PermisionID ----- VD : PERM0001
 ObjectID -------- VD : OBJT0001
 OperationID ----- VD : OPER0001
-RollID ---------- VD : ROLE0001
+RoleID ---------- VD : ROLE0001
