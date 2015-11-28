@@ -137,6 +137,20 @@ public class SqlArrayList {
 		}	
 	}
 	
+	public String[][] get2dArray()
+	{
+		String ret[][] = new String[rownum][colnum];
+		if(rownum == 0) return ret;
+		else
+		{
+			for(int i=0;i<rownum;i++)
+			{
+				ret[i] = getRow(i);
+			}
+			return ret;
+		}
+	}
+	
 	public int getRownumber()
 	{
 		return rownum;
