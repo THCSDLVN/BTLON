@@ -5,3 +5,10 @@ PermisionID ----- VD : PERM0001
 ObjectID -------- VD : OBJT0001
 OperationID ----- VD : OPER0001
 RoleID ---------- VD : ROLE0001
+
+StatusReser - CustomerRight                        - RestaurantRight              - NextStatusForCustomer    - NextStatusForRestaurant
+Updating    - Change Foodname,Time,Status,Quantity - Change Status                - Delete                   - Deny,Lock
+Deny        - Delete                               - Nothing                      - Nothing                  - Nothing
+Delete      - Nothing                              - Delete                       - Nothing                  - Nothing
+Lock        - Change Status                        - Delete After Order Day 1 Day - OK                       - Nothing
+OK          - Nothing                              - Delete                       - Nothing                  - Nothing
