@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.TableModelEvent;
 
@@ -23,11 +24,12 @@ import javax.swing.ListSelectionModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.Icon;
+import javax.swing.JComboBox;
 
 public class AccountGUI extends JFrame {
 
 	private JPanel contentPane;
-	private JTable table;
+	private JTable resListTable;
 	public SQLConnection c = new SQLConnection();
 	public int like = 0;
 	private JPanel menuAndOrder;
@@ -36,13 +38,27 @@ public class AccountGUI extends JFrame {
 	private JPanel resInfo;
 	private JLabel resNameLbl;
 	private JLabel ResAddressLbl;
-	private HidePanel menuPanel,orderPanel;
+	private HidePanel menuPanel;
 	private JLabel resPhoneLbl_1;
 	public String[] foodMenuColumns = {"Food","Price"}; 
-	public String[][] data;
+	public String[][] foodData;
+	public String[] orderColumns = {"Time"};
+	public String[][] orderData;
+	
+	// Code moi.
+	public String[] myResname,myResID; 
+	JComboBox myResCbox;
+	JButton goToMyResBtn;
+	String[][] myRestaurants;
+	
+	// Code moi.
+	private HidePanel2 myOrderPanel;
+	private JPanel restaurantPanel;
+	private MyOrder myOrderView;
 	/**
 	 * Launch the application.
-	 */
+	*/
+	
 	public static void main(String[] args) {
 		Account a = new Account();
 		a.setAID("ACC0101");
@@ -98,7 +114,7 @@ public class AccountGUI extends JFrame {
 		}
 		else
 			userAvaLbl.setIcon(new ImageIcon(this.getClass().getResource("/Picture/female.png")));
-		userAvaLbl.setBounds(12, 12, 128, 176);
+		userAvaLbl.setBounds(12, 12, 128, 138);
 		panel.add(userAvaLbl);
 		
 		JLabel fullnameIconLbl = new JLabel(new ImageIcon(this.getClass().getResource("/Picture/Rsname.png")));
@@ -125,43 +141,93 @@ public class AccountGUI extends JFrame {
 		birthdayLbl.setBounds(207, 112, 195, 38);
 		panel.add(birthdayLbl);
 		
+		// Code moi
+		JLabel myResLbl = new JLabel("My Restaurants");
+		myResLbl.setBounds(12, 162, 128, 26);
+		panel.add(myResLbl);
+		
+		//Code moi
+		myResCbox = new JComboBox();
+		myResCbox.setBounds(154, 162, 207, 26);
+		panel.add(myResCbox);
+		List<List<String>> myResList = c.getMyRes(a.getAID()); // SQL : select ResID,Resname from Restaurant 
+															   // where AID = '"+myAID+"'
+		if(myResList.size() == 0);
+		else{
+			myRestaurants = SolveArrayList.ConvertFromArrayList(myResList);
+			int i;
+			for(i=0;i<myRestaurants.length;i++){
+				myResCbox.addItem(myRestaurants[i][1]);
+			}
+		}
+		
+		//Code moi
+		goToMyResBtn = new JButton("go");
+		goToMyResBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int index = myResCbox.getSelectedIndex();
+				if(index == -1);
+				else{
+					System.out.println(myRestaurants[index][0] + " " + myRestaurants[index][1]);
+					//Send myRestaurants[index][0] (ResID) and myRestaurants[index][1] (Resname) to Hung's RestaurantGUI.
+					int success = c.DeleteThisRestaurant(myRestaurants[index][0]);
+					if(success != 0){
+						JOptionPane.showMessageDialog(null, "Thanh Cong");
+						myResCbox.removeItemAt(index);
+					}
+				}
+			}
+		});
+		goToMyResBtn.setBounds(373, 162, 36, 25);
+		panel.add(goToMyResBtn);
+		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, UIManager.getColor("Button.darkShadow"), null));
 		scrollPane.setBounds(12, 359, 416, 188);
 		userPanel.add(scrollPane);
 		
-		table = new JTable();
+		resListTable = new JTable();
 		String[] columnNames = {"Restaurant","Address","Like"};
 		List<List<String>> resList = new ArrayList<>();
 		resList = c.getRes();// SQL : select Resname,Address from Restaurant natural join SequenceRestaurant
 		String[][] x = SolveArrayList.ConvertFromArrayList(resList);
 		DefaultTableModel model = new DefaultTableModel(x, columnNames);
-		table.setModel(model);
-		table.getColumnModel().getColumn(0).setPreferredWidth(184);
-		table.getColumnModel().getColumn(1).setPreferredWidth(133);
-		scrollPane.setViewportView(table);
+		resListTable.setModel(model);
+		resListTable.getColumnModel().getColumn(0).setResizable(false);
+		resListTable.getColumnModel().getColumn(0).setPreferredWidth(184);
+		resListTable.getColumnModel().getColumn(1).setResizable(false);
+		resListTable.getColumnModel().getColumn(1).setPreferredWidth(133);
+		resListTable.getColumnModel().getColumn(2).setResizable(false);
+		scrollPane.setViewportView(resListTable);
 
 		JButton btnFeature = new JButton("Feature");
 		btnFeature.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				column = table.getSelectedColumn();
-				row = table.getSelectedRow();
+				DefaultTableModel model = (DefaultTableModel)resListTable.getModel();
+				column = resListTable.getSelectedColumn();
+				row = resListTable.getSelectedRow();
 				if(row < 0)
 					return;
 				resName = (String)model.getValueAt(row, 0);
 				resAddr = (String)model.getValueAt(row, 1);
-				List<List<String>> resNumber = c.getResInfo(resAddr); // SQL : select PhoneNumber from Account "
-						//+ "where AID = (select AID from SequenceRestaurant where Address = '"+resAddr
+				List<List<String>> resNumber = c.getResInfo(resName); // SQL : select PhoneNumber from Account "
+						//+ "where AID = (select AID from SequenceRestaurant where Address = '"+resAddr+"')"
+				if(resNumber.size() == 0){
+					JOptionPane.showMessageDialog(null, "Nha hang khong ton tai");
+					row = resListTable.getSelectedRow();
+					DefaultTableModel tempModel = (DefaultTableModel)resListTable.getModel();
+					tempModel.removeRow(row);
+					row = -1;
+					return;
+				}
 				getResNameLbl_1().setText(resName);
 				getResAddressLbl().setText(resAddr);
 				getResPhoneLbl().setText(resNumber.get(0).get(0));
-				JTable menu = getMenuPanel().getMenu();
-				getMenuPanel().setResAddress(resAddr);
-				List<List<String>> foodMenu = c.getFoodFromRes(resAddr);//SQL : select FoodName,Cost from Provide "
-						//+ "where ResID = (select ResID from SequenceRestaurant where Address = '"+ResAddress+"
-				data = new SolveArrayList().ConvertFromArrayList(foodMenu);
-				DefaultTableModel model = new DefaultTableModel(data, foodMenuColumns);
-				menu.setModel(model);
+				getPanel_1().setVisible(true);
+				if(getMenuPanel().isVisible())
+					getMenuPanel().setVisible(false);
+				if(getMyOrderPanel().isVisible())
+					getMyOrderPanel().setVisible(false);
 			}
 		});
 		btnFeature.setBounds(311, 559, 117, 25);
@@ -173,7 +239,7 @@ public class AccountGUI extends JFrame {
 		Restaurants.setBounds(12, 306, 416, 41);
 		userPanel.add(Restaurants);
 		
-		JPanel restaurantPanel = new JPanel();
+		restaurantPanel = new JPanel();
 		restaurantPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 204, 204), null));
 		restaurantPanel.setBounds(464, 12, 424, 596);
 		contentPane.add(restaurantPanel);
@@ -214,27 +280,16 @@ public class AccountGUI extends JFrame {
 		resPhoneLbl_1.setBounds(219, 112, 169, 38);
 		resInfo.add(resPhoneLbl_1);
 		
-		JLabel likeAvaLbl = new JLabel(new ImageIcon(AccountGUI.class.getResource("/Picture/red_heart.png")));
-		likeAvaLbl.setBounds(175, 162, 43, 38);
-		resInfo.add(likeAvaLbl);
-		
-		JLabel resLikeLbl = new JLabel((String) null);
-		resLikeLbl.setBounds(219, 162, 169, 38);
-		resInfo.add(resLikeLbl);
-		
-		JButton likeBtn = new JButton("");
-		likeBtn.setIcon(new ImageIcon(AccountGUI.class.getResource("/Picture/flying_heart.png")));
-		likeBtn.setBounds(12, 232, 55, 56);
-		restaurantPanel.add(likeBtn);
-		
 		JButton backBtn = new JButton("");
 		backBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getPanel_1().setVisible(true);
 				if(getMenuPanel().isVisible())
 					getMenuPanel().setVisible(false);
-				if(getOrderPanel().isVisible())
-					getOrderPanel().setVisible(false);
+				if(getMyOrderPanel().isVisible())
+					getMyOrderPanel().setVisible(false);
+				if(getOrderViewPanel().isVisible())
+					getOrderViewPanel().setVisible(false);
 			}
 		});
 		backBtn.setIcon(new ImageIcon(AccountGUI.class.getResource("/Picture/007355-blue-jelly-icon-arrows-arrow-styled-left.png")));
@@ -242,6 +297,22 @@ public class AccountGUI extends JFrame {
 		restaurantPanel.add(backBtn);
 		
 		JButton refreshBtn = new JButton("");
+		refreshBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String[] columnNames = {"Restaurant","Address","Like"};
+				List<List<String>> resList = new ArrayList<>();
+				resList = c.getRes();// SQL : select Resname,Address from Restaurant natural join SequenceRestaurant
+				String[][] x = SolveArrayList.ConvertFromArrayList(resList);
+				DefaultTableModel model = new DefaultTableModel();
+				int i;
+				for(i=0;i<3;i++)
+					model.addColumn(columnNames[i]);
+				for(i=0;i<x.length;i++)
+					model.addRow(x[i]);
+				//System.out.println(model.getRowCount());
+				resListTable.setModel(model);
+			}
+		});
 		refreshBtn.setIcon(new ImageIcon(AccountGUI.class.getResource("/Picture/refresh.png")));
 		refreshBtn.setBounds(290, 232, 55, 56);
 		restaurantPanel.add(refreshBtn);
@@ -252,28 +323,72 @@ public class AccountGUI extends JFrame {
 		restaurantPanel.add(menuAndOrder);
 		menuAndOrder.setLayout(null);
 		
-		JButton menuBtn = new JButton();
+		JButton menuBtn = new JButton();// Nho kiem tra xem con NH do khong ?
 		menuBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				getMenuPanel().setVisible(true);
-				JTable menu = getMenuPanel().getMenu();
-				getMenuPanel().setResAddress(resAddr);
-				List<List<String>> foodMenu = c.getFoodFromRes(resAddr); // SQL : select FoodName,Cost from Provide "
-				//+ "where ResID = (select ResID from SequenceRestaurant where Address = '"+ResAddress+"
-				data = new SolveArrayList().ConvertFromArrayList(foodMenu);
-				DefaultTableModel model = new DefaultTableModel(data, foodMenuColumns);
-				menu.setModel(model);
-				getPanel_1().setVisible(false);
+				if(c.getResInfo(resName).size() == 0){
+					JOptionPane.showMessageDialog(null, "This Restaurant Is Not Exist");
+					DefaultTableModel tempModel = (DefaultTableModel)resListTable.getModel();
+					if(row < 0)
+						return;
+					tempModel.removeRow(row);
+					row = -1;
+					return;
+				}
+				else{
+					JTable menu = getMenuPanel().getMenu();
+					List<List<String>> foodMenu = c.getFoodFromRes(resAddr); // SQL : select FoodName,Cost from Provide "
+					//+ "where ResID = (select ResID from SequenceRestaurant where Address = '"+ResAddress+"
+					getMenuPanel().setResAddress(resAddr);// Input resAddr into HidePanel.
+					foodData = new SolveArrayList().ConvertFromArrayList(foodMenu);
+					DefaultTableModel model = new DefaultTableModel(foodData, foodMenuColumns){
+						boolean[] columnEditables = new boolean[] {
+								false, false, false
+							};
+							public boolean isCellEditable(int row, int column) {
+								return columnEditables[column];
+							}
+					};
+					menu.setModel(model);
+					// Code moi.
+					// SQL:select distinct `Time` from `Reservation` "
+					//+ "where AID = '"+AID+"' and `ResAddress` = '"+resAddress+"'
+					List<List<String>> myOrderDate = c.getMyOrderDateFromThisRes(a.getAID(), resAddr);
+					for(List<String> innerLs : myOrderDate){
+						for(Iterator<String> i = innerLs.iterator();i.hasNext();){
+							getMenuPanel().getOrderItem().addItem(i.next());
+						}
+					}
+					getPanel_1().setVisible(false);
+					getMenuPanel().setVisible(true);
+				}
 			}
 		});
 		menuBtn.setIcon(new ImageIcon(AccountGUI.class.getResource("/Picture/food.png")));
 		menuBtn.setBounds(12, 65, 172, 162);
 		menuAndOrder.add(menuBtn);
 		
-		JButton orderBtn = new JButton();
+		//Code moi.
+		JButton orderBtn = new JButton(); // Nho kiem tra xem nha hang con o do khong?
 		orderBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				getOrderPanel().setVisible(true);
+				if(c.getResInfo(resName).size() == 0){
+					JOptionPane.showMessageDialog(null, "This Restaurant Is Not Exist");
+					DefaultTableModel tempModel = (DefaultTableModel)resListTable.getModel();
+					if(row < 0)
+						return;
+					tempModel.removeRow(row);
+					row = -1;
+					return;
+				}
+				HidePanel2 orderPanel = getMyOrderPanel();
+				orderPanel.setResAddress(resAddr);
+				JTable orderTable = getMyOrderPanel().getOrderTable();
+				List<List<String>> myOrderList = c.getMyOrderFromThisRes(a.getAID(),resAddr);
+				orderData = SolveArrayList.ConvertFromArrayList(myOrderList);
+				DefaultTableModel model = new DefaultTableModel(orderData, orderColumns);
+				orderTable.setModel(model);
+				orderPanel.setVisible(true);
 				getPanel_1().setVisible(false);
 			}
 		});
@@ -281,14 +396,27 @@ public class AccountGUI extends JFrame {
 		orderBtn.setBounds(216, 65, 172, 162);
 		menuAndOrder.add(orderBtn);
 		
-		menuPanel = new HidePanel(menuAndOrder.getBorder(),a.getAID());
+		menuPanel = new HidePanel(this,menuAndOrder.getBorder(),a.getAID());
 		restaurantPanel.add(menuPanel);
 		menuPanel.setVisible(false);
 		
-		orderPanel = new HidePanel(menuAndOrder.getBorder(),a.getAID());
-		restaurantPanel.add(orderPanel);
-		orderPanel.setVisible(false);
+		myOrderPanel = new HidePanel2(this,menuAndOrder.getBorder(),a.getAID());
+		restaurantPanel.add(myOrderPanel);
+		myOrderPanel.setVisible(false);
 		
+		myOrderView = new MyOrder(myOrderPanel);
+		restaurantPanel.add(myOrderView);
+		
+		JButton button = new JButton("");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new CreateMyRes(a.getAID()).setVisible(true);
+			}
+		});
+		button.setIcon(new ImageIcon(AccountGUI.class.getResource("/Picture/cancel.png")));
+		button.setBounds(12, 232, 55, 56);
+		restaurantPanel.add(button);
+		myOrderView.setVisible(false);
 	}
 	public JPanel getPanel_1() {
 		return menuAndOrder;
@@ -308,7 +436,13 @@ public class AccountGUI extends JFrame {
 	public JLabel getResPhoneLbl() {
 		return resPhoneLbl_1;
 	}
-	public HidePanel getOrderPanel(){
-		return orderPanel;
+	public HidePanel2 getMyOrderPanel(){
+		return myOrderPanel;
+	}
+	public JPanel getRestaurantPanel() {
+		return restaurantPanel;
+	}
+	public MyOrder getOrderViewPanel(){
+		return myOrderView;
 	}
 }

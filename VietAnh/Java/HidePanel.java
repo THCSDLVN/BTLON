@@ -1,5 +1,6 @@
 import java.awt.Rectangle;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -25,7 +26,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
 public class HidePanel extends JPanel {
-	public String[] columnNames = new String[] {"Food", "Price"};
 	SQLConnection c = new SQLConnection();
 	private JTable menu;
 	private JComboBox comboBox;
@@ -33,11 +33,11 @@ public class HidePanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public HidePanel(Border b,String AID) {
+	// Code moi.
+	public HidePanel(AccountGUI aGUI,Border b,String AID) {
 		this.setBounds(12, 300, 400, 284);
 		this.setBorder(b);
 		setLayout(null);
-		DefaultTableModel model = new DefaultTableModel(new String[][]{}, columnNames);
 		
 		JButton orderBtn = new JButton("Order");
 		orderBtn.addActionListener(new ActionListener() {
@@ -52,9 +52,10 @@ public class HidePanel extends JPanel {
 					return;
 				DefaultTableModel model = (DefaultTableModel)tempTable.getModel();
 				String foodname = (String)model.getValueAt(row, 0);
-				int foodPrice = Integer.parseInt((String)model.getValueAt(row, 1));
+				Double foodPrice = Double.parseDouble((String)model.getValueAt(row, 1));
 				String orderDate = (String)getOrderItem().getSelectedItem();
-				new OrderConfirm(foodname, foodPrice,AID,orderDate,resAddress).setVisible(true);
+				// Code moi.
+				new OrderConfirm(aGUI,foodname, foodPrice,AID,orderDate,resAddress).setVisible(true);
 			}
 		});
 		orderBtn.setBounds(148, 247, 117, 25);
@@ -75,7 +76,6 @@ public class HidePanel extends JPanel {
 		add(scrollPane);
 		
 		menu = new JTable();
-		menu.setModel(model);
 		scrollPane.setViewportView(menu);
 		
 		JButton newBtn = new JButton("New");

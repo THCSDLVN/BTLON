@@ -16,9 +16,9 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Account` (
   `Birthday` DATE NULL DEFAULT NULL,
   `PhoneNumber` CHAR(13) NULL,
   `Sex` VARCHAR(6) NULL,
-  `Status` INT NULL,
+  `Status` INT NULL DEFAULT 0,
   PRIMARY KEY (`AID`),
-  INDEX `AID` (`AID` ASC),
+  INDEX `AIDIndex` (`AID` ASC),
   UNIQUE INDEX `Username_UNIQUE` (`Username` ASC),
   UNIQUE INDEX `PhoneNumber_UNIQUE` (`PhoneNumber` ASC))
 ENGINE = InnoDB
@@ -43,17 +43,14 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`AccountAssignment` (
   `AID` VARCHAR(8) NOT NULL,
   `RLID` VARCHAR(8) NOT NULL,
   PRIMARY KEY (`AID`, `RLID`),
-  INDEX `fk_AccountAssignment_2` (`RLID` ASC),
-  CONSTRAINT `fk_AccountAssignment_1`
+  INDEX `AIDIndex` (`AID` ASC),
+  INDEX `RLIDIndex` (`RLID` ASC),
+  CONSTRAINT `fk_AID_AccountAssignment`
     FOREIGN KEY (`AID`)
-    REFERENCES `BT_LON`.`Account` (`AID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_AccountAssignment_2`
+    REFERENCES `BT_LON`.`Account` (`AID`),
+  CONSTRAINT `fk_RLID_AccountAssignment`
     FOREIGN KEY (`RLID`)
-    REFERENCES `BT_LON`.`Roles` (`RLID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `BT_LON`.`Roles` (`RLID`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -64,30 +61,25 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `BT_LON`.`Restaurant` (
   `ResID` VARCHAR(8) NOT NULL,
   `Resname` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`ResID`),
-  INDEX `ResID` (`ResID` ASC))
+  `AID` VARCHAR(8) NOT NULL,
+  PRIMARY KEY (`ResID`, `AID`),
+  INDEX `ResIDIndex` (`ResID` ASC),
+  INDEX `AIDIndex` (`AID` ASC),
+  CONSTRAINT `fk_AID_Restaurant`
+    FOREIGN KEY (`AID`)
+    REFERENCES `BT_LON`.`Account` (`AID`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+-- ----------------------------------------------------
+-- Table `BT_LON`.FoodSet
+-- ----------------------------------------------------
 
--- -----------------------------------------------------
--- Table `BT_LON`.`Manage`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `BT_LON`.`Manage` (
-  `AID` VARCHAR(8) NOT NULL,
-  `ResID` VARCHAR(8) NOT NULL,
-  PRIMARY KEY (`AID`, `ResID`),
-  INDEX `fk_Manage_2_idx` (`ResID` ASC),
-  CONSTRAINT `fk_Manage_1`
-    FOREIGN KEY (`AID`)
-    REFERENCES `BT_LON`.`Account` (`AID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Manage_2`
-    FOREIGN KEY (`ResID`)
-    REFERENCES `BT_LON`.`Restaurant` (`ResID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+CREATE TABLE IF NOT EXISTS `BT_LON`.`FoodSet` (
+  `Foodname` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`Foodname`),
+  INDEX `FoodnameIndex`(`Foodname` ASC)
+  )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -127,12 +119,14 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Provide` (
   `Cost` DOUBLE NULL DEFAULT NULL,
   `DescribeFood` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`ResID`, `Foodname`),
-  INDEX `Foodname` (`Foodname` ASC),
-  CONSTRAINT `fk_Provide_1`
+  INDEX `FoodnameIndex` (`Foodname` ASC),
+  INDEX `ResIDIndex` (`ResID` ASC),
+  CONSTRAINT `fk_Foodname_Provide`
+    FOREIGN KEY (`Foodname`)
+    REFERENCES `BT_LON`.`FoodSet` (`Foodname`),
+  CONSTRAINT `fk_ResID_Provide`
     FOREIGN KEY (`ResID`)
-    REFERENCES `BT_LON`.`Restaurant` (`ResID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `BT_LON`.`Restaurant` (`ResID`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -142,22 +136,13 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `BT_LON`.`SequenceRestaurant` (
   `Address` VARCHAR(45) NOT NULL,
-  `AID` VARCHAR(8) NOT NULL,
   `ResID` VARCHAR(8) NOT NULL,
-  `NumberLike` INT NULL DEFAULT 0,
-  PRIMARY KEY (`Address`, `AID`, `ResID`),
-  INDEX `fk_SequenceRestaurant_1_idx` (`AID` ASC),
-  INDEX `fk_SequenceRestaurant_2_idx` (`ResID` ASC),
-  CONSTRAINT `fk_SequenceRestaurant_1`
-    FOREIGN KEY (`AID`)
-    REFERENCES `BT_LON`.`Manage` (`AID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_SequenceRestaurant_2`
+  PRIMARY KEY (`Address`, `ResID`),
+  INDEX `ResIDIndex` (`ResID` ASC),
+  INDEX `AddressIndex` (`Address` ASC),
+  CONSTRAINT `fk_ResID_SequenceRestaurant`
     FOREIGN KEY (`ResID`)
-    REFERENCES `BT_LON`.`Manage` (`ResID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `BT_LON`.`Restaurant` (`ResID`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -169,29 +154,54 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Reservation` (
   `AID` VARCHAR(8) NOT NULL,
   `ResAddress` VARCHAR(45) NOT NULL,
   `Foodname` VARCHAR(45) NOT NULL,
-  `Time` DATETIME NOT NULL,
+  `Time` DATETIME NULL DEFAULT NULL,
   `Quantity` MEDIUMTEXT NULL DEFAULT NULL,
-  `AcceptReser` INT NULL DEFAULT 0,
-  PRIMARY KEY (`AID`, `ResAddress`, `Foodname`,`Time`),
-  INDEX `fk_Reservation_1_idx` (`AID` ASC),
-  INDEX `fk_Reservation_2_idx` (`ResAddress` ASC),
-  INDEX `fk_Reservation_3_idx` (`Foodname` ASC),
-  INDEX `fk_Reservation_4_idx` (`Time` ASC),
-  CONSTRAINT `fk_Reservation_1`
-    FOREIGN KEY (`AID`)
-    REFERENCES `BT_LON`.`Account` (`AID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Reservation_2`
-    FOREIGN KEY (`Foodname`)
-    REFERENCES `BT_LON`.`Provide` (`Foodname`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Reservation_3`
+  `StatusReser` VARCHAR(10) NULL, -- LOCK,UPDATING,DELETED,ACCEPTED
+  `Cost` DOUBLE NULL,
+  KEY(`Time`),
+  PRIMARY KEY (`AID`, `ResAddress`, `Foodname`, `Time`),
+  INDEX `ResAddressIndex` (`ResAddress` ASC),
+  INDEX `AIDIndex` (`AID` ASC),
+  INDEX `FoodnameIndex` (`Foodname` ASC),
+  INDEX `TimeIndex` (`Time` ASC),
+  CONSTRAINT `fk_ResAddress_Reservation`
     FOREIGN KEY (`ResAddress`)
-    REFERENCES `BT_LON`.`SequenceRestaurant` (`Address`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `BT_LON`.`SequenceRestaurant` (`Address`),
+  CONSTRAINT `fk_AID_Reservation`
+    FOREIGN KEY (`AID`)
+    REFERENCES `BT_LON`.`Account` (`AID`),
+  CONSTRAINT `fk_Foodname_Reservation`
+    FOREIGN KEY (`Foodname`)
+    REFERENCES `BT_LON`.`FoodSet` (`Foodname`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+-- -----------------------------------------------------
+-- Table `BT_LON`.`ServedOrder`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `BT_LON`.`ServedOrder` (
+  `AID` VARCHAR(8) NOT NULL,
+  `ResAddress` VARCHAR(45) NOT NULL,
+  `Foodname` VARCHAR(45) NOT NULL,
+  `Time` DATETIME NULL DEFAULT NULL,
+  `Feedback` VARCHAR(45) NULL,
+  PRIMARY KEY (`AID`, `ResAddress`, `Foodname`, `Time`),
+  INDEX `AIDIndex` (`AID` ASC),
+  INDEX `ResAddressIndex` (`ResAddress` ASC),
+  INDEX `FoodnameIndex` (`Foodname` ASC),
+  INDEX `TimeIndex` (`Time` ASC),
+  CONSTRAINT `fk_AID_ServedOrder`
+    FOREIGN KEY (`AID`)
+    REFERENCES `BT_LON`.`Reservation` (`AID`),
+  CONSTRAINT `fk_ResAddress_ServedOrder`
+    FOREIGN KEY (`ResAddress`)
+    REFERENCES `BT_LON`.`Reservation` (`ResAddress`),
+  CONSTRAINT `fk_Foodname_ServedOrder`
+    FOREIGN KEY (`Foodname`)
+    REFERENCES `BT_LON`.`FoodSet` (`Foodname`),
+  CONSTRAINT `fk_Time_ServedOrder`
+    FOREIGN KEY (`Time`)
+    REFERENCES `BT_LON`.`Reservation` (`Time`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -205,18 +215,15 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Permissions` (
   `OBJID` VARCHAR(8) NOT NULL,
   `OPID` VARCHAR(8) NOT NULL,
   PRIMARY KEY (`PRMID`, `OBJID`, `OPID`),
-  INDEX `fk_Permissions_1` (`OBJID` ASC),
-  INDEX `fk_Permissions_2` (`OPID` ASC),
-  CONSTRAINT `fk_Permissions_1`
+  INDEX `PRMIDIndex` (`PRMID` ASC),
+  INDEX `OPIDIndex` (`OPID` ASC),
+  INDEX `OBJIDIndex` (`OBJID` ASC),
+  CONSTRAINT `fk_OBJID_Permissions`
     FOREIGN KEY (`OBJID`)
-    REFERENCES `BT_LON`.`Objects` (`OBJID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Permissions_2`
+    REFERENCES `BT_LON`.`Objects` (`OBJID`),
+  CONSTRAINT `fk_OPID_Permissions`
     FOREIGN KEY (`OPID`)
-    REFERENCES `BT_LON`.`Operations` (`OPID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `BT_LON`.`Operations` (`OPID`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -228,21 +235,13 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`PermissionsAssignment` (
   `RLID` VARCHAR(8) NOT NULL,
   `PRMID` VARCHAR(8) NOT NULL,
   PRIMARY KEY (`RLID`, `PRMID`),
-  INDEX `fk_PermissionsAssignment_2` (`PRMID` ASC),
-  CONSTRAINT `fk_PermissionsAssignment_1`
+  INDEX `PRMIDIndex` (`PRMID` ASC),
+  INDEX `RLIDIndex` (`RLID` ASC),
+  CONSTRAINT `fk_RLID_PermissionsAssignment`
     FOREIGN KEY (`RLID`)
-    REFERENCES `BT_LON`.`Roles` (`RLID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_PermissionsAssignment_2`
+    REFERENCES `BT_LON`.`Roles` (`RLID`),
+  CONSTRAINT `fk_PRMID_PermissionsAssignment`
     FOREIGN KEY (`PRMID`)
-    REFERENCES `BT_LON`.`Permissions` (`PRMID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `BT_LON`.`Permissions` (`PRMID`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
