@@ -1,160 +1,188 @@
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+
+
 import java.util.Calendar;
 import java.util.logging.SimpleFormatter;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingConstants;
-import java.awt.event.ItemListener;
-import java.sql.Date;
-import java.text.ParseException;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+
+import java.util.Date;
+
+import java.awt.event.ItemListener;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Dimension;
+
 
 public class CreateOrder extends JDialog {
 
-	private final JPanel contentPanel = new JPanel();
-	private JComboBox monthCbox;
-	private JComboBox dayCbox;
-	private JComboBox hourCbox;
-	private JComboBox minsCbox;
+	public JComboBox monthCbox = new JComboBox();
+	public JComboBox dayCbox = new JComboBox();
+	public JComboBox hourCbox = new JComboBox();
+	public JComboBox minsCbox = new JComboBox();
+	public JComboBox yearCbox = new JComboBox();
 	
-	public JLabel yeahLbl;
+	public JLabel yearTxtLbl;
 	public JLabel monthTxtLbl;
 	public JLabel dayTxtLbl;
 	public JLabel hourTxtLbl;
 	public JLabel minTxtLbl;
+	public JLabel dateLbl = new JLabel("Date");
 	
-	// Declare datetime variable
-	public String year = Integer.toString(Calendar.getInstance().get(Calendar.YEAR));
-	public String month = "";
-	public String day = "";
-	public String hour = "";
-	public String min = "";
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			CreateOrder dialog = new CreateOrder(new JComboBox());
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	public JLabel lblMonth = new JLabel("Month");
+	public JLabel lblDay = new JLabel("Day");
+	public JLabel lblYear = new JLabel("Year");
 
-	/**
-	 * Create the dialog.
-	 */
+	public JLabel hourLbl = new JLabel("Hour");
+	public JLabel minsLbl = new JLabel("Minute");
+	
+	public JButton cancelBtn = new JButton("Cancel");
+	public JButton okBtn = new JButton("Confirm");
+
+	// Declare datetime variable
+	public String year = new String("");
+	public String month = new String("");
+	public String day = new String("");
+	public String hour = new String("");
+	public String min = new String("");
+
+	public Check check = new Check();
+	
+	public SQLConnection c = new SQLConnection();
+
 	public CreateOrder(JComboBox b) {
+		setTitle("Create Order");
+		setPreferredSize(new Dimension(560, 230));
 		setResizable(false);
-		setBounds(100, 100, 350, 189);
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(null);
+		pack();
+
+		getContentPane().setLayout(null);
+		getContentPane().add(okBtn);
+		getContentPane().add(cancelBtn);
 		
-		
-		JButton cancelBtn = new JButton("Cancel");
 		cancelBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
-		cancelBtn.setBounds(128, 152, 117, 25);
-		contentPanel.add(cancelBtn);
+		cancelBtn.setBounds(370, 180, 90, 27);
 		
-		JButton okBtn = new JButton("Confirm");
 		okBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try{
-					month = (String)getMonth().getSelectedItem();
-					day = (String)getDay().getSelectedItem();
-					hour = (String)getHour().getSelectedItem();
-					min = (String)getMin().getSelectedItem();
-					String datetime = new String(year+"-"+month+"-"+day+" "+hour+":"+min);
-					b.addItem(datetime);
-					dispose();
+					if(check.check_date(dayCbox,monthCbox,yearCbox)){
+						month = (String)getMonth().getSelectedItem();
+						day = (String)getDay().getSelectedItem();
+						hour = (String)getHour().getSelectedItem();
+						min = (String)getMin().getSelectedItem();
+						year = (String)getYear().getSelectedItem();
+						StringBuffer dateOrder = new StringBuffer("");
+						dateOrder.append(year + "/" + month + "/" + day + " " + hour + ":" + min);
+						if(!check.check_date(dateOrder.toString())){
+							JOptionPane.showMessageDialog(null,"Day Must Be Withtin 1 Week","Announce",JOptionPane.ERROR_MESSAGE);
+						}
+						else{
+							String datetime = new String(year+"-"+month+"-"+day+" "+hour+":"+min);
+							b.addItem(datetime);
+							dispose();
+						}
+					}
+					else{
+						JOptionPane.showMessageDialog(null,"Day Isn't Exists","Announce",JOptionPane.ERROR_MESSAGE);
+					}
 				}
 				catch(Exception p){
 					p.printStackTrace();
 				}
 			}
 		});
-		okBtn.setBounds(138, 115, 97, 25);
-		contentPanel.add(okBtn);
+		okBtn.setBounds(110, 180, 90, 27);
 		
-		JLabel dateLbl = new JLabel("Date :");
-		dateLbl.setBounds(65, 90, 49, 15);
-		contentPanel.add(dateLbl);
+		dateLbl.setBounds(20, 30, 26, 17);
+		getContentPane().add(dateLbl);
 		
-		monthCbox = new JComboBox();
 		monthCbox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				month = (String)getMonth().getSelectedItem();
-				monthTxtLbl.setText(month+" - ");
+				monthTxtLbl.setText(month + " - ");
 			}
 		});
-		monthCbox.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}));
+		monthCbox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		monthCbox.setMaximumRowCount(4);
-		monthCbox.setBounds(128, 12, 49, 24);
-		contentPanel.add(monthCbox);
+		monthCbox.setBounds(270, 20, 79, 27);
+		getContentPane().add(monthCbox);
 		
-		JLabel lblMonth = new JLabel("Month :");
-		lblMonth.setBounds(65, 17, 57, 15);
-		contentPanel.add(lblMonth);
-		
-		JLabel lblDay = new JLabel("Day :");
-		lblDay.setBounds(186, 17, 42, 15);
-		contentPanel.add(lblDay);
-		
-		dayCbox = new JComboBox();
+		yearCbox.setModel(new DefaultComboBoxModel(new String[] {"2015", "2016",}));
+		yearCbox.addItemListener(new ItemListener(){
+			public void itemStateChanged(ItemEvent e){
+				year = (String)getYear().getSelectedItem();
+				yearTxtLbl.setText(year);
+			}
+		});
+		yearCbox.setMaximumRowCount(4);
+		yearCbox.setBounds(450, 20, 79, 27);
+		getContentPane().add(yearCbox);
+
 		dayCbox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				day = (String)getDay().getSelectedItem();
-				dayTxtLbl.setText(day);
+				dayTxtLbl.setText(day+" - ");
 			}
 		});
-		dayCbox.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
-															"11", "12", "13", "14", "15", "16", "17", "19", "19", "20", 
-															"21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
+		dayCbox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10","11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		dayCbox.setMaximumRowCount(4);
-		dayCbox.setBounds(262, 12, 62, 24);
-		contentPanel.add(dayCbox);
+		dayCbox.setBounds(90, 20, 79, 27);
+		getContentPane().add(dayCbox);
 		
-		JLabel hourLbl = new JLabel("Hour :");
-		hourLbl.setBounds(65, 48, 57, 15);
-		contentPanel.add(hourLbl);
+		lblMonth.setBounds(190, 30, 46, 17);
+		getContentPane().add(lblMonth);
 		
-		hourCbox = new JComboBox();
+		lblDay.setBounds(20, 30, 30, 17);
+		getContentPane().add(lblDay);
+
+		lblYear.setBounds(380, 30, 40, 17);
+		getContentPane().add(lblYear);
+
+		yearTxtLbl = new JLabel((String)getYear().getSelectedItem(),SwingConstants.CENTER);
+		yearTxtLbl.setBounds(188, 140, 40, 15);
+		getContentPane().add(yearTxtLbl);
+		
+		monthTxtLbl = new JLabel((String)getMonth().getSelectedItem()+" - ",SwingConstants.CENTER);
+		monthTxtLbl.setBounds(158, 140, 30, 15);
+		getContentPane().add(monthTxtLbl);
+		
+		dayTxtLbl = new JLabel((String)getDay().getSelectedItem()+" - ");
+		dayTxtLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		dayTxtLbl.setBounds(128, 140, 30, 15);
+		getContentPane().add(dayTxtLbl);
+
+		dateLbl.setBounds(79,140,49,15);
+		getContentPane().add(dateLbl);
+
 		hourCbox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				hour = (String)getHour().getSelectedItem();
 				hourTxtLbl.setText(hour+" : ");
 			}
 		});
-		hourCbox.setModel(new DefaultComboBoxModel(new String[] {"0", "1", "2", "3", "4", "5", "6", "7",
-																"8", "9", "10", "11", "12", "13", "14", "15", "16", 
-																"17", "18", "19", "20", "21", "22", "23"}));
+		hourCbox.setModel(new DefaultComboBoxModel(new String[] {"00", "01", "02", "03", "04", "05", "06", "07","08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"}));
 		hourCbox.setMaximumRowCount(4);
-		hourCbox.setBounds(128, 48, 49, 24);
-		contentPanel.add(hourCbox);
-		
-		JLabel minsLbl = new JLabel("Minutes :");
-		minsLbl.setBounds(186, 48, 70, 15);
-		contentPanel.add(minsLbl);
-		
-		minsCbox = new JComboBox();
+		hourCbox.setBounds(90, 80, 79, 27);
+		getContentPane().add(hourCbox);
+
 		minsCbox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				min = (String)getMin().getSelectedItem();
@@ -164,42 +192,201 @@ public class CreateOrder extends JDialog {
 		minsCbox.setMaximumRowCount(4);
 		minsCbox.setModel(new DefaultComboBoxModel(new String[] {"00", "05", "10", "15", "20", "25", "30"
 																	, "35", "40", "45", "50", "55"}));
-		minsCbox.setBounds(262, 48, 62, 24);
-		contentPanel.add(minsCbox);
+		minsCbox.setBounds(270, 80, 79, 27);
+		getContentPane().add(minsCbox);
 		
-		yeahLbl = new JLabel(year+" - ",JLabel.CENTER);
-		yeahLbl.setBounds(128, 90, 49, 15);
-		contentPanel.add(yeahLbl);
-		
-		monthTxtLbl = new JLabel((String)getMonth().getSelectedItem()+" - ",SwingConstants.LEFT);
-		monthTxtLbl.setBounds(174, 90, 38, 15);
-		contentPanel.add(monthTxtLbl);
-		
-		dayTxtLbl = new JLabel((String)getDay().getSelectedItem()+" ");
-		dayTxtLbl.setHorizontalAlignment(SwingConstants.LEFT);
-		dayTxtLbl.setBounds(196, 90, 49, 15);
-		contentPanel.add(dayTxtLbl);
+		hourLbl.setBounds(20, 90, 35, 17);
+		getContentPane().add(hourLbl);
+
+		minsLbl.setBounds(190, 90, 49, 17);
+		getContentPane().add(minsLbl);
 		
 		hourTxtLbl = new JLabel((String)getHour().getSelectedItem()+" :");
-		hourTxtLbl.setHorizontalAlignment(SwingConstants.RIGHT);
-		hourTxtLbl.setBounds(247, 90, 38, 15);
-		contentPanel.add(hourTxtLbl);
+		hourTxtLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		hourTxtLbl.setBounds(380, 90, 30, 15);
+		getContentPane().add(hourTxtLbl);
 		
 		minTxtLbl = new JLabel((String)getMin().getSelectedItem());
-		minTxtLbl.setHorizontalAlignment(SwingConstants.RIGHT);
-		minTxtLbl.setBounds(272, 90, 39, 15);
-		contentPanel.add(minTxtLbl);
+		minTxtLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		minTxtLbl.setBounds(410, 90, 40, 15);
+		getContentPane().add(minTxtLbl);
 	}
+	
+	// Code moi.
+	public CreateOrder(JLabel newTime,String AID,String resAddress,String oldTime,JTable parentOrderTable){
+		setTitle("Create Order");
+		setPreferredSize(new Dimension(560, 230));
+		setResizable(false);
+		pack();
+
+		getContentPane().setLayout(null);
+		getContentPane().add(okBtn);
+		getContentPane().add(cancelBtn);
+		
+		cancelBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		cancelBtn.setBounds(370, 180, 90, 27);
+		
+		okBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					if(check.check_date(dayCbox,monthCbox,yearCbox)){
+						month = (String)getMonth().getSelectedItem();
+						day = (String)getDay().getSelectedItem();
+						hour = (String)getHour().getSelectedItem();
+						min = (String)getMin().getSelectedItem();
+						year = (String)getYear().getSelectedItem();
+						StringBuffer dateOrder = new StringBuffer("");
+						dateOrder.append(year + "/" + month + "/" + day + " " + hour + ":" + min);
+						if(!check.check_date(dateOrder.toString())){
+							JOptionPane.showMessageDialog(null,"Day Must Be Withtin 1 Week","Announce",JOptionPane.ERROR_MESSAGE);
+						}
+						else{
+							String datetime = new String(year+"-"+month+"-"+day+" "+hour+":"+min+":00");
+							int okUpdate = c.updateNewTime(AID, resAddress, oldTime, datetime);
+							if(okUpdate != 0){
+								JOptionPane.showMessageDialog(null, "Successfully Change Order Date");
+								newTime.setText(datetime);
+								parentOrderTable.setValueAt(datetime, parentOrderTable.getSelectedRow(), 0);
+							}
+							else{
+								JOptionPane.showMessageDialog(null, "Nha hang khong ton tai");
+							}
+							dispose();
+						}
+					}
+					else{
+						JOptionPane.showMessageDialog(null,"Day Isn't Exists","Announce",JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				catch(Exception p){
+					p.printStackTrace();
+				}
+			}
+		});
+		okBtn.setBounds(110, 180, 90, 27);
+		
+		dateLbl.setBounds(20, 30, 26, 17);
+		getContentPane().add(dateLbl);
+		
+		monthCbox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				month = (String)getMonth().getSelectedItem();
+				monthTxtLbl.setText(month + " - ");
+			}
+		});
+		monthCbox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
+		monthCbox.setMaximumRowCount(4);
+		monthCbox.setBounds(270, 20, 79, 27);
+		getContentPane().add(monthCbox);
+		
+		yearCbox.setModel(new DefaultComboBoxModel(new String[] {"2015", "2016",}));
+		yearCbox.addItemListener(new ItemListener(){
+			public void itemStateChanged(ItemEvent e){
+				year = (String)getYear().getSelectedItem();
+				yearTxtLbl.setText(year);
+			}
+		});
+		yearCbox.setMaximumRowCount(4);
+		yearCbox.setBounds(450, 20, 79, 27);
+		getContentPane().add(yearCbox);
+
+		dayCbox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				day = (String)getDay().getSelectedItem();
+				dayTxtLbl.setText(day+" - ");
+			}
+		});
+		dayCbox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10","11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
+		dayCbox.setMaximumRowCount(4);
+		dayCbox.setBounds(90, 20, 79, 27);
+		getContentPane().add(dayCbox);
+		
+		lblMonth.setBounds(190, 30, 46, 17);
+		getContentPane().add(lblMonth);
+		
+		lblDay.setBounds(20, 30, 30, 17);
+		getContentPane().add(lblDay);
+
+		lblYear.setBounds(380, 30, 40, 17);
+		getContentPane().add(lblYear);
+
+		yearTxtLbl = new JLabel((String)getYear().getSelectedItem(),SwingConstants.CENTER);
+		yearTxtLbl.setBounds(188, 140, 40, 15);
+		getContentPane().add(yearTxtLbl);
+		
+		monthTxtLbl = new JLabel((String)getMonth().getSelectedItem()+" - ",SwingConstants.CENTER);
+		monthTxtLbl.setBounds(158, 140, 30, 15);
+		getContentPane().add(monthTxtLbl);
+		
+		dayTxtLbl = new JLabel((String)getDay().getSelectedItem()+" - ");
+		dayTxtLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		dayTxtLbl.setBounds(128, 140, 30, 15);
+		getContentPane().add(dayTxtLbl);
+
+		dateLbl.setBounds(79,140,49,15);
+		getContentPane().add(dateLbl);
+
+		hourCbox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				hour = (String)getHour().getSelectedItem();
+				hourTxtLbl.setText(hour+" : ");
+			}
+		});
+		hourCbox.setModel(new DefaultComboBoxModel(new String[] {"00", "01", "02", "03", "04", "05", "06", "07","08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"}));
+		hourCbox.setMaximumRowCount(4);
+		hourCbox.setBounds(90, 80, 79, 27);
+		getContentPane().add(hourCbox);
+
+		minsCbox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				min = (String)getMin().getSelectedItem();
+				minTxtLbl.setText(min);
+			}
+		});
+		minsCbox.setMaximumRowCount(4);
+		minsCbox.setModel(new DefaultComboBoxModel(new String[] {"00", "05", "10", "15", "20", "25", "30"
+																	, "35", "40", "45", "50", "55"}));
+		minsCbox.setBounds(270, 80, 79, 27);
+		getContentPane().add(minsCbox);
+		
+		hourLbl.setBounds(20, 90, 35, 17);
+		getContentPane().add(hourLbl);
+
+		minsLbl.setBounds(190, 90, 49, 17);
+		getContentPane().add(minsLbl);
+		
+		hourTxtLbl = new JLabel((String)getHour().getSelectedItem()+" :");
+		hourTxtLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		hourTxtLbl.setBounds(380, 90, 30, 15);
+		getContentPane().add(hourTxtLbl);
+		
+		minTxtLbl = new JLabel((String)getMin().getSelectedItem());
+		minTxtLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		minTxtLbl.setBounds(410, 90, 40, 15);
+		getContentPane().add(minTxtLbl);
+	}
+
 	public JComboBox getMonth() {
 		return monthCbox;
 	}
+
 	public JComboBox getDay() {
 		return dayCbox;
 	}
+
 	public JComboBox getHour() {
 		return hourCbox;
 	}
+
 	public JComboBox getMin() {
 		return minsCbox;
+	}
+
+	public JComboBox getYear(){
+		return yearCbox;
 	}
 }
