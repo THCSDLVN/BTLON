@@ -11,6 +11,11 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
+import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.event.ChangeEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MyOrder extends JPanel {
 	private JTable orderContentTable;
@@ -22,6 +27,8 @@ public class MyOrder extends JPanel {
 	
 	public SQLConnection c = new SQLConnection();
 	public int row; // Dong` dc chon trong bang Cac mon an trong 1 order.
+	private JButton fixBtn;
+	private JButton deleteBtn;
 	/**
 	 * Create the panel.
 	 */
@@ -39,9 +46,29 @@ public class MyOrder extends JPanel {
 		add(scrollPane);
 		
 		orderContentTable = new JTable();
+		orderContentTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				row = orderContentTable.getSelectedRow();
+				String status = (String)orderContentTable.getValueAt(row, 3);
+				if(status.equals("Updating")){
+					getFixBtn().setEnabled(true);
+					getDeleteBtn().setEnabled(true);
+				}
+				else{
+					if(status.equals("Deny")){
+						getDeleteBtn().setEnabled(true);
+					}
+					else{
+						getFixBtn().setEnabled(false);
+						getDeleteBtn().setEnabled(false);
+					}
+				}
+			}
+		});
 		scrollPane.setViewportView(orderContentTable);
 		
-		JButton fixBtn = new JButton("");
+		fixBtn = new JButton("");
 		fixBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				row = getOrderContentTable().getSelectedRow();
@@ -56,9 +83,10 @@ public class MyOrder extends JPanel {
 		});
 		fixBtn.setIcon(new ImageIcon(MyOrder.class.getResource("/Picture/fix.png")));
 		fixBtn.setBounds(266, 218, 55, 54);
+		fixBtn.setEnabled(false);
 		add(fixBtn);
 		
-		JButton deleteBtn = new JButton("");
+		deleteBtn = new JButton("");
 		deleteBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				row = getOrderContentTable().getSelectedRow();
@@ -66,33 +94,40 @@ public class MyOrder extends JPanel {
 					return;
 				String foodname = (String)getOrderContentTable().getValueAt(row, 0);
 				String status = (String)getOrderContentTable().getValueAt(row, 3);
-				if(status.equals("Delete")){
-					JOptionPane.showMessageDialog(null,"Your "+foodname+" is being waiting for deleting");
-				}
-				else{
-					if(status.equals("Lock")){
-						JOptionPane.showMessageDialog(null, "Your "+foodname+" is locked");
-					}
+				if(status.equals("Updating")){
+					int confirm = JOptionPane.showConfirmDialog(null, "Are you sure want to delete "+foodname+"",
+							"Delete Confirm",JOptionPane.YES_NO_OPTION);
+					if(confirm == JOptionPane.NO_OPTION);
 					else{
-						int confirm = JOptionPane.showConfirmDialog(null, "Are you sure want to delete "+foodname+"",
-																	"Delete Confirm",JOptionPane.YES_NO_OPTION);
-						if(confirm == JOptionPane.NO_OPTION);
-						else{
-							int delete = c.deleteFoodFromThisOrder(AID, resAddress, foodname, orderDate);
-							if(delete != 0){
-								getOrderContentTable().setValueAt("Delete", row, 3);
-							}
-							else{
-								JOptionPane.showMessageDialog(null, "Nha hang khong ton tai");
-							}
+						int delete = c.deleteFoodFromThisOrder(AID, resAddress, foodname, orderDate);
+						if(delete != 0){
+							getOrderContentTable().setValueAt("Delete", row, 3);
 						}
-						
+						else{
+							JOptionPane.showMessageDialog(null, "Nha hang khong ton tai");
+						}
 					}
-				}	
+				}
+				else if(status.equals("Deny")){
+					int confirm = JOptionPane.showConfirmDialog(null, "Are you sure want to delete "+foodname+"",
+							"Delete Confirm",JOptionPane.YES_NO_OPTION);
+					if(confirm == JOptionPane.NO_OPTION);
+					else{
+						int delete = c.DeleteDenyOrder(AID, resAddress, foodname, orderDate);
+						if(delete != 0){
+							DefaultTableModel tempModel = (DefaultTableModel)getOrderContentTable().getModel();
+							tempModel.removeRow(row);
+						}
+						else{
+							JOptionPane.showMessageDialog(null, "Nha hang khong ton tai");
+						}
+					}
+				}
 			}
 		});
 		deleteBtn.setIcon(new ImageIcon(MyOrder.class.getResource("/Picture/delete.png")));
 		deleteBtn.setBounds(333, 218, 55, 54);
+		deleteBtn.setEnabled(false);
 		add(deleteBtn);
 		
 		JButton btnChangeTime = new JButton("");
@@ -104,6 +139,30 @@ public class MyOrder extends JPanel {
 		btnChangeTime.setIcon(new ImageIcon(MyOrder.class.getResource("/Picture/calendar.png")));
 		btnChangeTime.setBounds(354, 12, 34, 26);
 		add(btnChangeTime);
+		
+		JButton okBtn = new JButton("");
+		okBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				row = getOrderContentTable().getSelectedRow();
+				if(row < 0)
+					return;
+				String foodname = (String)getOrderContentTable().getValueAt(row, 0);
+				String status = (String)getOrderContentTable().getValueAt(row, 3); 
+				if(!status.equals("Lock"));
+				else{
+					int success = c.OkLockOrder(AID, resAddress, foodname, orderDate);
+					if(success != 0){
+						getOrderContentTable().setValueAt("Delete", row, 3);
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Nha hang khong ton tai");
+					}
+				}
+			}
+		});
+		okBtn.setIcon(new ImageIcon(MyOrder.class.getResource("/Picture/ok.png")));
+		okBtn.setBounds(199, 218, 55, 54);
+		add(okBtn);
 	}
 	public void setAID(String AID){
 		this.AID = AID;
@@ -125,5 +184,11 @@ public class MyOrder extends JPanel {
 	}
 	public JTable getOrderContentTable() {
 		return orderContentTable;
+	}
+	public JButton getFixBtn() {
+		return fixBtn;
+	}
+	public JButton getDeleteBtn() {
+		return deleteBtn;
 	}
 }

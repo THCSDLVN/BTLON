@@ -450,30 +450,79 @@ public class SQLConnection {
 			return 0;
 		}
 	}
-public int CreateMyRestaurant(String AID,String resID,String resName,String resAddress){
-	try{
-		Class.forName("com.mysql.jdbc.Driver");
+	public int CreateMyRestaurant(String AID,String resID,String resName,String resAddress){
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		Connection connect;
+		PreparedStatement stmt;
+		try{
+			connect = DriverManager.getConnection(url,username,password);
+			String sql1 = "insert into Restaurant value ('"+resID+"','"+resName+"','"+AID+"');";
+			stmt = connect.prepareStatement(sql1);
+			int TraVe = stmt.executeUpdate();
+			String sql2 = "insert into SequenceRestaurant value('"+resAddress+"','"+resID+"');";
+			stmt = connect.prepareStatement(sql2);
+			TraVe *= stmt.executeUpdate();
+			connect.close();
+			stmt.close();
+			return TraVe;
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
+			return 0;
+		}
 	}
-	catch(Exception e){
-		System.out.println(e.getMessage());
+	public int DeleteDenyOrder(String AID,String resAddress,String foodname,String orderDate){
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		Connection connect;
+		PreparedStatement stmt;
+		try{
+			connect = DriverManager.getConnection(url,username,password);
+			String sql1 = "delete from Reservation "
+					+ "where AID = '"+AID+"' and ResAddress = '"+resAddress+"' and Foodname = '"+foodname+"'"
+							+ "and Time = '"+orderDate+"'";
+			stmt = connect.prepareStatement(sql1);
+			int TraVe = stmt.executeUpdate();
+			connect.close();
+			stmt.close();
+			return TraVe;
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
+			return 0;
+		}
 	}
-	Connection connect;
-	PreparedStatement stmt;
-	try{
-		connect = DriverManager.getConnection(url,username,password);
-		String sql1 = "insert into Restaurant value ('"+resID+"','"+resName+"','"+AID+"');";
-		stmt = connect.prepareStatement(sql1);
-		int TraVe = stmt.executeUpdate();
-		String sql2 = "insert into SequenceRestaurant value('"+resAddress+"','"+resID+"');";
-		stmt = connect.prepareStatement(sql2);
-		TraVe *= stmt.executeUpdate();
-		connect.close();
-		stmt.close();
-		return TraVe;
+	public int OkLockOrder(String AID,String ResAddress,String foodname,String orderDate){
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		Connection connect;
+		Statement stmt;
+		try{
+			connect = DriverManager.getConnection(url,username,password);
+			String sql = "update `Reservation` set `StatusReser` = 'OK' "
+					+ "where AID = '"+AID+"' and `ResAddress` = '"+ResAddress+"' and `Time` = '"+orderDate+"' and `Foodname` = '"+foodname+"'";
+			stmt = connect.createStatement();
+			int TraVe = stmt.executeUpdate(sql);
+			connect.close();
+			stmt.close();
+			return TraVe;
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
+			return 0;
+		}
 	}
-	catch(Exception e){
-		System.out.println(e.getMessage());
-		return 0;
-	}
-}
 }

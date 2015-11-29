@@ -46,7 +46,6 @@ public class AccountGUI extends JFrame {
 	public String[][] orderData;
 	
 	// Code moi.
-	public String[] myResname,myResID; 
 	JComboBox myResCbox;
 	JButton goToMyResBtn;
 	String[][] myRestaurants;
@@ -166,15 +165,11 @@ public class AccountGUI extends JFrame {
 		goToMyResBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int index = myResCbox.getSelectedIndex();
-				if(index == -1);
+				if(index == -1){
+					new MyRestaurantOptions(null,null, a.getAID()).setVisible(true);
+				}
 				else{
-					System.out.println(myRestaurants[index][0] + " " + myRestaurants[index][1]);
-					//Send myRestaurants[index][0] (ResID) and myRestaurants[index][1] (Resname) to Hung's RestaurantGUI.
-					int success = c.DeleteThisRestaurant(myRestaurants[index][0]);
-					if(success != 0){
-						JOptionPane.showMessageDialog(null, "Thanh Cong");
-						myResCbox.removeItemAt(index);
-					}
+					new MyRestaurantOptions(myRestaurants[index][0], myRestaurants[index][1], a.getAID()).setVisible(true);
 				}
 			}
 		});
