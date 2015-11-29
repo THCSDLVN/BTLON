@@ -728,7 +728,6 @@ public class restaurant extends JFrame {
 			Calendar cal = Calendar.getInstance();
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
-			cal.add(Calendar.DATE, -1);
 			
 			if(ordertime.after(cal.getTime()))
 			{
