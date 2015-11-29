@@ -28,6 +28,8 @@ import javax.swing.DefaultComboBoxModel;
 
 import gui.SQLConnection;
 import gui.ProvideAIDRandom;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class signup extends JFrame {
 	
@@ -203,9 +205,8 @@ public class signup extends JFrame {
 		InfoFillPn.add(SexcomboBox);
 		
 		JButton btnSignup = new JButton("Sign up");
-		btnSignup.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
+		btnSignup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				signupClick();
 			}
 		});
@@ -214,9 +215,8 @@ public class signup extends JFrame {
 		signupPn.add(btnSignup);
 		
 		JButton btnCancel = new JButton("Cancel");
-		btnCancel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
@@ -245,7 +245,7 @@ public class signup extends JFrame {
 	private Boolean checkPhoneNumber(JTextField PhoneField)
 	{
 		String phonenum = new String(PhoneField.getText());
-		if(phonenum.matches("[0-9]+") || phonenum.isEmpty())
+		if(phonenum.matches("[0-9]+"))
 			return true;
 		else
 			return false;
@@ -264,19 +264,31 @@ public class signup extends JFrame {
 			return false;
 	}
 	
+	private Boolean check_text(String text)
+	{
+		if (text.matches("[A-Za-z0-9]+"))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	private void signupClick()
 	{
 		try
 		{
 			String aid,usrname,password,fullname,dateofbirth,sex,phonenum;
-			if(UsernameField.getText().isEmpty())
+			if(!check_text(UsernameField.getText()))
 			{
-				JOptionPane.showMessageDialog(null, "Fill your Username");
+				JOptionPane.showMessageDialog(null, "Username must be letters or digits");
 				return;
 			}
-			if(passwordField.getPassword().length == 0)
+			if(!check_text(new String(passwordField.getPassword())))
 			{
-				JOptionPane.showMessageDialog(null, "Fill your Password");
+				JOptionPane.showMessageDialog(null, "Password must be letters or digits");
 				return;
 			}
 			if(!checkRetyPassword(passwordField, RetypasswordField))
@@ -311,7 +323,7 @@ public class signup extends JFrame {
 			SqlArrayList rs = new SqlArrayList(stmt.executeQuery(maxAID_query));
 			if(rs.getRownumber() <= 0)
 			{
-				aid = new String("ACC0000");
+				aid = new String("ACCT0000");
 			}
 			else
 			{

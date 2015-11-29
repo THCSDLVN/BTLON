@@ -1,4 +1,4 @@
-package sqlfunc;
+package Server.sqlfunc;
 
 import java.sql.DriverManager;
 import java.sql.ResultSetMetaData;
@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 
 import java.util.StringTokenizer;
 
-import tableforresult.TableForResult;
+import Server.tableforresult.TableForResult;
 
 public class SQLFunc implements SQLFuncInterface{
 	Connection connect;
@@ -225,7 +225,7 @@ public class SQLFunc implements SQLFuncInterface{
 			if(!checkDataInsertForRestaurant(value2)){
 				return 0;
 			}
-			queryCommand.append("('" + value1 + "','" + value2 + "');");
+			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "');");
 		}
 		else if(tableName.equals("Account")){
 			if(!checkDataInsertForAccount(value2)){
@@ -236,14 +236,11 @@ public class SQLFunc implements SQLFuncInterface{
 		else if(tableName.equals("Provide")){
 			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "');");
 		}
-		else if(tableName.equals("Order")){
+		else if(tableName.equals("Reservation")){
 			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 + "');");
 		}
 		else if(tableName.equals("SequenceRestaurant")){
-			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "');");
-		}
-		else if(tableName.equals("Manage")){
-			queryCommand.append("('" + value1 + "','" + value2 + "');");
+			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "');");
 		}
 		else if(tableName.equals("Permisions")){
 			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 +"');");

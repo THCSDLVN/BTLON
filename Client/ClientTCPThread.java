@@ -90,7 +90,7 @@ public class ClientTCPThread {
 					}
 					clientProcess.label.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/offline.png"));
 					ioe.printStackTrace();
-					clientProcess.setRequest();
+
 				}
 				catch(ClassNotFoundException cnfe){
 					clientProcess.lock = 1;
@@ -117,7 +117,7 @@ public class ClientTCPThread {
 					}
 					clientProcess.label.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/offline.png"));
 					cnfe.printStackTrace();
-					clientProcess.setRequest();
+
 				}
 			}
 			else {
@@ -144,8 +144,28 @@ public class ClientTCPThread {
 					ioe.printStackTrace();
 				}
 				clientProcess.label.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/offline.png"));
-				clientProcess.setRequest();
 			}
+		}
+		try{
+			if(clientSocket != null){
+				clientSocket.close();
+				clientSocket = null;
+			}
+			if(inString != null){
+				inString.close();
+				inString = null;
+			}
+			if(outString != null){
+				outString.close();
+				outString = null;
+			}
+			if(inObject != null){
+				inObject.close();
+				inObject  = null;
+			}
+		}
+		catch(IOException e){
+			e.printStackTrace();
 		}	
 	}
 
@@ -155,19 +175,108 @@ public class ClientTCPThread {
 		try{
 			s = new Socket(SERVER_ADDRESS, TCP_SERVER_PORT);
 			if (s.isConnected()){ 
-				s.close();
-				clientProcess.label.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/online.png"));
+				s.close();				
 				if(clientProcess.lock == 1){
 					try{
+						clientProcess.label.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/online.png"));
 	 					clientSocket = new Socket(InetAddress.getByName("localhost"),TCP_SERVER_PORT);
 						inString = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 						outString = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 						inObject = new ObjectInputStream(clientSocket.getInputStream());
 						clientProcess.lock = 0;
+						if(!clientProcess.listUserIsOnline.isEmpty()){
+							for (Iterator<String> i = clientProcess.listUserIsOnline.iterator(); i.hasNext();) {
+								String usn = new String(i.next());
+								clientProcess.getRequestFromClient("updateDataQuery(Account~Status~1~Status = 0 and Username ='" + usn + "')");
+								clientProcess.printRequest();
+								if(clientProcess.lock == 0){
+									outString.println(clientProcess.setRequestToSocket());
+									outString.flush();
+									String result = new String();
+									result = (String)inObject.readObject();
+								}
+								clientProcess.setRequest();
+							}
+						}
 					}
-					catch(Exception e){
+					catch(EOFException e){
+						clientProcess.lock = 1;
+						try{
+							if(clientSocket != null){
+								clientSocket.close();
+								clientSocket = null;
+							}
+							if(inString != null){
+								inString.close();
+								inString = null;
+							}
+							if(outString != null){
+								outString.close();
+								outString = null;
+							}
+							if(inObject != null){
+								inObject.close();
+								inObject  = null;
+							}
+						}
+						catch(IOException ioe){
+							ioe.printStackTrace();
+						}
+						clientProcess.label.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/offline.png"));
+						e.printStackTrace();
+					}
+					catch(IOException e){
+						clientProcess.lock = 1;
+						try{
+							if(clientSocket != null){
+								clientSocket.close();
+								clientSocket = null;
+							}
+							if(inString != null){
+								inString.close();
+								inString = null;
+							}
+							if(outString != null){
+								outString.close();
+								outString = null;
+							}
+							if(inObject != null){
+								inObject.close();
+								inObject  = null;
+							}
+						}
+						catch(IOException ioe){
+							ioe.printStackTrace();
+						}
+						clientProcess.label.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/offline.png"));
 						e.printStackTrace();
 					} 
+					catch(ClassNotFoundException e){
+						clientProcess.lock = 1;
+						try{
+							if(clientSocket != null){
+								clientSocket.close();
+								clientSocket = null;
+							}
+							if(inString != null){
+								inString.close();
+								inString = null;
+							}
+							if(outString != null){
+								outString.close();
+								outString = null;
+							}
+							if(inObject != null){
+								inObject.close();
+								inObject  = null;
+							}
+						}
+						catch(IOException ioe){
+							ioe.printStackTrace();
+						}
+						clientProcess.label.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/offline.png"));
+						e.printStackTrace();
+					}
 				}  
 			}               
 		} 

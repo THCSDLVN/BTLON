@@ -10,12 +10,17 @@ USE `BT_LON` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `BT_LON`.`Account` (
   `AID` VARCHAR(8) NOT NULL,
-  `Username` VARCHAR(45) NULL DEFAULT NULL,
-  `Password` VARCHAR(45) NULL DEFAULT NULL,
-  `FullName` VARCHAR(45) NULL DEFAULT NULL,
+  `Username` VARCHAR(45) NOT NULL,
+  `Password` VARCHAR(45) NOT NULL,
+  `FullName` VARCHAR(45) NOT NULL,
   `Birthday` DATE NULL DEFAULT NULL,
+<<<<<<< HEAD
   `PhoneNumber` CHAR(13) NULL,
   `Sex` VARCHAR(6) NULL,
+=======
+  `PhoneNumber` CHAR(13) NOT NULL,
+  `Sex` VARCHAR(6) NOT NULL,
+>>>>>>> 9509a89139ff7b0e908e80928e296dafcbf4e941
   `Status` INT NULL DEFAULT 0,
   PRIMARY KEY (`AID`),
   INDEX `AIDIndex` (`AID` ASC),
@@ -60,7 +65,11 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `BT_LON`.`Restaurant` (
   `ResID` VARCHAR(8) NOT NULL,
+<<<<<<< HEAD
   `Resname` VARCHAR(45) NULL DEFAULT NULL,
+=======
+  `Resname` VARCHAR(45) NOT NULL,
+>>>>>>> 9509a89139ff7b0e908e80928e296dafcbf4e941
   `AID` VARCHAR(8) NOT NULL,
   PRIMARY KEY (`ResID`, `AID`),
   INDEX `ResIDIndex` (`ResID` ASC),
@@ -156,8 +165,17 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Reservation` (
   `Foodname` VARCHAR(45) NOT NULL,
   `Time` DATETIME NULL DEFAULT NULL,
   `Quantity` MEDIUMTEXT NULL DEFAULT NULL,
+<<<<<<< HEAD
   `StatusReser` VARCHAR(10) NULL, -- LOCK,UPDATING,DELETED,ACCEPTED
   `Cost` DOUBLE NULL,
+=======
+  `StatusReser` VARCHAR(10) NOT NULL,
+  `Cost` DOUBLE NULL,
+  `CustomerRight` VARCHAR(45) NOT NULL,
+  `RestaurantRight` VARCHAR(45) NOT NULL,
+  `NextStatusForCustomer` VARCHAR(45) NOT NULL,
+  `NextStatusForRestaurant` VARCHAR(45) NOT NULL,
+>>>>>>> 9509a89139ff7b0e908e80928e296dafcbf4e941
   KEY(`Time`),
   PRIMARY KEY (`AID`, `ResAddress`, `Foodname`, `Time`),
   INDEX `ResAddressIndex` (`ResAddress` ASC),
@@ -173,6 +191,7 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`Reservation` (
   CONSTRAINT `fk_Foodname_Reservation`
     FOREIGN KEY (`Foodname`)
     REFERENCES `BT_LON`.`FoodSet` (`Foodname`))
+<<<<<<< HEAD
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -202,9 +221,10 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`ServedOrder` (
   CONSTRAINT `fk_Time_ServedOrder`
     FOREIGN KEY (`Time`)
     REFERENCES `BT_LON`.`Reservation` (`Time`))
+=======
+>>>>>>> 9509a89139ff7b0e908e80928e296dafcbf4e941
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
-
 
 -- -----------------------------------------------------
 -- Table `BT_LON`.`Permissions`
@@ -244,4 +264,8 @@ CREATE TABLE IF NOT EXISTS `BT_LON`.`PermissionsAssignment` (
     FOREIGN KEY (`PRMID`)
     REFERENCES `BT_LON`.`Permissions` (`PRMID`))
 ENGINE = InnoDB
+<<<<<<< HEAD
 DEFAULT CHARACTER SET = utf8;
+=======
+DEFAULT CHARACTER SET = utf8;
+>>>>>>> 9509a89139ff7b0e908e80928e296dafcbf4e941
