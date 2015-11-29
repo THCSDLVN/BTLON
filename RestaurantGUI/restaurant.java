@@ -835,7 +835,7 @@ public class restaurant extends JFrame {
 			Statement stmt = SQLConnection.conn.createStatement();
 			stmt.executeUpdate(delete_query);
 			
-			String check_query = "SELECT DISTINCT `TIME` FROM reservation WHERE StatusReser = 'Lock' AND ResAddress = '" + Sequence_address[selected_address]+"'";
+			String check_query = "SELECT DISTINCT `TIME` FROM reservation WHERE StatusReser IN('Lock','Updating') AND ResAddress = '" + Sequence_address[selected_address]+"'";
 			SqlArrayList check_array = new SqlArrayList(stmt.executeQuery(check_query));
 			for(int i = 0; i< check_array.getRownumber();i++)
 			{
