@@ -48,7 +48,15 @@ VALUES ('ACCT0000','ROLE0001'),
 ('ACCT0017','ROLE0001'),
 ('ACCT0018','ROLE0001'),
 ('ACCT0019','ROLE0001'),
-('ACCT0020','ROLE0001');
+('ACCT0020','ROLE0001'),
+('ACCT0000','ROLE0002'),
+('ACCT0005','ROLE0002'),
+('ACCT0007','ROLE0002'),
+('ACCT0008','ROLE0002'),
+('ACCT0009','ROLE0002'),
+('ACCT0014','ROLE0002'),
+('ACCT0016','ROLE0002'),
+('ACCT0019','ROLE0002');
 
 
 INSERT INTO `Objects` VALUES
@@ -81,7 +89,7 @@ VALUES ('OPER0000','NULL','0','0','0','0'),
 
 INSERT INTO `Permissions` (PRMID,PermissionName,OBJID,OPID)
 VALUES
-('PERM0001','RUD-Account','OBJT0002','OPER0011'),/* Doc,Cap nhat,Xoa du lieu tren bang Account.*/
+('PERM0001','RU-Account','OBJT0002','OPER0010'),/* Doc,Cap nhat tren bang Account.*/
 ('PERM0002','RI-Restaurant','OBJT0003','OPER0012'),/*Doc,Them du lieu tren bang Restaurant.*/
 ('PERM0003','RIU-Restaurant','OBJT0003','OPER0014'),/* Doc,Them,Cap Nhat du lieu tren bang Restaurant.*/
 ('PERM0004','R-SequenceRestaurant','OBJT0004','OPER0008'),/* Doc du lieu tren bang SequenceRestaurant. */
@@ -90,7 +98,7 @@ VALUES
 ('PERM0007','RIUD-Provide','OBJT0005','OPER0015'),/* Doc,Them,Cap nhat,Xoa du lieu tren bang Provide.*/
 ('PERM0008','RIUD-Reservation','OBJT0001','OPER0015'),/* Doc,Them,Cap nhat,Xoa du lieu tren bang Reservation.*/
 ('PERM0009','RD-Reservation','OBJT0001','OPER0009'),/* Doc,Xoa du lieu tren bang Reservation.*/
-('PERM0010','RU-FoodSet','OBJT0006','OPER0010'),/* Xem,Sua du lieu cua bang FoodSet.*/
+('PERM0010','RI-FoodSet','OBJT0006','OPER0012'),/* Doc,Them du lieu cua bang FoodSet.*/
 ('PERM0011','R-FoodSet','OBJT0006','OPER0008');/*Doc du lieu cua bang FoodSet.*/
 
 
@@ -105,8 +113,8 @@ INSERT INTO PermissionsAssignment (RLID,PRMID) VALUES
 ('ROLE0002','PERM0007'),
 ('ROLE0001','PERM0008'),
 ('ROLE0002','PERM0009'),
-('ROLE0001','PERM0010'),
-('ROLE0002','PERM0011');
+('ROLE0001','PERM0011'),
+('ROLE0002','PERM0010');
 
 INSERT INTO `Restaurant`
 values('REST0001','123','ACCT0000'),
@@ -406,41 +414,41 @@ VALUES
 
 INSERT INTO `Reservation` 
 VALUES
-('ACCT0001', '25 Pho Hue', 'Com Ga', '2015-09-27 17:30:00', '1','Updating','20000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0001', '365 Kim Ma', 'Bun Bo Nam Bo', '2015-09-27 17:30:00', '1','Updating','60000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0001', '25 Pho Hue', 'Pho Bo', '2015-09-27 17:30:00', '2','Updating','30000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0001', '365 Kim Ma', 'Chao Suon', '2015-09-27 17:30:00', '1','Updating','40000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0001', '29 Hang Bai', 'Lau Thai', '2015-05-01 09:15:00', '1','Updating','50000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0001', '29 Hang Bai', 'Chao Ga', '2015-05-01 09:15:00', '1','Updating','80000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0001', '125 Cau Giay', 'Banh Pizza', '2015-05-01 09:15:00', '4','Updating','70000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0002', '365 Kim Ma', 'Banh My Sandwich', '2015-09-27 18:30:00', '1','Updating','25000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0002', '25 Pho Hue', 'Banh Xeo', '2015-09-27 18:30:00', '3','Updating','100000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0002', '25 Pho Hue', 'Lau ech', '2015-09-27 18:30:00', '1','Updating','80000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0002', '25 Pho Hue', 'Pho Ga', '2015-09-27 18:30:00', '2','Updating','70000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0002', '125 Cau Giay', 'Chao Ga', '2015-05-01 20:15:00', '1','Updating','80000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0002', '19 Tran Dai Nghia', 'Bun Cha', '2015-05-01 20:15:00', '3','Updating','40000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0002', '19 Tran Dai Nghia', 'Chao Suon', '2015-05-01 20:15:00', '1','Updating','60000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0003', '25 Pho Hue', 'Com Ga', '2015-09-27 20:30:00', '2','Updating','20000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0003', '25 Pho Hue', 'Bun Bo Nam Bo', '2015-09-27 20:30:00', '1','Updating','60000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0003', '25 Pho Hue', 'Pho Bo', '2015-09-27 20:30:00', '2','Updating','30000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0003', '255 Bach Mai', 'Xoi Thit Kho', '2015-05-01 10:15:00', '1','Updating','20000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0003', '12 Hai Ba Trung', 'Pho Bo', '2015-05-01 10:15:00', '2','Updating','45000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0004', '33 Le Duan', 'Bun Cha', '2015-12-31 21:55:00', '1','Updating','43000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0004', '33 Le Duan', 'Chao Ga', '2015-12-31 21:55:00', '1','Updating','43000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0005', '505 Dai La', 'Bun Cha', '2015-12-31 21:55:00', '1','Updating','45000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0005', '28 Hang Tre', 'Chao Ga', '2015-12-31 21:55:00', '2','Updating','43000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0005', '28 Hang Tre', 'Chao Suon', '2015-12-31 21:55:00', '1','Updating','76000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0005', '299 Giai Phong', 'Banh Pizza', '2015-12-31 21:55:00', '2','Updating','86000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0006', '2 Giai Phong', 'Bun Thang', '2015-12-24 21:55:00', '1','Updating','41000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0006', '2 Giai Phong', 'Banh My Sandwich', '2015-12-24 21:55:00', '1','Updating','47000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0006', '2 Giai Phong', 'Nem Chua', '2015-12-24 21:55:00', '4','Updating','37000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0006', '2 Giai Phong', 'Xoi Ga', '2015-12-24 21:55:00', '3','Updating','99000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0009', '1 Lac Long Quan', 'Banh My Sandwich', '2015-06-01 18:35:00', '1','Updating','28000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0009', '1 Lac Long Quan', 'Khoai Tay Nghien', '2015-06-01 18:35:00', '2','Updating','38000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0011', '20 Quan Thanh', 'Xoi Ga', '2015-06-01 20:35:00', '1','Updating','28000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0011', '20 Quan Thanh', 'My Van Than', '2015-06-01 20:35:00', '2','Updating','29000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0015', '3 Chua Boc', 'Khoai Tay Nghien', '2015-06-01 18:35:00', '1','Updating','38000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0015', '3 Chua Boc', 'Thit Bo Luc Lac', '2015-06-01 18:35:00', '4','Updating','48000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0015', '3 Chua Boc', 'Xoi Ga', '2015-06-01 18:35:00', '2','Updating','20500','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0017', '255 Truong Trinh', 'Bun Bo Nam Bo', '2015-06-02 18:30:00', '2','Updating','61000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock'),
-('ACCT0017', '255 Truong Trinh', 'Khoai Tay Nghien', '2015-06-02 18:30:00', '1','Updating','31000','Change Foodname,Time,Status,Quantity','Change Status','Delete','Deny,Lock');
+('ACCT0001', '25 Pho Hue', 'Com Ga', '2015-09-27 17:30:00', '1','Updating','20000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0001', '365 Kim Ma', 'Bun Bo Nam Bo', '2015-09-27 17:30:00', '1','Updating','60000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0001', '25 Pho Hue', 'Pho Bo', '2015-09-27 17:30:00', '2','Updating','30000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0001', '365 Kim Ma', 'Chao Suon', '2015-09-27 17:30:00', '1','Updating','40000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0001', '29 Hang Bai', 'Lau Thai', '2015-05-01 09:15:00', '1','Updating','50000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0001', '29 Hang Bai', 'Chao Ga', '2015-05-01 09:15:00', '1','Updating','80000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0001', '125 Cau Giay', 'Banh Pizza', '2015-05-01 09:15:00', '4','Updating','70000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0002', '365 Kim Ma', 'Banh My Sandwich', '2015-09-27 18:30:00', '1','Updating','25000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0002', '25 Pho Hue', 'Banh Xeo', '2015-09-27 18:30:00', '3','Updating','100000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0002', '25 Pho Hue', 'Lau ech', '2015-09-27 18:30:00', '1','Updating','80000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0002', '25 Pho Hue', 'Pho Ga', '2015-09-27 18:30:00', '2','Updating','70000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0002', '125 Cau Giay', 'Chao Ga', '2015-05-01 20:15:00', '1','Updating','80000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0002', '19 Tran Dai Nghia', 'Bun Cha', '2015-05-01 20:15:00', '3','Updating','40000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0002', '19 Tran Dai Nghia', 'Chao Suon', '2015-05-01 20:15:00', '1','Updating','60000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0003', '25 Pho Hue', 'Com Ga', '2015-09-27 20:30:00', '2','Updating','20000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0003', '25 Pho Hue', 'Bun Bo Nam Bo', '2015-09-27 20:30:00', '1','Updating','60000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0003', '25 Pho Hue', 'Pho Bo', '2015-09-27 20:30:00', '2','Updating','30000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0003', '255 Bach Mai', 'Xoi Thit Kho', '2015-05-01 10:15:00', '1','Updating','20000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0003', '12 Hai Ba Trung', 'Pho Bo', '2015-05-01 10:15:00', '2','Updating','45000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0004', '33 Le Duan', 'Bun Cha', '2015-12-31 21:55:00', '1','Updating','43000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0004', '33 Le Duan', 'Chao Ga', '2015-12-31 21:55:00', '1','Updating','43000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0005', '505 Dai La', 'Bun Cha', '2015-12-31 21:55:00', '1','Updating','45000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0005', '28 Hang Tre', 'Chao Ga', '2015-12-31 21:55:00', '2','Updating','43000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0005', '28 Hang Tre', 'Chao Suon', '2015-12-31 21:55:00', '1','Updating','76000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0005', '299 Giai Phong', 'Banh Pizza', '2015-12-31 21:55:00', '2','Updating','86000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0006', '2 Giai Phong', 'Bun Thang', '2015-12-24 21:55:00', '1','Updating','41000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0006', '2 Giai Phong', 'Banh My Sandwich', '2015-12-24 21:55:00', '1','Updating','47000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0006', '2 Giai Phong', 'Nem Chua', '2015-12-24 21:55:00', '4','Updating','37000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0006', '2 Giai Phong', 'Xoi Ga', '2015-12-24 21:55:00', '3','Updating','99000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0009', '1 Lac Long Quan', 'Banh My Sandwich', '2015-06-01 18:35:00', '1','Updating','28000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0009', '1 Lac Long Quan', 'Khoai Tay Nghien', '2015-06-01 18:35:00', '2','Updating','38000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0011', '20 Quan Thanh', 'Xoi Ga', '2015-06-01 20:35:00', '1','Updating','28000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0011', '20 Quan Thanh', 'My Van Than', '2015-06-01 20:35:00', '2','Updating','29000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0015', '3 Chua Boc', 'Khoai Tay Nghien', '2015-06-01 18:35:00', '1','Updating','38000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0015', '3 Chua Boc', 'Thit Bo Luc Lac', '2015-06-01 18:35:00', '4','Updating','48000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0015', '3 Chua Boc', 'Xoi Ga', '2015-06-01 18:35:00', '2','Updating','20500','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0017', '255 Truong Trinh', 'Bun Bo Nam Bo', '2015-06-02 18:30:00', '2','Updating','61000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock'),
+('ACCT0017', '255 Truong Trinh', 'Khoai Tay Nghien', '2015-06-02 18:30:00', '1','Updating','31000','Change Foodname,Time,Status,Quantity','Change Status,Delete After Order Day 1 Day','Delete','Deny,Lock');

@@ -85,6 +85,7 @@ public class SQLConnection {
 			connect = DriverManager.getConnection(url,username,password);
 			String sql = "select PhoneNumber from Account "
 					+ "where AID = (select AID from Restaurant where Resname = ?)";
+					// select PhoneNumber from Account natural join Restaurant where Resname = '"+resName+"' and Account.AID = Restaurant.AID
 			preStmt = connect.prepareStatement(sql);
 			preStmt.setString(1,resName);
 			result = preStmt.executeQuery();
@@ -125,6 +126,7 @@ public class SQLConnection {
 			stmt = connect.createStatement();
 			result = stmt.executeQuery("select FoodName,Cost from Provide "
 					+ "where ResID = (select ResID from SequenceRestaurant where Address = '"+ResAddress+"')");
+					// select FoodName,Cost from Provide natural join SequenceRestaurant where Address = '"+ResAddress+"' and Provide.ResID=SequenceRestaurant.ResID.
 			metadata = result.getMetaData();
 			numcols = metadata.getColumnCount();
 			while (result.next()) {
@@ -216,6 +218,7 @@ public class SQLConnection {
 			result = stmt.executeQuery("select FoodName,Cost from Provide"
 										+ "	where ResID = (select ResID from SequenceRestaurant where Address = '"+resAddress+"') and"
 										+ "	FoodName = '"+foodName+"'");
+			// select FoodName,Cost from Provide natural join SequenceRestaurant where FoodName = '"+foodname+"' and Provide.ResID = SequenceRestaurant.ResID
 			metadata = result.getMetaData();
 			numcols = metadata.getColumnCount();
 			while (result.next()) {
