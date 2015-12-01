@@ -20,6 +20,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -40,7 +42,9 @@ import Client.solvearraylist.SolveArrayList;
 import Client.clientprocess.ClientProcess;
 import Client.hidepanel.HidePanel;
 import Client.editprofileframe.EditProfileFrame;
-import Client.orderframe.OrderFrame;
+import Client.myorder.MyOrder;
+import Client.myrestaurantoption.MyRestaurantOption;
+import Client.hidepanel2.HidePanel2;
 
 public class AccountGUI extends JFrame{
 
@@ -50,6 +54,9 @@ public class AccountGUI extends JFrame{
 	public JPanel userPanel = new JPanel();
 	public JPanel panel = new JPanel();
 	public JPanel restaurantPanel = new JPanel();
+	
+	public HidePanel2 myOrderPanel;
+	public MyOrder myOrderView;
 	public HidePanel menuPanel,orderPanel;
 
 	public JTable table = new JTable();
@@ -61,8 +68,14 @@ public class AccountGUI extends JFrame{
 	public String resAddr = new String("");
 	public String resNumber = new String("");
 	public String[] foodMenuColumns = {"Food","Price","Describe"}; 
-	public String[][] data;
+	public String[][] orderData;
+	public String[][] foodData;
+	public String[][] myRestaurants;
+	public String[] orderColumns ={"Time"};
 	
+	public List<String> myRestaurantsName = new ArrayList<String>();
+	public List<String> myRestaurantsID = new ArrayList<String>();
+
 	public JLabel resNameLbl;
 	public JLabel resAddressLbl;
 	public JLabel resPhoneLbl_1;
@@ -76,20 +89,22 @@ public class AccountGUI extends JFrame{
 	public JLabel resNameAvaLbl = new JLabel(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/home.png"));
 	public JLabel resAddressAvaLbl = new JLabel(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/AddressIcon.png"));
 	public JLabel resPhoneAvaLbl = new JLabel(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/res_phone.png"));
-	public JLabel resLikeLbl = new JLabel((String) null);
 	public JLabel fullnameLbl;
 	public JLabel phoneNumberLbl;
 	public JLabel birthdayLbl;
 	public JLabel editProfileLbl = new JLabel("Edit Profile");
+	public JLabel myResLbl = new JLabel("My Restaurant(s)");
 	
-	public JButton listOrderBtn = new JButton("");
 	public JButton backBtn = new JButton("");
 	public JButton refreshBtn = new JButton("");
 	public JButton menuBtn = new JButton();
 	public JButton orderBtn = new JButton();
 	public JButton btnFeature = new JButton("Feature");
+	public JButton goToMyResBtn = new JButton("Go");
 
 	public JScrollPane scrollPane = new JScrollPane();
+
+	public JComboBox myResCbox = new JComboBox();
 
 	public AccountInfor accInfor = new AccountInfor();
 	public ClientProcess clientProcess = new ClientProcess();
@@ -134,7 +149,7 @@ public class AccountGUI extends JFrame{
 		userAvaLbl.setBounds(12, 12, 128, 176);
 		panel.add(userAvaLbl);
 		
-		fullnameIconLbl.setBounds(154, 12, 43, 38);
+		fullnameIconLbl.setBounds(150, 12, 43, 38);
 		panel.add(fullnameIconLbl);
 		
 		phoneNumberIconLbl.setBounds(152, 62, 43, 38);
@@ -152,6 +167,56 @@ public class AccountGUI extends JFrame{
 		birthdayLbl.setBounds(207, 112, 195, 38);
 		panel.add(birthdayLbl);
 		
+		myResLbl.setBounds(12, 162, 128, 26);
+		panel.add(myResLbl);
+
+		myResCbox.setBounds(150, 162, 207, 26);
+		panel.add(myResCbox);
+		List<List<String>> myResList = new ArrayList();
+		do{
+			;
+		}
+		while(!clientProcess.request.toString().equals(""));
+		clientProcess.getRequestFromClient("dataQuery{Restaurant~ResID,Resname~\"\"~AID = '" + accInfor.getAID() +"'~\"\"~\"\"}");
+		do{
+			if(clientProcess.lock == 1){
+				clientProcess.setRequest();
+				JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+				dispose();	
+			}
+			//Vong lap nay dung de cho den khi co ket qua
+		}while(!clientProcess.request.toString().equals(""));
+		myResList = clientProcess.getResultList();
+		clientProcess.setResultList();
+
+		if(myResList.size() == 0){
+			;
+		}
+		else{
+			myRestaurants = SolveArrayList.ConvertFromArrayList(myResList);
+			int i;
+			for(i = 0; i < myRestaurants.length; i++){
+				myRestaurantsName.add(myRestaurants[i][1].toString());
+				myRestaurantsID.add(myRestaurants[i][0].toString());
+			}
+			myResCbox.setModel(new DefaultComboBoxModel(myRestaurantsName.toArray()));
+		}
+
+		goToMyResBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int index = myResCbox.getSelectedIndex();
+				if(index == -1){
+					new MyRestaurantOption(clientProcess,null,null,myRestaurantsName,myRestaurantsID,accInfor.getAID(),myResCbox).setVisible(true);
+				}
+				else{
+					new MyRestaurantOption(clientProcess,myRestaurantsName.get(index),myRestaurantsID.get(index),myRestaurantsName,myRestaurantsID, accInfor.getAID(),myResCbox).setVisible(true);
+				}
+			}
+		});
+		goToMyResBtn.setBounds(363, 162, 50, 25);
+		goToMyResBtn.setFont(new Font("Ubuntu",0,12));
+		panel.add(goToMyResBtn);
+
 		scrollPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, UIManager.getColor("Button.darkShadow"), null));
 		scrollPane.setBounds(12, 359, 416, 188);
 		userPanel.add(scrollPane);
@@ -177,7 +242,7 @@ public class AccountGUI extends JFrame{
 			});
 		}
 		panel.add(editProfileLbl);
-		editProfileLbl.setBounds(325, 24, 195, 14);
+		editProfileLbl.setBounds(325, 123, 195, 14);
 		
 		String[] columnNames = {"Restaurant","Address"};
 		List<List<String>> resList = new ArrayList<>();		
@@ -185,7 +250,7 @@ public class AccountGUI extends JFrame{
 			;
 		}
 		while(!clientProcess.request.toString().equals(""));	
-		clientProcess.getRequestFromClient("dataQuery(Restaurant,SequenceRestaurant~Resname,Address~Restaurant.ResID = SequenceRestaurant.ResID~\"\"~\"\"~\"\")");
+		clientProcess.getRequestFromClient("dataQuery{Restaurant,SequenceRestaurant~Resname,Address~Restaurant.ResID = SequenceRestaurant.ResID~\"\"~\"\"~\"\"}");
 		do{
 			if(clientProcess.lock == 1){
 				clientProcess.setRequest();
@@ -198,7 +263,12 @@ public class AccountGUI extends JFrame{
 		clientProcess.setResultList();
 			
 		String[][] x = SolveArrayList.ConvertFromArrayList(resList);
-		DefaultTableModel model = new DefaultTableModel(x, columnNames);
+		DefaultTableModel model = new DefaultTableModel(x, columnNames){
+			boolean[] columnEditables = new boolean[] {false, false, false};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}	
+		};
 		table.setModel(model);
 		table.getColumnModel().getColumn(0).setPreferredWidth(184);
 		table.getColumnModel().getColumn(1).setPreferredWidth(133);
@@ -207,6 +277,7 @@ public class AccountGUI extends JFrame{
 		btnFeature.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(clientProcess.lock == 0){
+					DefaultTableModel model = (DefaultTableModel)table.getModel();
 					column = table.getSelectedColumn();
 					row = table.getSelectedRow();
 					if(row < 0){
@@ -219,7 +290,7 @@ public class AccountGUI extends JFrame{
 						;
 					}
 					while(!clientProcess.request.toString().equals(""));
-					clientProcess.getRequestFromClient("dataQuery(Account~PhoneNumber~\"\"~AID = (select AID from Restaurant where Resname = '" + resName +"')~\"\"~\"\")");
+					clientProcess.getRequestFromClient("dataQuery{Account~PhoneNumber~\"\"~AID = (select AID from Restaurant where Resname = '" + resName +"')~\"\"~\"\"}");
 					do{
 						if(clientProcess.lock == 1){
 							clientProcess.setRequest();
@@ -230,32 +301,30 @@ public class AccountGUI extends JFrame{
 					}while(!clientProcess.request.toString().equals(""));
 					resNumber = clientProcess.getResultList();
 					clientProcess.setResultList();
+
+					if(resNumber.size() == 0){
+						JOptionPane.showMessageDialog(null, "This Restaurant Doesn't Exist");
+						row = table.getSelectedRow();
+						DefaultTableModel tempModel = (DefaultTableModel)table.getModel();
+						tempModel.removeRow(row);
+						row = -1;
+						resNameLbl.setText("");
+						resAddressLbl.setText("");
+						resPhoneLbl_1.setText("");
+						return;
+					}
 					
 					getResNameLbl_1().setText(resName);
 					getResAddressLbl().setText(resAddr);
 					getResPhoneLbl().setText(resNumber.get(0).get(0));
-					JTable menu = getMenuPanel().getMenu();
-					getMenuPanel().setResAddress(resAddr);
-					List<List<String>> foodMenu = new ArrayList();
-					do{
-						;
-					}
-					while(!clientProcess.request.toString().equals(""));
-					clientProcess.getRequestFromClient("dataQuery(Provide~FoodName,Cost,DescribeFood~\"\"~ResID = (select ResID from SequenceRestaurant where Address = '" + resAddr +"')~\"\"~\"\")");
-					do{
-						if(clientProcess.lock == 1){
-							clientProcess.setRequest();
-							JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
-							return ;
-						}
-						//Vong lap nay dung de cho den khi co ket qua
-					}while(!clientProcess.request.toString().equals(""));
-					foodMenu = clientProcess.getResultList();
-					clientProcess.setResultList();
+					getPanel_1().setVisible(true);
 
-					data = new SolveArrayList().ConvertFromArrayList(foodMenu);
-					DefaultTableModel model = new DefaultTableModel(data, foodMenuColumns);
-					menu.setModel(model);
+					if(getMenuPanel().isVisible()){
+						getMenuPanel().setVisible(false);
+					}
+					if(getMyOrderPanel().isVisible()){
+						getMyOrderPanel().setVisible(false);
+					}
 				}
 				else{
 					JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
@@ -305,26 +374,17 @@ public class AccountGUI extends JFrame{
 		resPhoneLbl_1.setBounds(219, 112, 169, 38);
 		resInfo.add(resPhoneLbl_1);
 		
-		resLikeLbl.setBounds(219, 162, 169, 38);
-		resInfo.add(resLikeLbl);
-		
-		listOrderBtn.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/listOrder.png"));
-		listOrderBtn.setBounds(12, 232, 55, 56);
-		listOrderBtn.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent ae){
-				OrderFrame odrFrame = new OrderFrame(clientProcess,accInfor);
-			}
-		});
-		restaurantPanel.add(listOrderBtn);
-		
 		backBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getPanel_1().setVisible(true);
 				if(getMenuPanel().isVisible()){
 					getMenuPanel().setVisible(false);
 				}
-				if(getOrderPanel().isVisible()){
-					getOrderPanel().setVisible(false);
+				if(getMyOrderPanel().isVisible()){
+					getMyOrderPanel().setVisible(false);
+				}
+				if(getOrderViewPanel().isVisible()){
+					getOrderViewPanel().setVisible(false);
 				}
 			}
 		});
@@ -335,6 +395,48 @@ public class AccountGUI extends JFrame{
 		refreshBtn.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/refresh.png"));
 		refreshBtn.setBounds(290, 232, 55, 56);
 		restaurantPanel.add(refreshBtn);
+		refreshBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String[] columnNames = {"Restaurant","Address"};
+				List<List<String>> resList = new ArrayList<>();
+
+				do{
+					;
+				}
+				while(!clientProcess.request.toString().equals(""));	
+				clientProcess.getRequestFromClient("dataQuery{Restaurant,SequenceRestaurant~Resname,Address~Restaurant.ResID = SequenceRestaurant.ResID~\"\"~\"\"~\"\"}");
+				do{
+					if(clientProcess.lock == 1){
+						clientProcess.setRequest();
+						JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+						dispose();
+					}
+					//Vong lap nay dung de cho den khi co ket qua
+				}while(!clientProcess.request.toString().equals(""));
+				resList = clientProcess.getResultList();
+				clientProcess.setResultList();
+				
+				String[][] x = SolveArrayList.ConvertFromArrayList(resList);
+				DefaultTableModel model = new DefaultTableModel(){
+					boolean[] columnEditables = new boolean[] {false, false, false};
+					public boolean isCellEditable(int row, int column) {
+						return columnEditables[column];
+					}	
+				};
+				
+				table.getColumnModel().getColumn(0).setPreferredWidth(184);
+				table.getColumnModel().getColumn(1).setPreferredWidth(133);
+				
+				int i;
+				for(i = 0; i < 2; i++){
+					model.addColumn(columnNames[i]);
+				}
+				for(i = 0; i < x.length; i++){
+					model.addRow(x[i]);
+				}
+				table.setModel(model);
+			}
+		});
 		
 		menuAndOrder = new JPanel();
 		menuAndOrder.setBounds(12, 300, 400, 284);
@@ -344,29 +446,100 @@ public class AccountGUI extends JFrame{
 		
 		menuBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				getMenuPanel().setVisible(true);
-				JTable menu = getMenuPanel().getMenu();
-				List<List<String>> foodMenu = new ArrayList();
-				do{
-					;
+				if(resName.equals("")){
+					JOptionPane.showMessageDialog(null, "You Didn't Choose Restaurant");
+					return ;
 				}
-				while(!clientProcess.request.toString().equals(""));
-				clientProcess.getRequestFromClient("dataQuery(Provide~FoodName,Cost,DescribeFood~\"\"~ResID = (select ResID from SequenceRestaurant where Address = '" + resAddr +"')~\"\"~\"\")");
-				do{
-					if(clientProcess.lock == 1){
-						clientProcess.setRequest();
-						JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
-						return ;
+				if(clientProcess.lock == 0){
+					do{
+						;
 					}
-					//Vong lap nay dung de cho den khi co ket qua
-				}while(!clientProcess.request.toString().equals(""));
-				foodMenu = clientProcess.getResultList();
-				clientProcess.setResultList();
-				
-				data = new SolveArrayList().ConvertFromArrayList(foodMenu);
-				DefaultTableModel model = new DefaultTableModel(data, foodMenuColumns);
-				menu.setModel(model);
-				getPanel_1().setVisible(false);
+					while(!clientProcess.request.toString().equals(""));
+					clientProcess.getRequestFromClient("dataQuery{Account~PhoneNumber~\"\"~AID = (select AID from Restaurant where Resname = '" + resName +"')~\"\"~\"\"}");
+					do{
+						if(clientProcess.lock == 1){
+							clientProcess.setRequest();
+							JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+							return ;
+						}
+						//Vong lap nay dung de cho den khi co ket qua
+					}while(!clientProcess.request.toString().equals(""));
+					List<List<String>> result = new ArrayList();
+					result = clientProcess.getResultList();
+					clientProcess.setResultList();
+
+					if(result.size() == 0){
+						JOptionPane.showMessageDialog(null, "This Restaurant Is Not Exist");
+						DefaultTableModel tempModel = (DefaultTableModel)table.getModel();
+						if(row < 0){
+							return;
+						}
+						tempModel.removeRow(row);
+						row = -1;
+						return;
+					}
+					else{
+						JTable menu = getMenuPanel().getMenu();
+						List<List<String>> foodMenu = new ArrayList();
+						
+						do{
+							;
+						}
+						while(!clientProcess.request.toString().equals(""));
+						clientProcess.getRequestFromClient("dataQuery{Provide~Foodname,Cost,DescribeFood~\"\"~ResID = (select ResID from SequenceRestaurant where Address = '" + resAddr +"')~\"\"~\"\"}");
+						do{
+							if(clientProcess.lock == 1){
+								clientProcess.setRequest();
+								JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+								return ;
+							}
+							//Vong lap nay dung de cho den khi co ket qua
+						}while(!clientProcess.request.toString().equals(""));
+						foodMenu = clientProcess.getResultList();
+						clientProcess.setResultList();
+
+						getMenuPanel().setResAddress(resAddr);// Input resAddr into HidePanel.
+						foodData = new SolveArrayList().ConvertFromArrayList(foodMenu);
+						DefaultTableModel model = new DefaultTableModel(foodData, foodMenuColumns){
+							boolean[] columnEditables = new boolean[] {
+									false, false, false
+								};
+								public boolean isCellEditable(int row, int column) {
+									return columnEditables[column];
+								}
+						};
+						menu.setModel(model);
+
+						List<List<String>> myOrderDate = new ArrayList(); 
+						do{
+							;
+						}
+						while(!clientProcess.request.toString().equals(""));
+						clientProcess.getRequestFromClient("dataQuery{Reservation~Time~\"\"~AID = '" + accInfor.getAID() + "' and ResAddress = '" + resAddr + "'~\"\"~\"\"}");
+						do{
+							if(clientProcess.lock == 1){
+								clientProcess.setRequest();
+								JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+								return ;
+							}
+							//Vong lap nay dung de cho den khi co ket qua
+						}while(!clientProcess.request.toString().equals(""));
+						myOrderDate = clientProcess.getResultList();
+						clientProcess.setResultList();
+
+						for(List<String> innerLs : myOrderDate){
+							for(Iterator<String> i = innerLs.iterator();i.hasNext();){
+								getMenuPanel().getOrderItem().addItem(i.next());
+							}
+						}
+						getPanel_1().setVisible(false);
+						getMenuPanel().setVisible(true);
+					}
+				}
+				else{
+					JOptionPane.showMessageDialog(null,"Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
 			}
 		});
 		menuBtn.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/food.png"));
@@ -375,21 +548,81 @@ public class AccountGUI extends JFrame{
 		
 		orderBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				getOrderPanel().setVisible(true);
-				getPanel_1().setVisible(false);
+				if(clientProcess.lock == 0){
+					do{
+						;
+					}
+					while(!clientProcess.request.toString().equals(""));
+					clientProcess.getRequestFromClient("dataQuery{Account~PhoneNumber~\"\"~AID = (select AID from Restaurant where Resname = '" + resName +"')~\"\"~\"\"}");
+					do{
+						if(clientProcess.lock == 1){
+							clientProcess.setRequest();
+							JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+							return ;
+						}
+						//Vong lap nay dung de cho den khi co ket qua
+					}while(!clientProcess.request.toString().equals(""));
+					List<List<String>> result = new ArrayList();
+					result = clientProcess.getResultList();
+					clientProcess.setResultList();
+
+					if(result.size() == 0){
+						JOptionPane.showMessageDialog(null, "This Restaurant Doesn't Exist. Please Press Refresh Button");
+						DefaultTableModel tempModel = (DefaultTableModel)table.getModel();
+						if(row < 0){
+							return;
+						}
+						tempModel.removeRow(row);
+						row = -1;
+						return;
+					}
+					HidePanel2 orderPanel = getMyOrderPanel();
+					orderPanel.setResAddress(resAddr);
+					JTable orderTable = getMyOrderPanel().getOrderTable();
+					do{
+						;
+					}
+					while(!clientProcess.request.toString().equals(""));
+					clientProcess.getRequestFromClient("dataQuery{Reservation~Time~\"\"~AID = '" + accInfor.getAID() +"' and ResAddress = '" + resAddr +"'~\"\"~\"\"}");
+					do{
+						if(clientProcess.lock == 1){
+							clientProcess.setRequest();
+							JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+							return ;
+						}
+						//Vong lap nay dung de cho den khi co ket qua
+					}while(!clientProcess.request.toString().equals(""));
+
+					List<List<String>> myOrderList = new ArrayList();
+					myOrderList = clientProcess.getResultList();
+					clientProcess.setResultList();
+					orderData = SolveArrayList.ConvertFromArrayList(myOrderList);
+					DefaultTableModel model = new DefaultTableModel(orderData, orderColumns);
+					orderTable.setModel(model);
+					orderPanel.setVisible(true);
+					getPanel_1().setVisible(false);
+				}
+				else{
+					JOptionPane.showMessageDialog(null,"Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+					return ;
+				}
 			}
 		});
 		orderBtn.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/ResourceForClient/request-128.png"));
 		orderBtn.setBounds(216, 65, 172, 162);
 		menuAndOrder.add(orderBtn);
 		
-		menuPanel = new HidePanel(menuAndOrder.getBorder(),accInfor.getAID(),clientProcess);
+		menuPanel = new HidePanel(this,menuAndOrder.getBorder(),accInfor.getAID(),clientProcess);
 		restaurantPanel.add(menuPanel);
 		menuPanel.setVisible(false);
 		
-		orderPanel = new HidePanel(menuAndOrder.getBorder(),accInfor.getAID(),clientProcess);
-		restaurantPanel.add(orderPanel);
-		orderPanel.setVisible(false);
+		myOrderPanel = new HidePanel2(this,menuAndOrder.getBorder(),accInfor.getAID(),clientProcess);
+		restaurantPanel.add(myOrderPanel);
+
+		myOrderView = new MyOrder(myOrderPanel,clientProcess);
+		restaurantPanel.add(myOrderView);
+		
+		myOrderView.setVisible(false);
 	}
 
 	public JPanel getPanel_1() {
@@ -418,5 +651,17 @@ public class AccountGUI extends JFrame{
 
 	public HidePanel getOrderPanel(){
 		return orderPanel;
+	}
+
+	public JPanel getRestaurantPanel() {
+		return restaurantPanel;
+	}
+
+	public MyOrder getOrderViewPanel(){
+		return myOrderView;
+	}
+
+	public HidePanel2 getMyOrderPanel(){
+		return myOrderPanel;
 	}
 }

@@ -1,4 +1,4 @@
-package dataqueryframe;
+package Server.dataqueryframe;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
@@ -11,8 +11,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.UIManager;
-import javax.swing.plaf.ColorUIResource;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -31,11 +29,11 @@ import java.util.Map;
 
 import java.sql.ResultSet;
 
-import sqlfunc.SQLFunc;
-import tableforresult.TableForResult;
-import textprompt.TextPrompt;
-import buttonflag.ButtonFlag;
-import copypastefunc.CopyPasteFunc;
+import Server.sqlfunc.SQLFunc;
+import Server.tableforresult.TableForResult;
+import Server.textprompt.TextPrompt;
+import Server.buttonflag.ButtonFlag;
+import Server.copypastefunc.CopyPasteFunc;
 
 public class DataQueryFrame extends JFrame implements DataQueryFrameInterface{	
 	public CopyPasteFunc copyPasteFunc = new CopyPasteFunc();
@@ -123,11 +121,6 @@ public class DataQueryFrame extends JFrame implements DataQueryFrameInterface{
 		if(labelHelp.getMouseListeners().length < 1){
 			labelHelp.addMouseListener(new MouseAdapter(){
 				public void mouseClicked(MouseEvent me){
-					UIManager UI = new UIManager();
- 					UI.put("OptionPane.background",new ColorUIResource(0, 153, 204));
- 					UI.put("Panel.background",new ColorUIResource(0, 153, 204));
- 					UI.put("OptionPane.messageForeground", Color.WHITE);
-
 					Icon icon = new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/Resource/float.png");
 					StringBuffer msg = new StringBuffer();
 					msg.append("This is the window to retrieve data,");
@@ -175,12 +168,7 @@ public class DataQueryFrame extends JFrame implements DataQueryFrameInterface{
 					String groupBy = new String(groupByTextField.getText());
 					String having = new String(havingTextField.getText());
 					ResultSet result = sqlFunc.dataQuery(tableName,listColumn,onKey,condition,groupBy,having);
-					if(result == null){
-						UIManager UI = new UIManager();
- 						UI.put("OptionPane.background",new ColorUIResource(0, 153, 204));
- 						UI.put("Panel.background",new ColorUIResource(0, 153, 204));
- 						UI.put("OptionPane.messageForeground", Color.WHITE);
-						
+					if(result == null){						
 						JOptionPane.showMessageDialog(null,"Error In Query Command","Help Of DataQueryFrame",JOptionPane.INFORMATION_MESSAGE,icon);
 						return ;
 					}
@@ -242,6 +230,7 @@ public class DataQueryFrame extends JFrame implements DataQueryFrameInterface{
 				onKeyTextField.setText("");
 
 				buttonFlag.buttonQueryFlag = 1;
+				buttonFlag.buttonRefreshFlag = 1;
 			}
 		});
 	}

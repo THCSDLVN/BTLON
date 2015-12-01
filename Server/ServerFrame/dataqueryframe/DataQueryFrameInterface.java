@@ -1,4 +1,4 @@
-package dataqueryframe;
+package Server.dataqueryframe;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;

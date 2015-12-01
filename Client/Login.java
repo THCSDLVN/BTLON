@@ -93,7 +93,7 @@ public class Login {
 							;
 						}
 						while(!clientProcess.request.toString().equals(""));
-						clientProcess.getRequestFromClient("updateDataQuery(Account~Status~0~Status = 1 and Username ='" + usn + "')");
+						clientProcess.getRequestFromClient("updateDataQuery{Account~Status~0~Status = 1 and Username ='" + usn + "'}");
 						clientProcess.printRequest();
 						do{
 							if(clientProcess.lock == 1){
@@ -255,7 +255,7 @@ public class Login {
 								;
 							}
 							while(!clientProcess.request.toString().equals(""));			
-							clientProcess.getRequestFromClient("dataQuery(Account~*~\"\"~Username = '" + username + "' and Password = '" + passd + "' and Status = 0~\"\"~\"\")");
+							clientProcess.getRequestFromClient("dataQuery{Account~*~\"\"~Username = '" + username + "' and Password = '" + passd + "' and Status = 0~\"\"~\"\"}");
 							do{
 								if(clientProcess.lock == 1){
 									clientProcess.setRequest();
@@ -271,7 +271,7 @@ public class Login {
 									;
 								}
 								while(!clientProcess.request.toString().equals(""));
-								clientProcess.getRequestFromClient("updateDataQuery(Account~Status~1~Username = '" + username + "')");
+								clientProcess.getRequestFromClient("updateDataQuery{Account~Status~1~Username = '" + username + "'}");
 								do{
 									if(clientProcess.lock == 1){
 										clientProcess.setRequest();
@@ -298,7 +298,7 @@ public class Login {
 												;
 											}
 											while(!clientProcess.request.toString().equals(""));
-											clientProcess.getRequestFromClient("updateDataQuery(Account~Status~0~Status = 1 and Username = '"+ accInfor.getUsername() +"')");
+											clientProcess.getRequestFromClient("updateDataQuery{Account~Status~0~Status = 1 and Username = '"+ accInfor.getUsername() +"'}");
 											clientProcess.printRequest();
 											do{
 												if(clientProcess.lock == 1){
@@ -351,7 +351,7 @@ public class Login {
 							;
 						}
 						while(!clientProcess.request.toString().equals(""));
-						clientProcess.getRequestFromClient("updateDataQuery(Account~Status~0~Status = 1 and Username ='" + usn + "')");
+						clientProcess.getRequestFromClient("updateDataQuery{Account~Status~0~Status = 1 and Username ='" + usn + "'}");
 						do{
 							if(clientProcess.lock == 1){
 								clientProcess.setRequest();

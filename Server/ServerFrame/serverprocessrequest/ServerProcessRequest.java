@@ -8,11 +8,13 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 
 import Server.sqlfunc.SQLFunc;
+import Server.makearraylist.MakeArrayList;
 
 public class ServerProcessRequest {
 	String command;
 	String fillParam[];
 	SQLFunc funcTool;
+	MakeArrayList makeArrayList = new MakeArrayList();
 	
 	public ServerProcessRequest(){
 		command = new String();
@@ -24,18 +26,18 @@ public class ServerProcessRequest {
 			return false;
 		}
 		else{
-			if(request.charAt(0) == '(' || request.indexOf('(') < 0 || request.indexOf(')') < 0){
+			if(request.charAt(0) == '{' || request.indexOf('{') < 0 || request.indexOf('}') < 0){
 				return false;
 			}
 			else{
 				for(int i = 0 ; i < request.length() ; i++){
-					if(request.charAt(i) == '(' && request.charAt(i + 1) == ')'){
+					if(request.charAt(i) == '{' && request.charAt(i + 1) == '}'){
 						return false;
 					}
 				}
 			}
 		}
-		int i = request.indexOf('(');
+		int i = request.indexOf('{');
 		command = request.substring(0,i);
 		fillParam = stringTokenizer(request.substring(i + 1,request.length() - 1));
 		return true;
@@ -60,7 +62,7 @@ public class ServerProcessRequest {
 			}
 		}
 		else if(command.equals("insertDataQuery")){
-			if(fillParam.length != 9){
+			if(fillParam.length != 12){
 				return false;
 			}
 		}
@@ -92,37 +94,13 @@ public class ServerProcessRequest {
 		return stringResultArray;
 	}
 
-	public List<List<String>> makeArrayList(ResultSet result){
-		int numcols;
-		List<List<String>> resultList = new ArrayList<>();  // List of list, one per row
-		ResultSetMetaData metadata;
-
-		try{
-			metadata = result.getMetaData();
-			numcols = metadata.getColumnCount();	
-			while (result.next()) {
-				List<String> row = new ArrayList<>(numcols); // new list per row
-				int i = 1;
-				while (i <= numcols) {  // don't skip the last column, use <=
-					row.add(result.getString(i++));
-				}
-					resultList.add(row); // add it to the result
-			}
-			result.close();
-			return resultList;
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	public List<List<String>> executeDataQuery(){
 		ResultSet result = funcTool.dataQuery(fillParam[0],fillParam[1],fillParam[2],fillParam[3],fillParam[4],fillParam[5]);
 		if(result == null){
-			return null;
+			List<List<String>> resultList = new ArrayList<>();
+			return resultList;
 		}
-		return makeArrayList(result);
+		return makeArrayList.makeArrayList(result);
 	}
 
 	public String executeChangeDataQuery(){
@@ -130,7 +108,7 @@ public class ServerProcessRequest {
 			return Integer.toString(funcTool.updateDataQuery(fillParam[0],fillParam[1],fillParam[2],fillParam[3]));
 		}
 		else if(command.equals("insertDataQuery")){
-			return Integer.toString(funcTool.insertDataQuery(fillParam[0],fillParam[1],fillParam[2],fillParam[3],fillParam[4],fillParam[5],fillParam[6],fillParam[7],fillParam[8]));
+			return Integer.toString(funcTool.insertDataQuery(fillParam[0],fillParam[1],fillParam[2],fillParam[3],fillParam[4],fillParam[5],fillParam[6],fillParam[7],fillParam[8],fillParam[9],fillParam[10],fillParam[11]));
 		}
 		else if(command.equals("deleteDataQuery")){
 			return Integer.toString(funcTool.deleteDataQuery(fillParam[0],fillParam[1]));

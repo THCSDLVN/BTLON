@@ -22,6 +22,7 @@ import java.util.Map;
 
 import Client.clientprocess.ClientProcess;
 import Client.accountinfor.AccountInfor;
+import Client.check.Check;
 
 public class EditProfileFrame extends JFrame{
 	
@@ -36,6 +37,8 @@ public class EditProfileFrame extends JFrame{
 	public JTextField passTextField = new JTextField();
 	public JTextField nameTextField = new JTextField();
 	public JTextField phoneTextField = new JTextField();
+
+	public Check check = new Check();
 
 	public EditProfileFrame(AccountInfor accInf, ClientProcess clientProcess,JLabel lblName,JLabel lblPhone){
 		super("Edit Profile Frame");
@@ -118,84 +121,102 @@ public class EditProfileFrame extends JFrame{
 			public void actionPerformed(ActionEvent ae){
 				if(clientProcess.lock == 0){
 					int mark = 0;
-					String newPass = new String(passTextField.getText());
-					String newPhone = new String(phoneTextField.getText());
-					String newName = new String(nameTextField.getText());
-					if(!newPass.equals(accInf.getPassword())){
-						do{
-							;
-						}
-						while(!clientProcess.request.toString().equals(""));
-						clientProcess.getRequestFromClient("updateDataQuery(Account~Password~" + newPass + "~AID = '"+ accInf.getAID() +"')");
-						do{
-							if(clientProcess.lock == 1){
-								clientProcess.setRequest();
-								JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+					if(!passTextField.getText().equals(accInf.getPassword())){
+						if(check.check_text(passTextField.getText())){
+							do{
+								;
+							}
+							while(!clientProcess.request.toString().equals(""));
+							clientProcess.getRequestFromClient("updateDataQuery{Account~Password~" + passTextField.getText() + "~AID = '"+ accInf.getAID() +"'}");
+							do{
+								if(clientProcess.lock == 1){
+									clientProcess.setRequest();
+									JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+									return ;
+								}
+								//Vong lap nay dung de cho den khi co ket qua
+							}while(!clientProcess.request.toString().equals(""));
+							if(!clientProcess.getResultAlterQuery().equals("0")){
+								clientProcess.setResultAlterQuery();
+								mark++;
+								accInf.setPassword(passTextField.getText());
+								JOptionPane.showMessageDialog(null, "Change Password Successfully","Announce",JOptionPane.INFORMATION_MESSAGE);
+							}
+							else{
+								clientProcess.setResultAlterQuery();
+								JOptionPane.showMessageDialog(null, "Change Password Unsuccessfully","Announce",JOptionPane.INFORMATION_MESSAGE);
 								return ;
 							}
-							//Vong lap nay dung de cho den khi co ket qua
-						}while(!clientProcess.request.toString().equals(""));
-						if(!clientProcess.getResultAlterQuery().equals("0")){
-							clientProcess.setResultAlterQuery();
-							mark++;
-							accInf.setPassword(passTextField.getText());
-							JOptionPane.showMessageDialog(null, "Change Password Successful","Announce",JOptionPane.INFORMATION_MESSAGE);
 						}
 						else{
-							clientProcess.setResultAlterQuery();
-							JOptionPane.showMessageDialog(null, "Change Password Unsuccessful","Announce",JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Wrong Password - It Must Be Not Empty and Must Be Digits Or Letters And Length Withinh 45 Letters","Announce",JOptionPane.ERROR_MESSAGE);
+							return ;
 						}
 					}
-					if(!newPhone.equals(accInf.getPhoneNumber())){
-						do{
-							;
-						}
-						while(!clientProcess.request.toString().equals(""));
-						clientProcess.getRequestFromClient("updateDataQuery(Account~PhoneNumber~" + newPhone + "~AID = '"+ accInf.getAID() +"')");
-						do{
-							if(clientProcess.lock == 1){
-								clientProcess.setRequest();
-								JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+					if(!phoneTextField.getText().equals(accInf.getPhoneNumber())){
+						if(check.checkPhoneNumber(phoneTextField)){
+							do{
+								;
+							}
+							while(!clientProcess.request.toString().equals(""));
+							clientProcess.getRequestFromClient("updateDataQuery{Account~PhoneNumber~" + phoneTextField.getText() + "~AID = '"+ accInf.getAID() +"'}");
+							do{
+								if(clientProcess.lock == 1){
+									clientProcess.setRequest();
+									JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+									return ;
+								}
+								//Vong lap nay dung de cho den khi co ket qua
+							}while(!clientProcess.request.toString().equals(""));
+							if(!clientProcess.getResultAlterQuery().equals("0")){
+								clientProcess.setResultAlterQuery();
+								mark++;
+								accInf.setPhonenumber(phoneTextField.getText());
+								lblPhone.setText(accInf.getPhoneNumber());
+								JOptionPane.showMessageDialog(null, "Change PhoneNumber Successfully","Announce",JOptionPane.INFORMATION_MESSAGE);
+							}
+							else{
+								clientProcess.setResultAlterQuery();
+								JOptionPane.showMessageDialog(null, "Change PhoneNumber Unsuccessfully","Announce",JOptionPane.INFORMATION_MESSAGE);
 								return ;
 							}
-							//Vong lap nay dung de cho den khi co ket qua
-						}while(!clientProcess.request.toString().equals(""));
-						if(!clientProcess.getResultAlterQuery().equals("0")){
-							clientProcess.setResultAlterQuery();
-							mark++;
-							accInf.setPhonenumber(phoneTextField.getText());
-							lblPhone.setText(accInf.getPhoneNumber());
-							JOptionPane.showMessageDialog(null, "Change PhoneNumber Successful","Announce",JOptionPane.INFORMATION_MESSAGE);
 						}
 						else{
-							clientProcess.setResultAlterQuery();
-							JOptionPane.showMessageDialog(null, "Change PhoneNumber Unsuccessful","Announce",JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Wrong PhoneNumber - It Must Be Not Empty and Must Be Digits Or Letters And Length Withinh 13 Letters","Announce",JOptionPane.ERROR_MESSAGE);
+							return ;
 						}
 					}
-					if(!newName.equals(accInf.getFullname())){
-						do{
-							;
-						}
-						while(!clientProcess.request.toString().equals(""));
-						clientProcess.getRequestFromClient("updateDataQuery(Account~FullName~" + newName + "~AID = '"+ accInf.getAID() +"')");
-						do{
-							if(clientProcess.lock == 1){
-								clientProcess.setRequest();
-								JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+					if(!nameTextField.getText().equals(accInf.getFullname())){
+						if(check.check_text(nameTextField.getText())){
+							do{
+								;
+							}
+							while(!clientProcess.request.toString().equals(""));
+							clientProcess.getRequestFromClient("updateDataQuery{Account~FullName~" + nameTextField.getText() + "~AID = '"+ accInf.getAID() +"'}");
+							do{
+								if(clientProcess.lock == 1){
+									clientProcess.setRequest();
+									JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+									return ;
+								}
+								//Vong lap nay dung de cho den khi co ket qua
+							}while(!clientProcess.request.toString().equals(""));
+							if(!clientProcess.getResultAlterQuery().equals("0")){
+								clientProcess.setResultAlterQuery();
+								mark++;
+								accInf.setFullname(nameTextField.getText());
+								lblName.setText(accInf.getFullname());
+								JOptionPane.showMessageDialog(null, "Change Name Successfully","Announce",JOptionPane.INFORMATION_MESSAGE);
+							}
+							else{
+								clientProcess.setResultAlterQuery();
+								JOptionPane.showMessageDialog(null, "Change Name Unsuccessfully","Announce",JOptionPane.INFORMATION_MESSAGE);
 								return ;
 							}
-							//Vong lap nay dung de cho den khi co ket qua
-						}while(!clientProcess.request.toString().equals(""));
-						if(!clientProcess.getResultAlterQuery().equals("0")){
-							clientProcess.setResultAlterQuery();
-							mark++;
-							accInf.setFullname(nameTextField.getText());
-							lblName.setText(accInf.getFullname());
-							JOptionPane.showMessageDialog(null, "Change Name Successful","Announce",JOptionPane.INFORMATION_MESSAGE);
 						}
 						else{
-							clientProcess.setResultAlterQuery();
-							JOptionPane.showMessageDialog(null, "Change Name Unsuccessful","Announce",JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Wrong Name - It Must Be Not Empty and Must Be Digits Or Letters And Length Withinh 45 Letters","Announce",JOptionPane.ERROR_MESSAGE);
+							return ;
 						}
 					}
 					if(mark == 0){

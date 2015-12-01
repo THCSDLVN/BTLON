@@ -34,6 +34,7 @@ import Client.provideIDRandom.ProvideIDRandom;
 import Client.clientprocess.ClientProcess;
 import Client.accountinfor.AccountInfor;
 import Client.accountGUI.AccountGUI;
+import Client.check.Check;
 
 public class Signup extends JFrame {
 
@@ -68,6 +69,7 @@ public class Signup extends JFrame {
 
 	public ProvideIDRandom pAIDRan = new  ProvideIDRandom();
 	public ClientProcess clientProcess = new ClientProcess();
+	public Check check = new Check();
 
 	public Signup(ClientProcess cP) {
 		setTitle("Sign up");
@@ -209,62 +211,37 @@ public class Signup extends JFrame {
 		label.setFont(new Font("Magneto", Font.BOLD, 14));
 		label.setBounds(10, 26, 264, 46);	
 	}
-
-	public Boolean checkRetyPassword(JPasswordField typ,JPasswordField retyp){
-		String typPass = new String(typ.getPassword());
-		String retypPass = new String(retyp.getPassword());
-		if (retypPass.equals(typPass) && !retypPass.isEmpty()){
-			return true;
-		}
-		else{ 
-			return false;
-		}
-	}
-	
-	public Boolean checkPhoneNumber(JTextField PhoneField){
-		String phonenum = new String(PhoneField.getText());
-		if(phonenum.matches("[0-9]+") || phonenum.isEmpty()){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
 	
 	public void signupClick(){
 		if(clientProcess.lock == 0){
 			try{
 				String aid,usrname,password,fullname,dateofbirth,sex,phonenum;
-				if(usernameField.getText().isEmpty()){
-					JOptionPane.showMessageDialog(null, "Fill Your Username","Announce",JOptionPane.WARNING_MESSAGE);
+				if(!check.check_text(usernameField.getText())){
+					JOptionPane.showMessageDialog(null, "Wrong Username - It Must Be Not Empty and Must Be Digits Or Letters And Length Within 45 Letters","Announce",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				if(passwordField.getPassword().length == 0){
-					JOptionPane.showMessageDialog(null, "Fill Your Password","Announce",JOptionPane.WARNING_MESSAGE);
+				if(!check.check_pass(passwordField)){
+					JOptionPane.showMessageDialog(null, "Wrong Password - It Must Be Not Empty and Must Be Digits Or Letters And Length Within 45 Letters","Announce",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				if(!checkRetyPassword(passwordField, retypasswordField)){
-					JOptionPane.showMessageDialog(null, "The Retype-Password Is Incorrect","Announce",JOptionPane.WARNING_MESSAGE);
+				if(!check.checkRetypePassword(passwordField, retypasswordField)){
+					JOptionPane.showMessageDialog(null, "The Retype-Password Is Incorrect","Announce",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				if(!checkPhoneNumber(phoneNumField)){
-					JOptionPane.showMessageDialog(null, "Your PhoneNumber Must Be Digits","Announce",JOptionPane.WARNING_MESSAGE);
+				if(!check.check_text(fullNameField.getText())){
+					JOptionPane.showMessageDialog(null, "Wrong FullName - It Must Be Not Empty and Must Be Digits Or Letters And Length Within 45 Letters","Announce",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				if(!check.checkPhoneNumber(phoneNumField)){
+					JOptionPane.showMessageDialog(null, "Wrong Phonenumber - It Must Be Not Empty and Must Be Digits Or Letters And Length Within 13 Letters","Announce",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				if(dayCbbox.getSelectedIndex() < 0 ||monthCbbox.getSelectedIndex() < 0 || yearCbbox.getSelectedIndex() < 0){
 					JOptionPane.showMessageDialog(null,"Fill Your Date Of Birth");
 					return;
 				}
-				if(!check_date(dayCbbox, monthCbbox, yearCbbox)){
-					JOptionPane.showMessageDialog(null,"Date Of Birth Is Not Exist","Announce",JOptionPane.WARNING_MESSAGE);
-					return;
-				}
-				if(!usernameField.getText().equals("") && !check_text(usernameField.getText())){
-					JOptionPane.showMessageDialog(null, "Username Must Be Letters Or Digits","Announce",JOptionPane.WARNING_MESSAGE);
-					return;
-				}
-				if(!passwordField.getText().equals("") && !check_text(passwordField.getText())){
-					JOptionPane.showMessageDialog(null, "Password Must Be Letters Or Digits","Announce",JOptionPane.WARNING_MESSAGE);
+				if(!check.check_date(dayCbbox, monthCbbox, yearCbbox)){
+					JOptionPane.showMessageDialog(null,"Date Of Birth Is Not Exist","Announce",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				
@@ -280,7 +257,7 @@ public class Signup extends JFrame {
 				}
 				while(!clientProcess.request.toString().equals(""));
 				
-				clientProcess.getRequestFromClient("dataQuery(Account~AID~\"\"~\"\"~\"\"~\"\")");
+				clientProcess.getRequestFromClient("dataQuery{Account~AID~\"\"~\"\"~\"\"~\"\"}");
 				do{
 					if(clientProcess.lock == 1){
 						clientProcess.setRequest();
@@ -289,7 +266,7 @@ public class Signup extends JFrame {
 					}
 					//Vong lap nay dung de cho den khi co ket qua
 				}while(!clientProcess.request.toString().equals(""));
-				List<List<String>> resultList;
+				List<List<String>> resultList = new ArrayList();
 				resultList = clientProcess.getResultList();
 				clientProcess.setResultList();
 				aid = new String(pAIDRan.ProvideIDRandom(resultList,"ACCT"));
@@ -297,7 +274,7 @@ public class Signup extends JFrame {
 					;
 				}
 				while(!clientProcess.request.toString().equals(""));
-				clientProcess.getRequestFromClient("insertDataQuery(Account~"+ aid + "~" + usrname + "~" + password + "~" + fullname + "~" + dateofbirth + "~" + phonenum + "~" + sex + "~1" +")");
+				clientProcess.getRequestFromClient("insertDataQuery{Account~"+ aid + "~" + usrname + "~" + password + "~" + fullname + "~" + dateofbirth + "~" + phonenum + "~" + sex + "~1~\"\"~\"\"~\"\"}");
 				do{
 					if(clientProcess.lock == 1){
 						clientProcess.setRequest();
@@ -307,7 +284,10 @@ public class Signup extends JFrame {
 					}
 					//Vong lap nay dung de cho den khi co ket qua
 				}while(!clientProcess.request.toString().equals(""));
-				if(!clientProcess.getResultAlterQuery().equals("0")){
+				String result = new String();
+				result = clientProcess.getResultAlterQuery();
+				clientProcess.setResultAlterQuery();
+				if(!result.equals("0")){
 					AccountInfor accInfor = new AccountInfor();
 					accInfor.setAID(aid);
 					accInfor.setUsername(usrname);
@@ -324,8 +304,7 @@ public class Signup extends JFrame {
 								;
 							}
 							while(!clientProcess.request.toString().equals(""));
-							clientProcess.getRequestFromClient("updateDataQuery(Account~Status~0~Status = 1 and Username = '"+ accInfor.getUsername() +"')");
-							clientProcess.printRequest();
+							clientProcess.getRequestFromClient("updateDataQuery{Account~Status~0~Status = 1 and Username = '"+ accInfor.getUsername() +"'}");
 							do{
 								if(clientProcess.lock == 1){
 									clientProcess.setRequest();
@@ -336,6 +315,7 @@ public class Signup extends JFrame {
 								}
 								//Vong lap nay dung de cho den khi co ket qua
 							}while(!clientProcess.request.toString().equals(""));
+							clientProcess.setResultAlterQuery();
 							if(clientProcess.listUserIsOnline.contains(accInfor.getUsername())){
 								clientProcess.listUserIsOnline.remove(accInfor.getUsername());
 							}
@@ -365,9 +345,25 @@ public class Signup extends JFrame {
 					
 					JOptionPane.showMessageDialog(null, "Your Account Has Been Created","Announce",JOptionPane.INFORMATION_MESSAGE);
 					clientProcess.listUserIsOnline.add(usrname);
+
+					do{
+						;
+					}
+					while(!clientProcess.request.toString().equals(""));
+					
+					clientProcess.getRequestFromClient("insertDataQuery{AccountAssignment~" + aid + "~ROLE0001~\"\"~\"\"~\"\"~\"\"~\"\"~\"\"~\"\"~\"\"~\"\"}");
+					do{
+						if(clientProcess.lock == 1){
+							clientProcess.setRequest();
+							JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+							return ;
+						}
+						//Vong lap nay dung de cho den khi co ket qua
+					}while(!clientProcess.request.toString().equals(""));
+					clientProcess.setResultAlterQuery();
 				}
 				else{
-					JOptionPane.showMessageDialog(null, "Your Account Cann't Be Created","Announce",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Your Account Cann't Be Created. Please Check Your Information Carfully","Announce",JOptionPane.ERROR_MESSAGE);
 				}
 				clientProcess.setResultAlterQuery();
 			}
@@ -379,29 +375,6 @@ public class Signup extends JFrame {
 		}
 		else{
 			JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
-		}
-	}
-
-	private Boolean check_date(JComboBox day,JComboBox month,JComboBox year){
-		int[] monthdays = new int[]{31,28,31,30,31,30,31,31,30,31,30,31};
-		int iday = day.getSelectedIndex()+1;
-		int imonth = month.getSelectedIndex();
-		int iyear = year.getSelectedIndex()+1920;
-		monthdays[1] = (iyear%4 == 0)? 29 : 28;
-		if(iday<=monthdays[imonth]){
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	private Boolean check_text(String text){
-		if (text.matches("[A-Za-z0-9]+")){
-			return true;
-		}
-		else{
-			return false;
 		}
 	}
 	

@@ -75,7 +75,7 @@ public class ClientThread {
 							message = clientProcess.setRequestToSocket();
 							outString.println(message);
 							outString.flush();
-							int i = message.indexOf("(");
+							int i = message.indexOf("{");
 							if(i >= 0){
 								commandName = message.substring(0, i);
 								if(commandName.equals("dataQuery")){
@@ -103,6 +103,7 @@ public class ClientThread {
 			}
 			catch(IOException ioe){
 				clientProcess.lock = 1;
+				clientProcess.setRequest();
 				try{
 					if(clientSocket != null){
 						clientSocket.close();
@@ -129,6 +130,7 @@ public class ClientThread {
 			}
 			catch(ClassNotFoundException cnfe){
 				clientProcess.lock = 1;
+				clientProcess.setRequest();
 				try{
 					if(clientSocket != null){
 						clientSocket.close();

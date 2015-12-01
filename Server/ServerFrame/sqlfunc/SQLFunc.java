@@ -148,10 +148,9 @@ public class SQLFunc implements SQLFuncInterface{
 		
 		String tableNameOut = tableNameTreating(tableName);
 		StringBuffer queryCommand = new StringBuffer();
-		queryCommand.append("SELECT " + listColumn + " FROM " + tableNameOut);
+		queryCommand.append("SELECT DISTINCT " + listColumn + " FROM " + tableNameOut);
 		if(!on.equals("")){
-			String onKey = listColumnTreating(tableName,on);
-			queryCommand.append(" ON " + onKey);
+			queryCommand.append(" ON " + on);
 		}
 		if(!condition.equals("")){
 			queryCommand.append(" WHERE " + condition);
@@ -163,6 +162,7 @@ public class SQLFunc implements SQLFuncInterface{
 			queryCommand.append(" HAVING " + having);
 		}
 		queryCommand.append(";");
+		System.out.println(queryCommand.toString());
 	
 		return executeQueryCommand(queryCommand.toString());
 	}
@@ -176,6 +176,7 @@ public class SQLFunc implements SQLFuncInterface{
 
 		connectToDBMS();
 		getStatement();
+		System.out.println(queryCommand.toString());
 		return executeUpdateCommand(queryCommand.toString());
 	}
 
@@ -206,11 +207,12 @@ public class SQLFunc implements SQLFuncInterface{
 			queryCommand.append(" WHERE " + condition);
 		}
 		queryCommand.append(";");
+		System.out.println(queryCommand.toString());
 
 		return executeUpdateCommand(queryCommand.toString());
 	}
 
-	public int insertDataQuery(String tableName, String value1, String value2, String value3, String value4, String value5, String value6,String value7,String value8){
+	public int insertDataQuery(String tableName, String value1, String value2, String value3, String value4, String value5, String value6,String value7,String value8,String value9,String value10,String value11){
 		if(tableName.equals("") || !checkString(tableName,false)){
 			return 0;
 		}
@@ -233,14 +235,17 @@ public class SQLFunc implements SQLFuncInterface{
 			}
 			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 + "','" + value7 + "','" + value8 + "');");
 		}
+		else if(tableName.equals("FoodSet")){
+			queryCommand.append("('" + value1 +"');");
+		}
 		else if(tableName.equals("Provide")){
 			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "');");
 		}
 		else if(tableName.equals("Reservation")){
-			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 + "');");
+			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 + "','" + value7 +"','" + value8 + "','" + value9 +"','" + value10 +"','" + value11 +"');");
 		}
 		else if(tableName.equals("SequenceRestaurant")){
-			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "');");
+			queryCommand.append("('" + value1 + "','" + value2 + "');");
 		}
 		else if(tableName.equals("Permisions")){
 			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 +"');");
@@ -260,6 +265,8 @@ public class SQLFunc implements SQLFuncInterface{
 		else if(tableName.equals("Operations")){
 			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 +"');");
 		}
+
+		System.out.println(queryCommand.toString());
 
 		return executeUpdateCommand(queryCommand.toString());
 	}
@@ -284,7 +291,7 @@ public class SQLFunc implements SQLFuncInterface{
 		
 		try{ 
 			while(result.next()){
-				resNameArray[counter++] = result.getString("ResName");
+				resNameArray[counter++] = result.getString("Resname");
 			}
 		}
 		catch(SQLException sqle){
@@ -317,7 +324,7 @@ public class SQLFunc implements SQLFuncInterface{
 
 		try{ 
 			while(result.next()){
-				userNameArray[counter] = result.getString("UserName");
+				userNameArray[counter] = result.getString("Username");
 			}
 		}
 		catch(SQLException sqle){

@@ -28,7 +28,7 @@ public class TCPThread implements Runnable{
 			String commandName = new String();
 			while((message = in.readLine()) != null){
 				if(!message.equals("exit")){
-					int i = message.indexOf('(');
+					int i = message.indexOf('{');
 					if(i >= 0){
 						commandName = message.substring(0,i);
 						if(spr.checkReceivedRequest(message) && spr.checkCommand() && spr.checkParam()){

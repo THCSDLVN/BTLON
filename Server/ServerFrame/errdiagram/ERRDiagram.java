@@ -1,4 +1,4 @@
-package errdiagram;
+package Server.errdiagram;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,13 +12,13 @@ public class ERRDiagram extends JFrame{
 		getContentPane().setLayout(null);
 		setVisible(true);
 		setResizable(false);
-		setPreferredSize(new Dimension(815,547));
+		setPreferredSize(new Dimension(815,554));
 		pack();
 
 		JLabel labelImage = new JLabel();
 
 		labelImage.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/Resource/ERRDiagram.png"));
 		getContentPane().add(labelImage);
-		labelImage.setBounds(0, 0, 820, 540);
+		labelImage.setBounds(0, 0, 815, 554);
 	}
 }

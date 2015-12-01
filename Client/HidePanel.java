@@ -29,6 +29,7 @@ import java.awt.Rectangle;
 import Client.orderconfirm.OrderConfirm;
 import Client.createorder.CreateOrder;
 import Client.clientprocess.ClientProcess;
+import Client.accountGUI.AccountGUI;
 
 public class HidePanel extends JPanel {
 	public String[] columnNames = new String[] {"Food", "Price"};
@@ -47,11 +48,18 @@ public class HidePanel extends JPanel {
 
 	public String resAddress ="";
 
-	public HidePanel(Border b, String aid,ClientProcess clientProcess) {
+	public HidePanel(AccountGUI accGUI,Border b, String aid,ClientProcess clientProcess) {
 		this.setBounds(12, 300, 400, 284);
 		this.setBorder(b);
 		setLayout(null);
-		DefaultTableModel model = new DefaultTableModel(new String[][]{}, columnNames);
+		DefaultTableModel model = new DefaultTableModel(new String[][]{}, columnNames){
+			boolean[] columnEditables = new boolean[] {
+					false, false, false
+				};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}	
+		};
 		
 		orderBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -68,7 +76,7 @@ public class HidePanel extends JPanel {
 				String foodname = (String)model.getValueAt(row, 0);
 				int foodPrice = Integer.parseInt((String)model.getValueAt(row, 1));
 				String orderDate = (String)getOrderItem().getSelectedItem();
-				new OrderConfirm(clientProcess,foodname,foodPrice,aid,orderDate,resAddress).setVisible(true);
+				new OrderConfirm(accGUI,clientProcess,foodname,foodPrice,aid,orderDate,resAddress);
 			}
 		});
 		orderBtn.setBounds(148, 247, 117, 25);
@@ -80,12 +88,10 @@ public class HidePanel extends JPanel {
 		comboBox.setBounds(116, 7, 189, 24);
 		add(comboBox);
 		
-		
 		scrollPane.setBounds(12, 74, 376, 164);
 		scrollPane.setBorder(b);
 		add(scrollPane);
 		
-		menu.setModel(model);
 		scrollPane.setViewportView(menu);
 		
 		btnNewButton.addActionListener(new ActionListener() {
