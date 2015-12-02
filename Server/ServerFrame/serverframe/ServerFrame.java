@@ -7,6 +7,7 @@ import javax.swing.SwingConstants;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.WindowConstants;
+import javax.swing.JOptionPane;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,14 +18,23 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowEvent;
 
+import java.sql.ResultSet;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
+
 import Server.dataqueryframe.DataQueryFrame;
 import Server.errdiagram.ERRDiagram;
 import Server.buttonflag.ButtonFlag;
 import Server.sqlfunc.SQLFunc;
+import Server.makearraylist.MakeArrayList;
 
 public class ServerFrame extends JFrame implements ServerFrameInterface,WindowListener{
 	public ButtonFlag buttonFlag = new ButtonFlag();
 	public SQLFunc funcTool = new SQLFunc();
+	public MakeArrayList makeArrayList = new MakeArrayList();
+
 	public ServerFrame(){
 		super("ServerFrame");
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -38,6 +48,7 @@ public class ServerFrame extends JFrame implements ServerFrameInterface,WindowLi
 		getContentPane().add(buttonExit);
 		getContentPane().add(buttonDiagram);
 		getContentPane().add(buttonQuery);
+		getContentPane().add(buttonRefresh);
 		getContentPane().add(backGroundLabel);
 
 		appNameLabel.setIcon(new ImageIcon("/home/mylaptop/AppDatabase/DatabaseOfResApp/Resource/AppName.png"));
@@ -48,7 +59,7 @@ public class ServerFrame extends JFrame implements ServerFrameInterface,WindowLi
 
 		buttonExit.setBackground(new Color(0, 153, 204));
 		buttonExit.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		buttonExit.setBounds(450, 160, 110, 30);
+		buttonExit.setBounds(440, 210, 125, 30);
 		buttonExit.setFont(new Font("Ubuntu", 1, 15));
 		buttonExit.setForeground(Color.WHITE);
 		buttonExit.addActionListener(new ActionListener(){
@@ -67,7 +78,7 @@ public class ServerFrame extends JFrame implements ServerFrameInterface,WindowLi
 
 		buttonQuery.setBackground(new Color(0, 153, 204));
 		buttonQuery.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		buttonQuery.setBounds(450, 60, 110, 30);
+		buttonQuery.setBounds(440, 60, 125, 30);
 		buttonQuery.setFont(new Font("Ubuntu", 1, 14));
 		buttonQuery.setForeground(Color.WHITE);
 		if(buttonQuery.getActionListeners().length < 1){
@@ -75,6 +86,7 @@ public class ServerFrame extends JFrame implements ServerFrameInterface,WindowLi
 				public void actionPerformed(ActionEvent ae){
 					if(buttonFlag.buttonQueryFlag == 1){
 						buttonFlag.buttonQueryFlag = 0;
+						buttonFlag.buttonRefreshFlag = 0;
 						new DataQueryFrame(buttonFlag);	
 					}		
 				}
@@ -83,7 +95,7 @@ public class ServerFrame extends JFrame implements ServerFrameInterface,WindowLi
 
 		buttonDiagram.setBackground(new Color(0, 153, 204));
 		buttonDiagram.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		buttonDiagram.setBounds(450, 110, 110, 30);
+		buttonDiagram.setBounds(440, 110, 125, 30);
 		buttonDiagram.setFont(new Font("Ubuntu", 1, 15));
 		buttonDiagram.setForeground(Color.WHITE);
 		buttonDiagram.addActionListener(new ActionListener(){
@@ -91,6 +103,34 @@ public class ServerFrame extends JFrame implements ServerFrameInterface,WindowLi
 				new ERRDiagram();			
 			}
 		});
+
+		buttonRefresh.setBackground(new Color(0, 153, 204));
+		buttonRefresh.setFont(new Font("Ubuntu", 1, 14));
+		buttonRefresh.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		buttonRefresh.setForeground(Color.WHITE);
+		if(buttonRefresh.getActionListeners().length < 1){
+			buttonRefresh.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent ae) {
+					if(buttonFlag.buttonRefreshFlag == 1){
+						buttonFlag.buttonQueryFlag = 0;
+						buttonFlag.buttonRefreshFlag = 0;
+						List<List<String>> list = new ArrayList();
+						list = funcTool.dataQuery("FoodSet","Foodname","","Foodname not in (select Foodname from Provide) and Foodname not in (select Foodname from Reservation)","","");
+						for(List<String> innerLs : list) {
+							for (Iterator<String> j = innerLs.iterator(); j.hasNext();) {
+								String name = new String(j.next());
+								funcTool.deleteDataQuery("FoodSet","Foodname = '" + name + "'");
+							}
+						}
+						list.clear();
+						buttonFlag.buttonQueryFlag = 1;
+						buttonFlag.buttonRefreshFlag = 1;
+						JOptionPane.showMessageDialog(null,"Refesh Finished");
+					}		
+				}
+			});
+		}
+		buttonRefresh.setBounds(440, 160, 125, 30);
 	}
 	public void windowOpened(WindowEvent we){
 

@@ -68,12 +68,12 @@ public class Foodcreate extends JDialog {
 						JOptionPane.showMessageDialog(null, "Wrong Foodname - It Must Be Not Empty and Must Be Digits Or Letters And Length Within 45 Letters","Announce",JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					if(!check.check_text(descriptionField.getText().toString())){
-						JOptionPane.showMessageDialog(null, "Wrong Description - It Must Be Not Empty and Must Be Digits Or Letters And Length Within 45 Letters","Announce",JOptionPane.ERROR_MESSAGE);
-						return;
-					}
 					if(!checkisNumber(priceField)){
 						JOptionPane.showMessageDialog(null, "Wrong Price - It Must Be Digits","Announce",JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					if(!check.check_text(descriptionField.getText().toString())){
+						JOptionPane.showMessageDialog(null, "Wrong Description - It Must Be Not Empty and Must Be Digits Or Letters And Length Within 45 Letters","Announce",JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 					int foopriceI = Integer.parseInt(priceField.getText());

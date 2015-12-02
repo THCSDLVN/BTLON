@@ -4,9 +4,6 @@ import java.util.StringTokenizer;
 import java.util.List;
 import java.util.ArrayList;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-
 import Server.sqlfunc.SQLFunc;
 import Server.makearraylist.MakeArrayList;
 
@@ -14,7 +11,6 @@ public class ServerProcessRequest {
 	String command;
 	String fillParam[];
 	SQLFunc funcTool;
-	MakeArrayList makeArrayList = new MakeArrayList();
 	
 	public ServerProcessRequest(){
 		command = new String();
@@ -95,12 +91,9 @@ public class ServerProcessRequest {
 	}
 
 	public List<List<String>> executeDataQuery(){
-		ResultSet result = funcTool.dataQuery(fillParam[0],fillParam[1],fillParam[2],fillParam[3],fillParam[4],fillParam[5]);
-		if(result == null){
-			List<List<String>> resultList = new ArrayList<>();
-			return resultList;
-		}
-		return makeArrayList.makeArrayList(result);
+		List<List<String>> result = new ArrayList();
+		result = funcTool.dataQuery(fillParam[0],fillParam[1],fillParam[2],fillParam[3],fillParam[4],fillParam[5]);
+		return result;
 	}
 
 	public String executeChangeDataQuery(){

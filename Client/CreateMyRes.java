@@ -179,7 +179,35 @@ public class CreateMyRes extends JDialog {
 							JOptionPane.showMessageDialog(null, "Create Restaurant Unsuccesfully - Please Check Infor Carefully","Annouce",JOptionPane.INFORMATION_MESSAGE);
 						}
 					}
+
+					do{
+						;
+					}while(!clientProcess.request.toString().equals(""));
+					clientProcess.getRequestFromClient("dataQuery{Restaurant~AID~\"\"~ResID = '" + resID +"'~\"\"~\"\"}");
+					do{
+						if(clientProcess.lock == 1){
+							clientProcess.setRequest();
+							JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+							return ;
+						}
+						//Vong lap nay dung de cho den khi co ket qua
+					}while(!clientProcess.request.toString().equals(""));
+					List<List<String>> result2 = new ArrayList();
+					result2 = clientProcess.getResultList();
+					clientProcess.setResultList();
 					
+					String ownerAID = new String();
+					for(List<String> innerLs : result2) {
+						for (String str : innerLs) {
+							ownerAID = new String(str);
+						}
+					}
+
+					if(!ownerAID.equals(aid)){
+						JOptionPane.showMessageDialog(null,"You Can't Create Sequence Store For Restaurant " + resName);
+						return ;
+					}
+
 					do{
 						;
 					}

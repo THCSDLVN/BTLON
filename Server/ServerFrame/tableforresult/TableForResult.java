@@ -1,106 +1,44 @@
-package tableforresult;
+package Server.tableforresult;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-
-import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JFrame;
-import javax.swing.table.TableRowSorter;
 import javax.swing.RowSorter;
+import javax.swing.table.TableRowSorter;
 
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
-abstract class ResultSetTableModel extends AbstractTableModel{
-	private ResultSet rs;
-	private ResultSetMetaData rsmd;
-
-	public ResultSetTableModel(ResultSet aRes){
-		rs = aRes;
-		try{
-			rsmd = rs.getMetaData();
-		}
-		catch(SQLException e){
-			System.out.println(e.getMessage());
-		}
-	}
-
-	public int getColumnCount(){
-		try{
-			return rsmd.getColumnCount();
-		}
-		catch(SQLException e){
-			System.out.println(e.getMessage());
-			return 0;
-		}
-	}
-
-	public String getColumnName(int c){
-		try{
-			return rsmd.getColumnName(c + 1);
-		}
-		catch(SQLException e){
-			System.out.println(e.getMessage());
-			return "";
-		}
-	}
-
-	public ResultSet getResultSet(){
-		return rs;
-	}
-}
-
-class ScrollPaneResultSetTableModel extends ResultSetTableModel{
-	public ScrollPaneResultSetTableModel(ResultSet aRes){
-		super(aRes);
-	}
-
-	public Object getValueAt(int r,int c){
-		try{
-			ResultSet rs = getResultSet();
-			rs.absolute(r + 1);
-			return rs.getObject(c + 1);
-		}
-		catch(SQLException e){
-			System.out.println(e.getMessage());
-			return null;
-		}
-	}
-
-	public int getRowCount(){
-		try{ 
-			ResultSet rs = getResultSet();
-			rs.last();
-			return rs.getRow();
-		}
-		catch(SQLException e){
-			System.out.println(e.getMessage());
-			return 0;
-		}
-	}
-}
+import Server.solvearraylist.SolveArrayList;
 
 public class TableForResult extends JFrame{ 
-	public ResultSetTableModel model;
 	public JScrollPane scrollPane = new JScrollPane();
 	public JTable table = new JTable();
 
-	public TableForResult(ResultSet result){
+	public TableForResult(List<List<String>> result, List<String> columnNames){
 		super("Result Table");
 		setVisible(true);
 		setPreferredSize(new Dimension(1200,550));
 		pack();
 
-		model = new ScrollPaneResultSetTableModel(result);
-		table = new JTable(model);
+		String [][] x = SolveArrayList.ConvertFromArrayList(result);
+		DefaultTableModel model = new DefaultTableModel(x,columnNames.toArray()){
+			boolean[] columnEditables = new boolean[] {false, false, false, false, false, false, false, false, false, false, false, false, false, false
+			, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+			, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+			, false, false, false, false, false, false};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}	
+		};
+
 		scrollPane = new JScrollPane(table);
-		RowSorter<ResultSetTableModel> sorter = new TableRowSorter<ResultSetTableModel>(model);
+		RowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(model);
+		table.setModel(model);
 		table.setRowSorter(sorter);
 		getContentPane().add(scrollPane,"Center");
 		pack();

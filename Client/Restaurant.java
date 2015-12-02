@@ -58,7 +58,6 @@ public class Restaurant extends JFrame {
 	public JButton btnDeleteOrder;
 	public JButton btnLock;
 	public JButton btnlogout = new JButton("");
-	public JButton btnAddAddress = new JButton("Create Address");
 	
 	public JTable rqfoodbl;
 	public JTable foodMenuTbl;
@@ -152,45 +151,30 @@ public class Restaurant extends JFrame {
 		});
 		addressCb.setBounds(189, 93, 288, 28);
 		inforPane.add(addressCb);
-		
-		
-		btnAddAddress.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CreateAddress edit_dialog = new CreateAddress(clientProcess,resID);
-				edit_dialog.setVisible(true);
-				LoadAddress(clientProcess);
+										
+		JPanel requestPane = new JPanel();
+		requestPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(0, 51, 51), new Color(0, 51, 102)));
+		requestPane.setLayout(null);
+		requestPane.setBounds(10, 200, 774, 361);
+		requestPane.setVisible(false);
+										
+		JPanel selectPane = new JPanel();
+		selectPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(102, 153, 51), new Color(102, 153, 102)));
+		selectPane.setBounds(10, 200, 774, 361);
+		contentPane.add(selectPane);
+		selectPane.setLayout(null);
+										
+		JButton btnRequest = new JButton("REQUEST");		
+		btnRequest.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				ClearOrderDetail();
 				auto_delete(clientProcess);
 				refreshOrder(clientProcess);
+				btnBack.setEnabled(true);
+				selectPane.setVisible(false);
+				contentPane.getComponents()[2].setVisible(true);
 			}
 		});
-		btnAddAddress.setBounds(2, 142, 139, 33);
-		btnAddAddress.setFont(new Font("Tahoma",Font.BOLD,11));
-		inforPane.add(btnAddAddress);
-								
-										JPanel requestPane = new JPanel();
-										requestPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(0, 51, 51), new Color(0, 51, 102)));
-										requestPane.setLayout(null);
-										requestPane.setBounds(10, 200, 774, 361);
-										requestPane.setVisible(false);
-										
-										JPanel selectPane = new JPanel();
-										selectPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(102, 153, 51), new Color(102, 153, 102)));
-										selectPane.setBounds(10, 200, 774, 361);
-										contentPane.add(selectPane);
-										selectPane.setLayout(null);
-										
-										JButton btnRequest = new JButton("REQUEST");		
-										btnRequest.addActionListener(new ActionListener() {
-											public void actionPerformed(ActionEvent e) {
-												ClearOrderDetail();
-												auto_delete(clientProcess);
-												refreshOrder(clientProcess);
-												btnBack.setEnabled(true);
-												selectPane.setVisible(false);
-												contentPane.getComponents()[2].setVisible(true);
-											}
-										});
 										btnRequest.setFont(new Font("Monotype Corsiva", Font.BOLD, 15));
 										btnRequest.setVerticalTextPosition(SwingConstants.BOTTOM);
 										btnRequest.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -810,7 +794,7 @@ public class Restaurant extends JFrame {
 					return;
 				}
 				
-				if(!rqFoodList.getRow(selected_foodorder)[4].toLowerCase().contains("Delete".toLowerCase()))
+				if(!rqFoodList.getRow(selected_foodorder)[4].toLowerCase().contains("Lock".toLowerCase()))
 				{
 					JOptionPane.showMessageDialog(null, "Can not Lock this Order");
 					return;
@@ -829,7 +813,7 @@ public class Restaurant extends JFrame {
 				
 				Date cur = cal.getTime();
 
-				if(cur.after(ordertime) || cal.getTime().compareTo(cur) == 0)
+				if(cur.after(ordertime) || ordertime.compareTo(cur) == 0)
 				{
 					do{
 						;

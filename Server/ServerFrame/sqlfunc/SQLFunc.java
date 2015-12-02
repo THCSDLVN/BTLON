@@ -6,15 +6,18 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 
 import java.util.StringTokenizer;
+import java.util.List;
+import java.util.ArrayList;
 
-import Server.tableforresult.TableForResult;
+import Server.makearraylist.MakeArrayList;
 
 public class SQLFunc implements SQLFuncInterface{
-	Connection connect;
-	Statement stmt;
-	ResultSet result;
+
+	public MakeArrayList make = new MakeArrayList();
+	public List<String> listColumnNames = new ArrayList();
 	
 	public void connectToDBMS(){
 		try{
@@ -25,13 +28,23 @@ public class SQLFunc implements SQLFuncInterface{
 		}
 	}
 
-	public void getStatement(){
-		try{ 
-			connect = DriverManager.getConnection(url,username,password);
-			stmt = connect.createStatement();
+	public SQLFunc(){
+		connectToDBMS();
+	}
+
+	public void getColumnNamesList(ResultSet rs){
+		try{
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int columnCount = rsmd.getColumnCount();
+			listColumnNames.clear();
+			// The column count starts from 1
+			for (int i = 1; i < columnCount + 1; i++ ) {
+				listColumnNames.add(rsmd.getColumnName(i).toString());
+				// Do stuff with name
+			}
 		}
-		catch(SQLException sqle){
-			sqle.getMessage();
+		catch(Exception e){
+			e.printStackTrace();
 		}
 	}
 
@@ -113,9 +126,22 @@ public class SQLFunc implements SQLFuncInterface{
 		return onKey.toString();
 	} 
 
-	public ResultSet executeQueryCommand(String queryCommand){
+	public List<List<String>> executeQueryCommand(String queryCommand){
 		try{ 
-			return stmt.executeQuery(queryCommand);
+			Connection connect = DriverManager.getConnection(url,username,password);
+			Statement stmt = connect.createStatement();
+			ResultSet resultSet = stmt.executeQuery(queryCommand);
+
+			getColumnNamesList(resultSet);
+			List<List<String>> resultList = new ArrayList();
+			resultList = make.makeArrayList(resultSet);
+			
+			resultSet.close();			
+			stmt.close();
+			connect.close();
+
+
+			return resultList;
 		}
 		catch(SQLException e) {
 			System.out.println(e.getMessage());
@@ -125,7 +151,13 @@ public class SQLFunc implements SQLFuncInterface{
 
 	public int executeUpdateCommand(String updateCommand){
 		try{ 
-			return stmt.executeUpdate(updateCommand); 
+			Connection connect = DriverManager.getConnection(url,username,password);
+			Statement stmt = connect.createStatement();
+			int result = stmt.executeUpdate(updateCommand);
+			
+			stmt.close();
+			connect.close();
+			return result;
 		}
 		catch(SQLException e) {
 			System.out.println(e.getMessage());
@@ -133,7 +165,7 @@ public class SQLFunc implements SQLFuncInterface{
 		}
 	}
 
-	public ResultSet dataQuery(String tableName, String listColumn, String on, String condition, String groupBy, String having){
+	public List<List<String>> dataQuery(String tableName, String listColumn, String on, String condition, String groupBy, String having){
 		if(tableName.equals("") || listColumn.equals("") || !checkString(tableName,true)){
 			return null;
 		}
@@ -142,9 +174,6 @@ public class SQLFunc implements SQLFuncInterface{
 				return null;
 			}
 		}
-
-		connectToDBMS();
-		getStatement();
 		
 		String tableNameOut = tableNameTreating(tableName);
 		StringBuffer queryCommand = new StringBuffer();
@@ -163,7 +192,6 @@ public class SQLFunc implements SQLFuncInterface{
 		}
 		queryCommand.append(";");
 		System.out.println(queryCommand.toString());
-	
 		return executeQueryCommand(queryCommand.toString());
 	}
 
@@ -174,8 +202,6 @@ public class SQLFunc implements SQLFuncInterface{
 		StringBuffer queryCommand = new StringBuffer();
 		queryCommand.append("DELETE FROM " + tableName + " WHERE " + condition + " ;");
 
-		connectToDBMS();
-		getStatement();
 		System.out.println(queryCommand.toString());
 		return executeUpdateCommand(queryCommand.toString());
 	}
@@ -184,24 +210,8 @@ public class SQLFunc implements SQLFuncInterface{
 		if(tableName.equals("") || !checkString(tableName,false) || setColumn.equals("") || setNewValue.equals("")){
 			return 0;
 		}
-		connectToDBMS();
-		getStatement();
 		
 		StringBuffer queryCommand = new StringBuffer();
-		if(tableName.equals("Account")){
-			if(setColumn.equals("Username")){
-				if(!checkDataInsertForAccount(setNewValue)){
-					return 0;
-				}
-			}
-		}
-		else if(tableName.equals("Restaurant")){
-			if(setColumn.equals("ResName")){
-				if(!checkDataInsertForRestaurant(setNewValue)){
-					return 0;
-				}
-			}
-		}
 		queryCommand.append("UPDATE " + tableName + " SET " + setColumn + " = '" + setNewValue + "'");
 		if(!condition.equals("")){
 			queryCommand.append(" WHERE " + condition);
@@ -216,23 +226,15 @@ public class SQLFunc implements SQLFuncInterface{
 		if(tableName.equals("") || !checkString(tableName,false)){
 			return 0;
 		}
-		connectToDBMS();
-		getStatement();
 		
 		StringBuffer queryCommand = new StringBuffer();
 		queryCommand.append("INSERT INTO " + tableName + " VALUES ");
 
 
 		if(tableName.equals("Restaurant")){
-			if(!checkDataInsertForRestaurant(value2)){
-				return 0;
-			}
 			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "');");
 		}
 		else if(tableName.equals("Account")){
-			if(!checkDataInsertForAccount(value2)){
-				return 0;
-			}
 			queryCommand.append("('" + value1 + "','" + value2 + "','" + value3 + "','" + value4 + "','" + value5 + "','" + value6 + "','" + value7 + "','" + value8 + "');");
 		}
 		else if(tableName.equals("FoodSet")){
@@ -269,73 +271,5 @@ public class SQLFunc implements SQLFuncInterface{
 		System.out.println(queryCommand.toString());
 
 		return executeUpdateCommand(queryCommand.toString());
-	}
-
-	public boolean checkDataInsertForRestaurant(String resName){
-		int rows = 0,counter = 0;
-		try{
-			result = executeQueryCommand("SELECT * FROM Restaurant;");
-			if(result.last()){
-				rows = result.getRow();
-				result.beforeFirst();
-			}
-		}
-		catch(SQLException sqle){
-			System.out.println(sqle.getMessage());
-		}
-
-		String restaurantNameArray[] = new String[rows];
-		String addressArray[] = new String[rows];
-		String phoneNumberArray[] = new String[rows];
-		String resNameArray[] = new String[rows];
-		
-		try{ 
-			while(result.next()){
-				resNameArray[counter++] = result.getString("Resname");
-			}
-		}
-		catch(SQLException sqle){
-			System.out.println(sqle.getMessage());
-		}
-
-		for(counter = 0 ; counter < rows ; counter ++){
-			if(!resName.equals("") && resName.equals(resNameArray[counter])){
-				return false;
-			}
-		}
-
-		return true;
-	}
-	
-	public boolean checkDataInsertForAccount(String userName){
-		int rows = 0,counter = 0;
-		try{ 
-			result = executeQueryCommand("SELECT * FROM Account;");
-			if(result.last()){
-				rows = result.getRow();
-				result.beforeFirst();
-			}
-		}
-		catch(SQLException sqle){
-			System.out.println(sqle.getMessage());
-		}
-
-		String userNameArray[] = new String[rows];
-
-		try{ 
-			while(result.next()){
-				userNameArray[counter] = result.getString("Username");
-			}
-		}
-		catch(SQLException sqle){
-			System.out.println(sqle.getMessage());
-		}
-
-		for(counter = 0 ; counter < rows ; counter ++){
-			if(!userName.equals("") && userName.equals(userNameArray[counter])){
-				return false;
-			}
-		}
-		return true;
 	}
 }

@@ -26,6 +26,9 @@ import java.awt.event.ActionEvent;
 import java.awt.font.TextAttribute;
 
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import java.sql.ResultSet;
 
@@ -167,13 +170,16 @@ public class DataQueryFrame extends JFrame implements DataQueryFrameInterface{
 					String condition = new String(conditionTextField.getText());
 					String groupBy = new String(groupByTextField.getText());
 					String having = new String(havingTextField.getText());
-					ResultSet result = sqlFunc.dataQuery(tableName,listColumn,onKey,condition,groupBy,having);
+					List<List<String>> result = new ArrayList();
+					result = sqlFunc.dataQuery(tableName,listColumn,onKey,condition,groupBy,having);
+					List<String> listColumnNames = new ArrayList();
+					listColumnNames = sqlFunc.listColumnNames;
 					if(result == null){						
 						JOptionPane.showMessageDialog(null,"Error In Query Command","Help Of DataQueryFrame",JOptionPane.INFORMATION_MESSAGE,icon);
 						return ;
 					}
 					else{
-						new TableForResult(result);
+						new TableForResult(result,listColumnNames);
 						tableNameTextField.setText("");
 						listColumnTextField.setText("");
 						conditionTextField.setText("");

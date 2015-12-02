@@ -597,7 +597,12 @@ public class AccountGUI extends JFrame{
 					myOrderList = clientProcess.getResultList();
 					clientProcess.setResultList();
 					orderData = SolveArrayList.ConvertFromArrayList(myOrderList);
-					DefaultTableModel model = new DefaultTableModel(orderData, orderColumns);
+					DefaultTableModel model = new DefaultTableModel(orderData, orderColumns){
+						boolean[] columnEditables = new boolean[] {false, false, false};
+						public boolean isCellEditable(int row, int column) {
+							return columnEditables[column];
+						}	
+					};
 					orderTable.setModel(model);
 					orderPanel.setVisible(true);
 					getPanel_1().setVisible(false);
