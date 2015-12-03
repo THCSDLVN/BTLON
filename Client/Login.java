@@ -103,6 +103,7 @@ public class Login {
 							}
 							//Vong lap nay dung de cho den khi co ket qua
 						}while(!clientProcess.request.toString().equals(""));
+						clientProcess.setResultAlterQuery();
 					}
 					clientProcess.listUserIsOnline.clear();
 				}
@@ -264,7 +265,8 @@ public class Login {
 								}
 								//Vong lap nay dung de cho den khi co ket qua
 							}while(!clientProcess.request.toString().equals(""));
-							List<List<String>> rsl = clientProcess.getResultList();
+							List<List<String>> rsl = new ArrayList();
+							rsl = clientProcess.getResultList();
 							clientProcess.setResultList();
 							if(!rsl.isEmpty()){
 								do{
@@ -279,8 +281,11 @@ public class Login {
 										return ;
 									}
 									//Vong lap nay dung de cho den khi co ket qua
-								}while(!clientProcess.request.toString().equals(""));			
-								if(!clientProcess.getResultAlterQuery().equals("0")){
+								}while(!clientProcess.request.toString().equals(""));	
+								String rs = new String();
+								rs = clientProcess.getResultAlterQuery();
+								clientProcess.setResultAlterQuery();		
+								if(!rs.equals("0")){
 									String result[][] = SolveArrayList.ConvertFromArrayList(rsl);
 									AccountInfor accInfor = new AccountInfor();
 									accInfor.setAID(result[0][0]);
@@ -310,6 +315,7 @@ public class Login {
 												}
 												//Vong lap nay dung de cho den khi co ket qua
 											}while(!clientProcess.request.toString().equals(""));
+											clientProcess.setResultAlterQuery();
 											if(clientProcess.listUserIsOnline.contains(accInfor.getUsername())){
 												clientProcess.listUserIsOnline.remove(accInfor.getUsername());
 											}
@@ -360,7 +366,7 @@ public class Login {
 							}
 							//Vong lap nay dung de cho den khi co ket qua
 						}while(!clientProcess.request.toString().equals(""));
-					}
+					}clientProcess.setResultAlterQuery();
 					clientProcess.listUserIsOnline.clear();
 				}
 				clientProcess.getRequestFromClient("exit");

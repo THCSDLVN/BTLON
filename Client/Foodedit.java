@@ -107,7 +107,8 @@ public class Foodedit extends JDialog {
 						}
 						//Vong lap nay dung de cho den khi co ket qua
 					}while(!clientProcess.request.toString().equals(""));
-					String result = clientProcess.getResultAlterQuery();
+					String result = new String();
+					result = clientProcess.getResultAlterQuery();
 					clientProcess.setResultAlterQuery();
 					
 					if(!result.equals("0")){
@@ -124,7 +125,8 @@ public class Foodedit extends JDialog {
 							}
 							//Vong lap nay dung de cho den khi co ket qua
 						}while(!clientProcess.request.toString().equals(""));
-						String result2 = clientProcess.getResultAlterQuery();
+						String result2 = new String(); 
+						result2 = clientProcess.getResultAlterQuery();
 						clientProcess.setResultAlterQuery();
 						
 						if(!result2.equals("0")){

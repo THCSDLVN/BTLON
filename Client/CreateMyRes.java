@@ -157,7 +157,8 @@ public class CreateMyRes extends JDialog {
 								}
 								//Vong lap nay dung de cho den khi co ket qua
 							}while(!clientProcess.request.toString().equals(""));
-							List<List<String>> result = clientProcess.getResultList();
+							List<List<String>> result = new ArrayList();
+							result = clientProcess.getResultList();
 							clientProcess.setResultList();
 							if(result.size() == 1){
 								do{

@@ -27,7 +27,7 @@ public class DeleteFood extends JDialog {
 		ResID = id;
 		setTitle("Delete Food");
 		setModal(true);
-		setPreferredSize(new Dimension(466, 178));
+		setPreferredSize(new Dimension(350, 140));
 		setResizable(false);
 		pack();
 		
@@ -35,12 +35,12 @@ public class DeleteFood extends JDialog {
 		
 		JLabel lblIMG = new JLabel("");
 		lblIMG.setIcon(new ImageIcon(DeleteFood.class.getResource("/com/sun/javafx/scene/control/skin/modena/dialog-confirm.png")));
-		lblIMG.setBounds(10, 23, 50, 50);
+		lblIMG.setBounds(8, 15, 50, 50);
 		getContentPane().add(lblIMG);
 		
-		JLabel lblNewLabel_1 = new JLabel("Do you want to delete "+ foodname + " ?");
+		JLabel lblNewLabel_1 = new JLabel("Do You Want To Delete This Food ?");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1.setBounds(91, 23, 359, 31);
+		lblNewLabel_1.setBounds(91, 23, 300, 31);
 		getContentPane().add(lblNewLabel_1);
 		
 		JButton Ybtn = new JButton("YES");
@@ -60,7 +60,8 @@ public class DeleteFood extends JDialog {
 						}
 						//Vong lap nay dung de cho den khi co ket qua
 					}while(!clientProcess.request.toString().equals(""));
-					String result = clientProcess.getResultAlterQuery();
+					String result = new String();
+					result = clientProcess.getResultAlterQuery();
 					clientProcess.setResultAlterQuery();
 					if(!result.equals("0")){
 						JOptionPane.showMessageDialog(null,"Delete Successfully");
@@ -78,7 +79,7 @@ public class DeleteFood extends JDialog {
 			}
 		});
 		Ybtn.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		Ybtn.setBounds(91, 85, 132, 54);
+		Ybtn.setBounds(60, 80, 100, 40);
 		getContentPane().add(Ybtn);
 		
 		JButton btnNo = new JButton("NO");
@@ -88,7 +89,7 @@ public class DeleteFood extends JDialog {
 			}
 		});
 		btnNo.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnNo.setBounds(240, 85, 132, 54);
+		btnNo.setBounds(200, 80, 100, 40);
 		getContentPane().add(btnNo);
 	}
 }

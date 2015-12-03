@@ -1195,7 +1195,8 @@ public class Restaurant extends JFrame {
 					}
 					//Vong lap nay dung de cho den khi co ket qua
 				}while(!clientProcess.request.toString().equals(""));
-				List<List<String>> result = clientProcess.getResultList();
+				List<List<String>> result = new ArrayList();
+				result = clientProcess.getResultList();
 				clientProcess.setResultList();
 				
 				SqlArrayList check_array = new SqlArrayList(result);

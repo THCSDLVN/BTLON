@@ -66,7 +66,8 @@ public class CreateAddress extends JDialog {
 								}
 								//Vong lap nay dung de cho den khi co ket qua
 							}while(!clientProcess.request.toString().equals(""));
-							String result = clientProcess.getResultAlterQuery();
+							String result = new String();
+							result = clientProcess.getResultAlterQuery();
 							clientProcess.setResultAlterQuery();
 							
 							if(!result.equals("0")){

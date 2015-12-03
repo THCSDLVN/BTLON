@@ -251,7 +251,8 @@ public class MyOrder extends JPanel {
 							}
 							//Vong lap nay dung de cho den khi co ket qua
 						}while(!clientProcess.request.toString().equals(""));
-						String success = clientProcess.getResultAlterQuery();
+						String success = new String();
+						success = clientProcess.getResultAlterQuery();
 						clientProcess.setResultAlterQuery();
 
 						if(!success.equals("0")){
@@ -382,22 +383,22 @@ public class MyOrder extends JPanel {
 								}
 							}
 							else{
-								JOptionPane.showMessageDialog(null, "This Order 's Status Is Not Lock Be Deleted. Please Back And Come In Again");
+								JOptionPane.showMessageDialog(null, "This Order 's Status Is Not Lock Or Be Deleted. Please Back And Come In Again");
 								return;
 							}
 						}
 						else{
-							JOptionPane.showMessageDialog(null, "This Order 's Status Is Not Lock Be Deleted. Please Back And Come In Again");
+							JOptionPane.showMessageDialog(null, "This Order 's Status Is Not Lock Be Or Deleted. Please Back And Come In Again");
 							return;
 						}
 					}
 					else{
-						JOptionPane.showMessageDialog(null, "This Order 's Status Is Not Lock Be Deleted. Please Back And Come In Again");
+						JOptionPane.showMessageDialog(null, "This Order 's Status Is Not Lock Or Be Deleted. Please Back And Come In Again");
 						return;
 					}
 				}
 				else{
-					JOptionPane.showMessageDialog(null, "This Order 's Status Is Not Lock Be Deleted. Please Back And Come In Again");
+					JOptionPane.showMessageDialog(null, "This Order 's Status Is Not Lock Or Be Deleted. Please Back And Come In Again");
 					return;
 				}
 			}

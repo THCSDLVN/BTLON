@@ -18,6 +18,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import Client.clientprocess.ClientProcess;
 import Client.check.Check;
 
@@ -84,7 +87,27 @@ public class Foodcreate extends JDialog {
 						String foodname = foodnameField.getText();
 						String foodprice = Integer.toString(foopriceI);
 						String description = descriptionField.getText();
-						
+
+						do{
+							;
+						}while(!clientProcess.request.toString().equals(""));
+						clientProcess.getRequestFromClient("dataQuery{Restaurant~Resname~\"\"~ResID = '" + id + "'~\"\"~\"\"}");
+						do{
+							if(clientProcess.lock == 1){
+								clientProcess.setRequest();
+								JOptionPane.showMessageDialog(null, "Server Has Crashed","Announce",JOptionPane.WARNING_MESSAGE);
+								return ;
+							}
+						//Vong lap nay dung de cho den khi co ket qua
+						}while(!clientProcess.request.toString().equals(""));
+						List<List<String>> resultid = new ArrayList();
+						resultid = clientProcess.getResultList();
+						clientProcess.setResultList();
+						if(resultid.size() == 0){
+							JOptionPane.showMessageDialog(null,"Create Unsucessfully");
+							return ;
+						}
+
 						do{
 							;
 						}
@@ -99,7 +122,8 @@ public class Foodcreate extends JDialog {
 							}
 						//Vong lap nay dung de cho den khi co ket qua
 						}while(!clientProcess.request.toString().equals(""));
-						String result = clientProcess.getResultAlterQuery();
+						String result = new String();
+						result = clientProcess.getResultAlterQuery();
 						clientProcess.setResultAlterQuery();
 						if(!result.equals("0")){	
 							do{
@@ -116,7 +140,8 @@ public class Foodcreate extends JDialog {
 								}
 							//Vong lap nay dung de cho den khi co ket qua
 							}while(!clientProcess.request.toString().equals(""));
-							String result2 = clientProcess.getResultAlterQuery();
+							String result2 = new String();
+							result2 = clientProcess.getResultAlterQuery();
 							clientProcess.setResultAlterQuery();
 							
 							if(!result2.equals("0")){

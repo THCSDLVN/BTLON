@@ -136,14 +136,15 @@ public class EditProfileFrame extends JFrame{
 								}
 								//Vong lap nay dung de cho den khi co ket qua
 							}while(!clientProcess.request.toString().equals(""));
-							if(!clientProcess.getResultAlterQuery().equals("0")){
-								clientProcess.setResultAlterQuery();
+							String result1 = new String();
+							result1 = clientProcess.getResultAlterQuery();
+							clientProcess.setResultAlterQuery();
+							if(!result1.equals("0")){
 								mark++;
 								accInf.setPassword(passTextField.getText());
 								JOptionPane.showMessageDialog(null, "Change Password Successfully","Announce",JOptionPane.INFORMATION_MESSAGE);
 							}
 							else{
-								clientProcess.setResultAlterQuery();
 								JOptionPane.showMessageDialog(null, "Change Password Unsuccessfully","Announce",JOptionPane.INFORMATION_MESSAGE);
 								return ;
 							}
@@ -168,15 +169,17 @@ public class EditProfileFrame extends JFrame{
 								}
 								//Vong lap nay dung de cho den khi co ket qua
 							}while(!clientProcess.request.toString().equals(""));
-							if(!clientProcess.getResultAlterQuery().equals("0")){
-								clientProcess.setResultAlterQuery();
+							String result2 = new String();
+							result2 = clientProcess.getResultAlterQuery(); 
+							clientProcess.setResultAlterQuery();
+
+							if(!result2.equals("0")){
 								mark++;
 								accInf.setPhonenumber(phoneTextField.getText());
 								lblPhone.setText(accInf.getPhoneNumber());
 								JOptionPane.showMessageDialog(null, "Change PhoneNumber Successfully","Announce",JOptionPane.INFORMATION_MESSAGE);
 							}
 							else{
-								clientProcess.setResultAlterQuery();
 								JOptionPane.showMessageDialog(null, "Change PhoneNumber Unsuccessfully","Announce",JOptionPane.INFORMATION_MESSAGE);
 								return ;
 							}
@@ -201,15 +204,16 @@ public class EditProfileFrame extends JFrame{
 								}
 								//Vong lap nay dung de cho den khi co ket qua
 							}while(!clientProcess.request.toString().equals(""));
-							if(!clientProcess.getResultAlterQuery().equals("0")){
-								clientProcess.setResultAlterQuery();
+							String result3 = new String();
+							result3 = clientProcess.getResultAlterQuery();
+							clientProcess.setResultAlterQuery();
+							if(!result3.equals("0")){
 								mark++;
 								accInf.setFullname(nameTextField.getText());
 								lblName.setText(accInf.getFullname());
 								JOptionPane.showMessageDialog(null, "Change Name Successfully","Announce",JOptionPane.INFORMATION_MESSAGE);
 							}
 							else{
-								clientProcess.setResultAlterQuery();
 								JOptionPane.showMessageDialog(null, "Change Name Unsuccessfully","Announce",JOptionPane.INFORMATION_MESSAGE);
 								return ;
 							}
